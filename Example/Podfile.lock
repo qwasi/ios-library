@@ -1,0 +1,20 @@
+PODS:
+  - Expecta (1.0.0)
+  - Qwasi (0.1.0)
+  - Specta (1.0.1)
+
+DEPENDENCIES:
+  - Expecta
+  - Qwasi (from `../`)
+  - Specta
+
+EXTERNAL SOURCES:
+  Qwasi:
+    :path: ../
+
+SPEC CHECKSUMS:
+  Expecta: 32604574add2c46a36f8d2f716b6c5736eb75024
+  Qwasi: 3e62f2e418047b732e7dbf38f4c8ca7050557e13
+  Specta: 097be314a75de103703a3bf9a529dc1a398509d7
+
+COCOAPODS: 0.37.1
