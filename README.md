@@ -1,10 +1,5 @@
 # Qwasi
 
-[![CI Status](http://img.shields.io/travis/Rob Rodriguez/Qwasi.svg?style=flat)](https://travis-ci.org/Rob Rodriguez/Qwasi)
-[![Version](https://img.shields.io/cocoapods/v/Qwasi.svg?style=flat)](http://cocoapods.org/pods/Qwasi)
-[![License](https://img.shields.io/cocoapods/l/Qwasi.svg?style=flat)](http://cocoapods.org/pods/Qwasi)
-[![Platform](https://img.shields.io/cocoapods/p/Qwasi.svg?style=flat)](http://cocoapods.org/pods/Qwasi)
-
 ## Usage
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.

@@ -50,14 +50,12 @@
 		482B48537720198C500DBC64 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E2643D196078C1840908B978 /* Foundation.framework */; };
 		4E9C50B975024B8AC35B9EFA /* SpectaDSL.h in Headers */ = {isa = PBXBuildFile; fileRef = 262FF09756ABF3E1C5692479 /* SpectaDSL.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		4F6E9B113445E385BA5498F7 /* EXPMatchers+beInTheRangeOf.h in Headers */ = {isa = PBXBuildFile; fileRef = 11AD9CC92B79F8DC45C4C298 /* EXPMatchers+beInTheRangeOf.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		50D2685F4B253B8A058338B3 /* ReplaceMe.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CDC2EF7F3D0DCF6DD8C9EF2 /* ReplaceMe.m */; };
 		52BFFD17400DDFEBF8F554FD /* EXPMatchers+beKindOf.h in Headers */ = {isa = PBXBuildFile; fileRef = A959FA3FC5BB7FA5A8A6E975 /* EXPMatchers+beKindOf.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		54DA5648B4A682E0343031FD /* XCTestCase+Specta.h in Headers */ = {isa = PBXBuildFile; fileRef = 378E9A9EB3840B4BE11EB357 /* XCTestCase+Specta.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		594E8C3A60A35F209EC9E9C6 /* Pods-Qwasi_Example-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = B46EAC7DD6652E2006F030CA /* Pods-Qwasi_Example-dummy.m */; };
 		5A5075F058297E627C568D0D /* EXPMatchers+beSupersetOf.m in Sources */ = {isa = PBXBuildFile; fileRef = C97FCD3CF59116EF5C33AA3C /* EXPMatchers+beSupersetOf.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5B2EED3EC8FAEBBCF0898F30 /* NSValue+Expecta.m in Sources */ = {isa = PBXBuildFile; fileRef = BAB8E8CB5E4AFBEF055FBF6B /* NSValue+Expecta.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		5C05B0F557EA7B2545C11469 /* NSValue+Expecta.h in Headers */ = {isa = PBXBuildFile; fileRef = D13BA14CFE22412953B9618E /* NSValue+Expecta.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5C6FF233F0F37C73579AE9DC /* ReplaceMe.m in Sources */ = {isa = PBXBuildFile; fileRef = 1CDC2EF7F3D0DCF6DD8C9EF2 /* ReplaceMe.m */; };
 		5E4CF786EB0D1BE66BC6578C /* EXPMatchers+equal.h in Headers */ = {isa = PBXBuildFile; fileRef = A06DB7F9BB98C09EDC2815BB /* EXPMatchers+equal.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63495C4E2D8B35F4DEB547B4 /* EXPMatchers+respondTo.h in Headers */ = {isa = PBXBuildFile; fileRef = B74DFDA403935A45106FD626 /* EXPMatchers+respondTo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		663441981C4617236A681CAD /* ExpectaObject.h in Headers */ = {isa = PBXBuildFile; fileRef = 2B442AA4051268E479F654FD /* ExpectaObject.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -113,6 +111,18 @@
 		CC94354D6FCD0A7C0C02A1D1 /* EXPMatchers+beSubclassOf.h in Headers */ = {isa = PBXBuildFile; fileRef = 6B912176DDEA34651A909F3A /* EXPMatchers+beSubclassOf.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF170E85658C97592E62B8E0 /* EXPMatcherHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FEC374363A43F8B7FF92624 /* EXPMatcherHelpers.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		D0DB7C0AA49021B5A8AA47B2 /* EXPExpect.m in Sources */ = {isa = PBXBuildFile; fileRef = F3E036E8CCBA04F7E8D5ECCE /* EXPExpect.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
+		D44005571B1E1D7F008B80B1 /* Qwasi.h in Headers */ = {isa = PBXBuildFile; fileRef = D44005551B1E1D7F008B80B1 /* Qwasi.h */; };
+		D44005581B1E1D7F008B80B1 /* Qwasi.h in Headers */ = {isa = PBXBuildFile; fileRef = D44005551B1E1D7F008B80B1 /* Qwasi.h */; };
+		D44005591B1E1D7F008B80B1 /* Qwasi.m in Sources */ = {isa = PBXBuildFile; fileRef = D44005561B1E1D7F008B80B1 /* Qwasi.m */; };
+		D440055A1B1E1D7F008B80B1 /* Qwasi.m in Sources */ = {isa = PBXBuildFile; fileRef = D44005561B1E1D7F008B80B1 /* Qwasi.m */; };
+		D440055D1B1E1D91008B80B1 /* QwasiConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = D440055B1B1E1D91008B80B1 /* QwasiConfig.h */; };
+		D440055E1B1E1D91008B80B1 /* QwasiConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = D440055B1B1E1D91008B80B1 /* QwasiConfig.h */; };
+		D440055F1B1E1D91008B80B1 /* QwasiConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = D440055C1B1E1D91008B80B1 /* QwasiConfig.m */; };
+		D44005601B1E1D91008B80B1 /* QwasiConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = D440055C1B1E1D91008B80B1 /* QwasiConfig.m */; };
+		D44005631B1E1D9C008B80B1 /* QwasiClient.h in Headers */ = {isa = PBXBuildFile; fileRef = D44005611B1E1D9C008B80B1 /* QwasiClient.h */; };
+		D44005641B1E1D9C008B80B1 /* QwasiClient.h in Headers */ = {isa = PBXBuildFile; fileRef = D44005611B1E1D9C008B80B1 /* QwasiClient.h */; };
+		D44005651B1E1D9C008B80B1 /* QwasiClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D44005621B1E1D9C008B80B1 /* QwasiClient.m */; };
+		D44005661B1E1D9C008B80B1 /* QwasiClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D44005621B1E1D9C008B80B1 /* QwasiClient.m */; };
 		D53D373C11ED64D0D71A2E2E /* EXPMatchers+beKindOf.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB4BE142E40C84ABECFE34E /* EXPMatchers+beKindOf.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DADA895C6CB309BF189BE589 /* EXPDoubleTuple.m in Sources */ = {isa = PBXBuildFile; fileRef = A208C0CD1083AB5DCF5828BD /* EXPDoubleTuple.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		DDE8D18806CF15695B38B80D /* SPTCompiledExample.h in Headers */ = {isa = PBXBuildFile; fileRef = 43C44631DA9EFC4241927C79 /* SPTCompiledExample.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -191,7 +201,6 @@
 		15723A62A9663F74A42EDEB9 /* Pods-Qwasi_Tests-Qwasi.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Qwasi_Tests-Qwasi.xcconfig"; path = "../Pods-Qwasi_Tests-Qwasi/Pods-Qwasi_Tests-Qwasi.xcconfig"; sourceTree = "<group>"; };
 		16204A1365810D2FB9367395 /* Pods-Qwasi_Example-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Qwasi_Example-resources.sh"; sourceTree = "<group>"; };
 		182DD50CB497632AF5609005 /* EXPMatchers+beInTheRangeOf.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "EXPMatchers+beInTheRangeOf.m"; path = "Expecta/Matchers/EXPMatchers+beInTheRangeOf.m"; sourceTree = "<group>"; };
-		1CDC2EF7F3D0DCF6DD8C9EF2 /* ReplaceMe.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = ReplaceMe.m; sourceTree = "<group>"; };
 		1D5C109D14FFFE75D8B38057 /* Pods-Qwasi_Tests-Specta.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Qwasi_Tests-Specta.xcconfig"; sourceTree = "<group>"; };
 		1F604C6AB0482009AAB02AC2 /* SpectaUtility.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SpectaUtility.m; path = Specta/Specta/SpectaUtility.m; sourceTree = "<group>"; };
 		1FF1F5618D323175C38E04F6 /* SPTCompiledExample.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SPTCompiledExample.m; path = Specta/Specta/SPTCompiledExample.m; sourceTree = "<group>"; };
@@ -306,6 +315,12 @@
 		D13924F97BAC464A523E2171 /* Pods-Qwasi_Tests-Specta-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Qwasi_Tests-Specta-dummy.m"; sourceTree = "<group>"; };
 		D13BA14CFE22412953B9618E /* NSValue+Expecta.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "NSValue+Expecta.h"; path = "Expecta/NSValue+Expecta.h"; sourceTree = "<group>"; };
 		D24834ED19BF8EF9CB3D4DE7 /* EXPDefines.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = EXPDefines.h; path = Expecta/EXPDefines.h; sourceTree = "<group>"; };
+		D44005551B1E1D7F008B80B1 /* Qwasi.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Qwasi.h; sourceTree = "<group>"; };
+		D44005561B1E1D7F008B80B1 /* Qwasi.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Qwasi.m; sourceTree = "<group>"; };
+		D440055B1B1E1D91008B80B1 /* QwasiConfig.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QwasiConfig.h; sourceTree = "<group>"; };
+		D440055C1B1E1D91008B80B1 /* QwasiConfig.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QwasiConfig.m; sourceTree = "<group>"; };
+		D44005611B1E1D9C008B80B1 /* QwasiClient.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = QwasiClient.h; sourceTree = "<group>"; };
+		D44005621B1E1D9C008B80B1 /* QwasiClient.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = QwasiClient.m; sourceTree = "<group>"; };
 		D5B838925F149DA53A2689C1 /* Pods-Qwasi_Tests-Expecta-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Qwasi_Tests-Expecta-dummy.m"; sourceTree = "<group>"; };
 		D7B82769B1FFBF2DA8C5CD03 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		DB02B55509C1ECD5FCA30E3C /* EXPMatchers+beInstanceOf.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = "EXPMatchers+beInstanceOf.m"; path = "Expecta/Matchers/EXPMatchers+beInstanceOf.m"; sourceTree = "<group>"; };
@@ -462,7 +477,12 @@
 		5812E705D994E114584C914C /* Classes */ = {
 			isa = PBXGroup;
 			children = (
-				1CDC2EF7F3D0DCF6DD8C9EF2 /* ReplaceMe.m */,
+				D44005551B1E1D7F008B80B1 /* Qwasi.h */,
+				D44005561B1E1D7F008B80B1 /* Qwasi.m */,
+				D440055B1B1E1D91008B80B1 /* QwasiConfig.h */,
+				D440055C1B1E1D91008B80B1 /* QwasiConfig.m */,
+				D44005611B1E1D9C008B80B1 /* QwasiClient.h */,
+				D44005621B1E1D9C008B80B1 /* QwasiClient.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";
@@ -745,7 +765,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D44005571B1E1D7F008B80B1 /* Qwasi.h in Headers */,
+				D440055D1B1E1D91008B80B1 /* QwasiConfig.h in Headers */,
 				F9915008148EB7E3ED613E11 /* Pods-Qwasi_Example-Qwasi-umbrella.h in Headers */,
+				D44005631B1E1D9C008B80B1 /* QwasiClient.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -761,7 +784,10 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D44005581B1E1D7F008B80B1 /* Qwasi.h in Headers */,
+				D440055E1B1E1D91008B80B1 /* QwasiConfig.h in Headers */,
 				29469B808957176C65C4945C /* Pods-Qwasi_Tests-Qwasi-umbrella.h in Headers */,
+				D44005641B1E1D9C008B80B1 /* QwasiClient.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1077,8 +1103,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D44005651B1E1D9C008B80B1 /* QwasiClient.m in Sources */,
 				6FB795B4CB5EE20F7DD3B2EA /* Pods-Qwasi_Example-Qwasi-dummy.m in Sources */,
-				5C6FF233F0F37C73579AE9DC /* ReplaceMe.m in Sources */,
+				D440055F1B1E1D91008B80B1 /* QwasiConfig.m in Sources */,
+				D44005591B1E1D7F008B80B1 /* Qwasi.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -1128,8 +1156,10 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D44005661B1E1D9C008B80B1 /* QwasiClient.m in Sources */,
 				69BAC1ADC6ADDAA5F57FAE18 /* Pods-Qwasi_Tests-Qwasi-dummy.m in Sources */,
-				50D2685F4B253B8A058338B3 /* ReplaceMe.m in Sources */,
+				D44005601B1E1D91008B80B1 /* QwasiConfig.m in Sources */,
+				D440055A1B1E1D7F008B80B1 /* Qwasi.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
