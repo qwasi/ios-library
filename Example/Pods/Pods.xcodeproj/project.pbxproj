@@ -111,16 +111,16 @@
 		CC94354D6FCD0A7C0C02A1D1 /* EXPMatchers+beSubclassOf.h in Headers */ = {isa = PBXBuildFile; fileRef = 6B912176DDEA34651A909F3A /* EXPMatchers+beSubclassOf.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		CF170E85658C97592E62B8E0 /* EXPMatcherHelpers.m in Sources */ = {isa = PBXBuildFile; fileRef = 3FEC374363A43F8B7FF92624 /* EXPMatcherHelpers.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
 		D0DB7C0AA49021B5A8AA47B2 /* EXPExpect.m in Sources */ = {isa = PBXBuildFile; fileRef = F3E036E8CCBA04F7E8D5ECCE /* EXPExpect.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
-		D44005571B1E1D7F008B80B1 /* Qwasi.h in Headers */ = {isa = PBXBuildFile; fileRef = D44005551B1E1D7F008B80B1 /* Qwasi.h */; };
-		D44005581B1E1D7F008B80B1 /* Qwasi.h in Headers */ = {isa = PBXBuildFile; fileRef = D44005551B1E1D7F008B80B1 /* Qwasi.h */; };
+		D44005571B1E1D7F008B80B1 /* Qwasi.h in Headers */ = {isa = PBXBuildFile; fileRef = D44005551B1E1D7F008B80B1 /* Qwasi.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D44005581B1E1D7F008B80B1 /* Qwasi.h in Headers */ = {isa = PBXBuildFile; fileRef = D44005551B1E1D7F008B80B1 /* Qwasi.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D44005591B1E1D7F008B80B1 /* Qwasi.m in Sources */ = {isa = PBXBuildFile; fileRef = D44005561B1E1D7F008B80B1 /* Qwasi.m */; };
 		D440055A1B1E1D7F008B80B1 /* Qwasi.m in Sources */ = {isa = PBXBuildFile; fileRef = D44005561B1E1D7F008B80B1 /* Qwasi.m */; };
-		D440055D1B1E1D91008B80B1 /* QwasiConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = D440055B1B1E1D91008B80B1 /* QwasiConfig.h */; };
-		D440055E1B1E1D91008B80B1 /* QwasiConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = D440055B1B1E1D91008B80B1 /* QwasiConfig.h */; };
+		D440055D1B1E1D91008B80B1 /* QwasiConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = D440055B1B1E1D91008B80B1 /* QwasiConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D440055E1B1E1D91008B80B1 /* QwasiConfig.h in Headers */ = {isa = PBXBuildFile; fileRef = D440055B1B1E1D91008B80B1 /* QwasiConfig.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D440055F1B1E1D91008B80B1 /* QwasiConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = D440055C1B1E1D91008B80B1 /* QwasiConfig.m */; };
 		D44005601B1E1D91008B80B1 /* QwasiConfig.m in Sources */ = {isa = PBXBuildFile; fileRef = D440055C1B1E1D91008B80B1 /* QwasiConfig.m */; };
-		D44005631B1E1D9C008B80B1 /* QwasiClient.h in Headers */ = {isa = PBXBuildFile; fileRef = D44005611B1E1D9C008B80B1 /* QwasiClient.h */; };
-		D44005641B1E1D9C008B80B1 /* QwasiClient.h in Headers */ = {isa = PBXBuildFile; fileRef = D44005611B1E1D9C008B80B1 /* QwasiClient.h */; };
+		D44005631B1E1D9C008B80B1 /* QwasiClient.h in Headers */ = {isa = PBXBuildFile; fileRef = D44005611B1E1D9C008B80B1 /* QwasiClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		D44005641B1E1D9C008B80B1 /* QwasiClient.h in Headers */ = {isa = PBXBuildFile; fileRef = D44005611B1E1D9C008B80B1 /* QwasiClient.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D44005651B1E1D9C008B80B1 /* QwasiClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D44005621B1E1D9C008B80B1 /* QwasiClient.m */; };
 		D44005661B1E1D9C008B80B1 /* QwasiClient.m in Sources */ = {isa = PBXBuildFile; fileRef = D44005621B1E1D9C008B80B1 /* QwasiClient.m */; };
 		D53D373C11ED64D0D71A2E2E /* EXPMatchers+beKindOf.m in Sources */ = {isa = PBXBuildFile; fileRef = DEB4BE142E40C84ABECFE34E /* EXPMatchers+beKindOf.m */; settings = {COMPILER_FLAGS = "-fno-objc-arc"; }; };
@@ -479,10 +479,10 @@
 			children = (
 				D44005551B1E1D7F008B80B1 /* Qwasi.h */,
 				D44005561B1E1D7F008B80B1 /* Qwasi.m */,
-				D440055B1B1E1D91008B80B1 /* QwasiConfig.h */,
-				D440055C1B1E1D91008B80B1 /* QwasiConfig.m */,
 				D44005611B1E1D9C008B80B1 /* QwasiClient.h */,
 				D44005621B1E1D9C008B80B1 /* QwasiClient.m */,
+				D440055B1B1E1D91008B80B1 /* QwasiConfig.h */,
+				D440055C1B1E1D91008B80B1 /* QwasiConfig.m */,
 			);
 			path = Classes;
 			sourceTree = "<group>";

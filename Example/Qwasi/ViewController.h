@@ -8,6 +8,6 @@
 
 @import UIKit;
 
-@interface QViewController : UIViewController
+@interface ViewController : UIViewController
 
 @end

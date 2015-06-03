@@ -6,13 +6,13 @@
 //  Copyright (c) 2014 Rob Rodriguez. All rights reserved.
 //
 
-#import "QViewController.h"
+#import "ViewController.h"
 
-@interface QViewController ()
+@interface ViewController ()
 
 @end
 
-@implementation QViewController
+@implementation ViewController
 
 - (void)viewDidLoad
 {

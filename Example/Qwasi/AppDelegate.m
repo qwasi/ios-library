@@ -6,9 +6,10 @@
 //  Copyright (c) 2014 Rob Rodriguez. All rights reserved.
 //
 
-#import "QAppDelegate.h"
+#import "AppDelegate.h"
+#import <Qwasi/QwasiConfig.h>
 
-@implementation QAppDelegate
+@implementation AppDelegate
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {

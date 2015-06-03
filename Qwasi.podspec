@@ -23,4 +23,5 @@ Pod::Spec.new do |s|
   s.resource_bundles = {
     'Qwasi' => ['Pod/Assets/*.png']
   }
+
 end
