@@ -16,12 +16,18 @@ Pod::Spec.new do |s|
   s.author           = { "Rob Rodriguez" => "rob.rodriguez@qwasi.com" }
   s.source           = { :git => "https://code.qwasi.com/scm/sdk/ios-library.git", :tag => s.version.to_s }
 
+  s.ios.deployment_target = '7.1'
+
   s.platform     = :ios, '7.0'
   s.requires_arc = true
 
-  s.source_files = 'Pod/Classes/**/*'
-  s.resource_bundles = {
-    'Qwasi' => ['Pod/Assets/*.png']
-  }
+  s.public_header_files = 'Pod/**/*.h'
 
+  s.source_files = 'Pod/**/*'
+
+  s.dependency 'CocoaLumberjack'
+  s.dependency 'AFJSONRPCClient'
+  s.dependency 'GBDeviceInfo', '~> 3.1.0'
+  s.dependency 'Emitter'
+  s.dependency 'QSwizzle', '~> 0.2.0'
 end

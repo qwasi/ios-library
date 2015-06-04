@@ -14,6 +14,10 @@
 @property (nonatomic,readonly) NSString* key;
 
 + (instancetype)default;
+
 + (instancetype)configWithFile:(NSString*)path;
-+ (instancetype)configWithURL:(NSURL*)url withApplication:(NSString*)app withKey:(NSString*)key;
+
++ (instancetype)configWithURL:(NSURL*)url
+              withApplication:(NSString*)app
+                      withKey:(NSString*)key;
 @end

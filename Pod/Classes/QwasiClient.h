@@ -7,7 +7,13 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "QwasiConfig.h"
+#import "AFJSONRPCClient.h"
 
-@interface QwasiClient : NSObject
+@interface QwasiClient : AFJSONRPCClient
+
++ (instancetype)default;
+
++ (instancetype)clientWithConfig:(QwasiConfig*)config;
 
 @end

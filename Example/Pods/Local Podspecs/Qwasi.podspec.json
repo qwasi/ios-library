@@ -1,25 +1,37 @@
 {
   "name": "Qwasi",
-  "version": "0.1.0",
-  "summary": "A short description of Qwasi.",
-  "description": "                       An optional longer description of Qwasi\n\n                       * Markdown format.\n                       * Don't worry about the indent, we strip it!\n",
-  "homepage": "https://github.com/<GITHUB_USERNAME>/Qwasi",
+  "version": "2.1.0",
+  "summary": "Qwasi iOS Library",
+  "homepage": "https://code.qwasi.com/scm/sdk/ios-library",
   "license": "MIT",
   "authors": {
     "Rob Rodriguez": "rob.rodriguez@qwasi.com"
   },
   "source": {
-    "git": "https://github.com/<GITHUB_USERNAME>/Qwasi.git",
-    "tag": "0.1.0"
+    "git": "https://code.qwasi.com/scm/sdk/ios-library.git",
+    "tag": "2.1.0"
   },
   "platforms": {
     "ios": "7.0"
   },
   "requires_arc": true,
-  "source_files": "Pod/Classes/**/*",
-  "resource_bundles": {
-    "Qwasi": [
-      "Pod/Assets/*.png"
+  "public_header_files": "Pod/**/*.h",
+  "source_files": "Pod/**/*",
+  "dependencies": {
+    "CocoaLumberjack": [
+
+    ],
+    "AFJSONRPCClient": [
+
+    ],
+    "GBDeviceInfo": [
+      "~> 3.1.0"
+    ],
+    "Emitter": [
+
+    ],
+    "QSwizzle": [
+      "~> 0.2.0"
     ]
   }
 }

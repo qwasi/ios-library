@@ -7,7 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		29EF777DDD3118C7532E6A5A /* Pods_Qwasi_Example.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 416D945E793C9F6ACE4F6C09 /* Pods_Qwasi_Example.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
+		494AFD87A7EBF8F09ED48013 /* libPods-Qwasi_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCEAC89F46AC7B20C6874C26 /* libPods-Qwasi_Tests.a */; };
+		4FE46F3EBAC8202E14F9E762 /* libPods-AcmePush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C3193B4C97F30A2EB1AAE57 /* libPods-AcmePush.a */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -23,8 +24,9 @@
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
-		ADEF535A2AB799374DE796C4 /* Pods_Qwasi_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA99CDB12811F4AAAE410C7D /* Pods_Qwasi_Tests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		D44005681B1E2367008B80B1 /* Qwasi.plist in Resources */ = {isa = PBXBuildFile; fileRef = D44005671B1E2367008B80B1 /* Qwasi.plist */; };
+		D440056C1B1F6B03008B80B1 /* Pods-AcmePush.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D440056A1B1F6B03008B80B1 /* Pods-AcmePush.debug.xcconfig */; };
+		D440056D1B1F6B03008B80B1 /* Pods-AcmePush.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D440056B1B1F6B03008B80B1 /* Pods-AcmePush.release.xcconfig */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -39,7 +41,7 @@
 
 /* Begin PBXFileReference section */
 		416D945E793C9F6ACE4F6C09 /* Pods_Qwasi_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Qwasi_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		6003F58A195388D20070C39A /* Qwasi_Example.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Qwasi_Example.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		6003F58A195388D20070C39A /* AcmePush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AcmePush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
 		6003F591195388D20070C39A /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -60,13 +62,15 @@
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
-		9F4900C6D539609CB88077B8 /* Pods-Qwasi_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Qwasi_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-Qwasi_Example/Pods-Qwasi_Example.release.xcconfig"; sourceTree = "<group>"; };
+		8C3193B4C97F30A2EB1AAE57 /* libPods-AcmePush.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AcmePush.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		AE719FB6C0C2C63D194AA37E /* Pods-Qwasi_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Qwasi_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Qwasi_Tests/Pods-Qwasi_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		B04A6F727881ABA0750F25F3 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		BA00615680AA0D9A6A7484F9 /* Pods-Qwasi_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Qwasi_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Qwasi_Tests/Pods-Qwasi_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		CCEAC89F46AC7B20C6874C26 /* libPods-Qwasi_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Qwasi_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D44005671B1E2367008B80B1 /* Qwasi.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Qwasi.plist; sourceTree = "<group>"; };
-		DFF3F79B525D0FD34AEC689D /* Pods-Qwasi_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Qwasi_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Qwasi_Example/Pods-Qwasi_Example.debug.xcconfig"; sourceTree = "<group>"; };
-		EA99CDB12811F4AAAE410C7D /* Pods_Qwasi_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Qwasi_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		D440056A1B1F6B03008B80B1 /* Pods-AcmePush.debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-AcmePush.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AcmePush/Pods-AcmePush.debug.xcconfig"; sourceTree = "<group>"; };
+		D440056B1B1F6B03008B80B1 /* Pods-AcmePush.release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-AcmePush.release.xcconfig"; path = "Pods/Target Support Files/Pods-AcmePush/Pods-AcmePush.release.xcconfig"; sourceTree = "<group>"; };
+		D440058D1B2104A9008B80B1 /* AcmePush.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AcmePush.entitlements; sourceTree = "<group>"; };
 		F720FC39F2B85B089FF4B6A5 /* Qwasi.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Qwasi.podspec; path = ../Qwasi.podspec; sourceTree = "<group>"; };
 		FCA453E192B2E31FB97CAFDB /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -79,7 +83,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				29EF777DDD3118C7532E6A5A /* Pods_Qwasi_Example.framework in Frameworks */,
+				4FE46F3EBAC8202E14F9E762 /* libPods-AcmePush.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -90,7 +94,7 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				ADEF535A2AB799374DE796C4 /* Pods_Qwasi_Tests.framework in Frameworks */,
+				494AFD87A7EBF8F09ED48013 /* libPods-Qwasi_Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,6 +104,7 @@
 		6003F581195388D10070C39A = {
 			isa = PBXGroup;
 			children = (
+				D440058D1B2104A9008B80B1 /* AcmePush.entitlements */,
 				60FF7A9C1954A5C5007DD14C /* Podspec Metadata */,
 				6003F593195388D20070C39A /* Example for Qwasi */,
 				6003F5B5195388D20070C39A /* Tests */,
@@ -112,7 +117,7 @@
 		6003F58B195388D20070C39A /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				6003F58A195388D20070C39A /* Qwasi_Example.app */,
+				6003F58A195388D20070C39A /* AcmePush.app */,
 				6003F5AE195388D20070C39A /* Qwasi_Tests.xctest */,
 			);
 			name = Products;
@@ -126,7 +131,8 @@
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
 				416D945E793C9F6ACE4F6C09 /* Pods_Qwasi_Example.framework */,
-				EA99CDB12811F4AAAE410C7D /* Pods_Qwasi_Tests.framework */,
+				8C3193B4C97F30A2EB1AAE57 /* libPods-AcmePush.a */,
+				CCEAC89F46AC7B20C6874C26 /* libPods-Qwasi_Tests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -191,8 +197,8 @@
 		6A580EF9DBE91D27C3218695 /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				DFF3F79B525D0FD34AEC689D /* Pods-Qwasi_Example.debug.xcconfig */,
-				9F4900C6D539609CB88077B8 /* Pods-Qwasi_Example.release.xcconfig */,
+				D440056A1B1F6B03008B80B1 /* Pods-AcmePush.debug.xcconfig */,
+				D440056B1B1F6B03008B80B1 /* Pods-AcmePush.release.xcconfig */,
 				AE719FB6C0C2C63D194AA37E /* Pods-Qwasi_Tests.debug.xcconfig */,
 				BA00615680AA0D9A6A7484F9 /* Pods-Qwasi_Tests.release.xcconfig */,
 			);
@@ -210,7 +216,6 @@
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				9D2449E9F6B8092D7DD923FC /* Embed Pods Frameworks */,
 				2E0831F34D45EA947A1AB298 /* Copy Pods Resources */,
 			);
 			buildRules = (
@@ -219,7 +224,7 @@
 			);
 			name = AcmePush;
 			productName = Qwasi;
-			productReference = 6003F58A195388D20070C39A /* Qwasi_Example.app */;
+			productReference = 6003F58A195388D20070C39A /* AcmePush.app */;
 			productType = "com.apple.product-type.application";
 		};
 		6003F5AD195388D20070C39A /* Qwasi_Tests */ = {
@@ -230,7 +235,6 @@
 				6003F5AA195388D20070C39A /* Sources */,
 				6003F5AB195388D20070C39A /* Frameworks */,
 				6003F5AC195388D20070C39A /* Resources */,
-				EFFC354873D044D8A5FDEE00 /* Embed Pods Frameworks */,
 				34234A02CAB7BB691A2B32D7 /* Copy Pods Resources */,
 			);
 			buildRules = (
@@ -253,6 +257,17 @@
 				LastUpgradeCheck = 0510;
 				ORGANIZATIONNAME = "Rob Rodriguez";
 				TargetAttributes = {
+					6003F589195388D20070C39A = {
+						DevelopmentTeam = 4S9AUPE2C5;
+						SystemCapabilities = {
+							com.apple.BackgroundModes = {
+								enabled = 1;
+							};
+							com.apple.InterAppAudio = {
+								enabled = 0;
+							};
+						};
+					};
 					6003F5AD195388D20070C39A = {
 						TestTargetID = 6003F589195388D20070C39A;
 					};
@@ -283,7 +298,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				6003F5A4195388D20070C39A /* Main_iPad.storyboard in Resources */,
+				D440056C1B1F6B03008B80B1 /* Pods-AcmePush.debug.xcconfig in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
+				D440056D1B1F6B03008B80B1 /* Pods-AcmePush.release.xcconfig in Resources */,
 				D44005681B1E2367008B80B1 /* Qwasi.plist in Resources */,
 				6003F5A1195388D20070C39A /* Main_iPhone.storyboard in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
@@ -313,7 +330,7 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Qwasi_Example/Pods-Qwasi_Example-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AcmePush/Pods-AcmePush-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		34234A02CAB7BB691A2B32D7 /* Copy Pods Resources */ = {
@@ -346,21 +363,6 @@
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
 			showEnvVarsInLog = 0;
 		};
-		9D2449E9F6B8092D7DD923FC /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Qwasi_Example/Pods-Qwasi_Example-frameworks.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
 		D757D52DE9418972E3C8BEF5 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -374,21 +376,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		EFFC354873D044D8A5FDEE00 /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Qwasi_Tests/Pods-Qwasi_Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -532,30 +519,36 @@
 		};
 		6003F5C0195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = DFF3F79B525D0FD34AEC689D /* Pods-Qwasi_Example.debug.xcconfig */;
+			baseConfigurationReference = D440056A1B1F6B03008B80B1 /* Pods-AcmePush.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Qwasi/Qwasi-Prefix.pch";
 				INFOPLIST_FILE = "Qwasi/Qwasi-Info.plist";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Debug;
 		};
 		6003F5C1195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 9F4900C6D539609CB88077B8 /* Pods-Qwasi_Example.release.xcconfig */;
+			baseConfigurationReference = D440056B1B1F6B03008B80B1 /* Pods-AcmePush.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Qwasi/Qwasi-Prefix.pch";
 				INFOPLIST_FILE = "Qwasi/Qwasi-Info.plist";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				WRAPPER_EXTENSION = app;
 			};
 			name = Release;

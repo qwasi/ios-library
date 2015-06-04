@@ -1,6 +1,47 @@
 PODS:
+  - AFJSONRPCClient (2.1.1):
+    - AFNetworking (~> 2.1)
+  - AFNetworking (2.5.4):
+    - AFNetworking/NSURLConnection (= 2.5.4)
+    - AFNetworking/NSURLSession (= 2.5.4)
+    - AFNetworking/Reachability (= 2.5.4)
+    - AFNetworking/Security (= 2.5.4)
+    - AFNetworking/Serialization (= 2.5.4)
+    - AFNetworking/UIKit (= 2.5.4)
+  - AFNetworking/NSURLConnection (2.5.4):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/NSURLSession (2.5.4):
+    - AFNetworking/Reachability
+    - AFNetworking/Security
+    - AFNetworking/Serialization
+  - AFNetworking/Reachability (2.5.4)
+  - AFNetworking/Security (2.5.4)
+  - AFNetworking/Serialization (2.5.4)
+  - AFNetworking/UIKit (2.5.4):
+    - AFNetworking/NSURLConnection
+    - AFNetworking/NSURLSession
+  - BlocksKit/DynamicDelegate (2.2.5)
+  - CocoaLumberjack (2.0.0):
+    - CocoaLumberjack/Default (= 2.0.0)
+    - CocoaLumberjack/Extensions (= 2.0.0)
+  - CocoaLumberjack/Core (2.0.0)
+  - CocoaLumberjack/Default (2.0.0):
+    - CocoaLumberjack/Core
+  - CocoaLumberjack/Extensions (2.0.0):
+    - CocoaLumberjack/Default
+  - Emitter (0.0.9):
+    - BlocksKit/DynamicDelegate
   - Expecta (1.0.0)
-  - Qwasi (0.1.0)
+  - GBDeviceInfo (3.1.0)
+  - QSwizzle (0.2.2)
+  - Qwasi (2.1.0):
+    - AFJSONRPCClient
+    - CocoaLumberjack
+    - Emitter
+    - GBDeviceInfo (~> 3.1.0)
+    - QSwizzle (~> 0.2.0)
   - Specta (1.0.1)
 
 DEPENDENCIES:
@@ -13,8 +54,15 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
+  AFJSONRPCClient: 333bada91e6e45398446b8bd84e238e6f2389b1b
+  AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
+  BlocksKit: 7f422b971407001178d181a43b99014ea2591fe6
+  CocoaLumberjack: a6f77d987d65dc7ba86b0f84db7d0b9084f77bcb
+  Emitter: cf50bf44fc8817535018fbd6c4fd576b87803e78
   Expecta: 32604574add2c46a36f8d2f716b6c5736eb75024
-  Qwasi: 3e62f2e418047b732e7dbf38f4c8ca7050557e13
+  GBDeviceInfo: 3b22a82dc6e2313144b7af71af7ba11a0a3bb74f
+  QSwizzle: 90b1de5af6fe9e3bbc2e2c5b7f0d3fdf9d4f1b79
+  Qwasi: 0b4ac53af84772cedc6ce3d5a92dfb9fab2d67b5
   Specta: 097be314a75de103703a3bf9a529dc1a398509d7
 
-COCOAPODS: 0.37.1
+COCOAPODS: 0.37.2

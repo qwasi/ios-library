@@ -1,6 +1,0 @@
-framework module Qwasi {
-  umbrella header "Pods-Qwasi_Example-Qwasi-umbrella.h"
-
-  export *
-  module * { export * }
-}
