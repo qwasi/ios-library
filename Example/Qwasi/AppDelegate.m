@@ -9,7 +9,8 @@
 #import "AppDelegate.h"
 #import "Qwasi.h"
 
-#define USER_TOKEN @"201-867-5309"
+#define USER_TOKEN          @"201-867-5309"
+#define DEVICE_TOKEN_KEY    @"deviceToken"
 
 @implementation AppDelegate
 
@@ -19,13 +20,13 @@
     [DDLog addLogger:[DDTTYLogger sharedInstance]];
     
     // Get our device token from the defaults
-    NSString* deviceToken = [[NSUserDefaults standardUserDefaults] valueForKey: @"deviceToken"];
+    NSString* deviceToken = [[NSUserDefaults standardUserDefaults] valueForKey: DEVICE_TOKEN_KEY];
     
     // Register the device with Qwasi
     [[Qwasi shared] registerDevice: deviceToken withUserToken: USER_TOKEN success: ^(NSString *deviceToken) {
         
         // We need to store this for later as this is our unique device identifier
-        [[NSUserDefaults standardUserDefaults] setValue: deviceToken forKey: @"deviceToken"];
+        [[NSUserDefaults standardUserDefaults] setValue: deviceToken forKey: DEVICE_TOKEN_KEY];
         
         // Enable push services
         [Qwasi shared].pushEnabled = YES;
