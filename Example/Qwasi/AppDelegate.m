@@ -7,7 +7,6 @@
 //
 
 #import "AppDelegate.h"
-#import "CocoaLumberjack.h"
 #import "Qwasi.h"
 
 #define USER_TOKEN @"201-867-5309"

@@ -13,6 +13,7 @@
 #import "QwasiClient.h"
 #import "QwasiMessage.h"
 #import "QwasiLocationManager.h"
+#import "CocoaLumberjack.h"
 #import "Emitter.h"
 
 extern NSString* const kEventApplicationState;
