@@ -36,7 +36,7 @@
     }];
     
     [[Qwasi shared] on: @"error" listener: ^(NSError* error) {
-        // Handle Errors here
+        // Handle Errors here (see QwasiError.h)
         if (error.domain == kQwasiErrorDomain) {
             switch (error.code) {
                 default:
