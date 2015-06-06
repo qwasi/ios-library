@@ -21,7 +21,6 @@
     return sharedInstance;
 }
 
-
 + (instancetype)clientWithConfig:(QwasiConfig*)config {
     return [[QwasiClient alloc] initWithConfig: config];
 }

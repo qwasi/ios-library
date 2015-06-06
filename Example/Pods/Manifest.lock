@@ -62,7 +62,7 @@ SPEC CHECKSUMS:
   Expecta: 32604574add2c46a36f8d2f716b6c5736eb75024
   GBDeviceInfo: 3b22a82dc6e2313144b7af71af7ba11a0a3bb74f
   QSwizzle: 90b1de5af6fe9e3bbc2e2c5b7f0d3fdf9d4f1b79
-  Qwasi: 0b4ac53af84772cedc6ce3d5a92dfb9fab2d67b5
+  Qwasi: 81f1ea96440e03ca2fc0f04cdbc87f5b4647b76b
   Specta: 097be314a75de103703a3bf9a529dc1a398509d7
 
 COCOAPODS: 0.37.2

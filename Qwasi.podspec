@@ -16,10 +16,10 @@ Pod::Spec.new do |s|
   s.author           = { "Rob Rodriguez" => "rob.rodriguez@qwasi.com" }
   s.source           = { :git => "https://code.qwasi.com/scm/sdk/ios-library.git", :tag => s.version.to_s }
 
-  s.ios.deployment_target = '7.1'
-
   s.platform     = :ios, '7.0'
   s.requires_arc = true
+  s.ios.deployment_target = '7.1'
+  s.ios.framework = 'CoreLocation'
 
   s.public_header_files = 'Pod/**/*.h'
 

@@ -25,8 +25,6 @@
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		D44005681B1E2367008B80B1 /* Qwasi.plist in Resources */ = {isa = PBXBuildFile; fileRef = D44005671B1E2367008B80B1 /* Qwasi.plist */; };
-		D440056C1B1F6B03008B80B1 /* Pods-AcmePush.debug.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D440056A1B1F6B03008B80B1 /* Pods-AcmePush.debug.xcconfig */; };
-		D440056D1B1F6B03008B80B1 /* Pods-AcmePush.release.xcconfig in Resources */ = {isa = PBXBuildFile; fileRef = D440056B1B1F6B03008B80B1 /* Pods-AcmePush.release.xcconfig */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -254,7 +252,7 @@
 			isa = PBXProject;
 			attributes = {
 				CLASSPREFIX = Q;
-				LastUpgradeCheck = 0510;
+				LastUpgradeCheck = 0630;
 				ORGANIZATIONNAME = "Rob Rodriguez";
 				TargetAttributes = {
 					6003F589195388D20070C39A = {
@@ -298,9 +296,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6003F5A4195388D20070C39A /* Main_iPad.storyboard in Resources */,
-				D440056C1B1F6B03008B80B1 /* Pods-AcmePush.debug.xcconfig in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
-				D440056D1B1F6B03008B80B1 /* Pods-AcmePush.release.xcconfig in Resources */,
 				D44005681B1E2367008B80B1 /* Qwasi.plist in Resources */,
 				6003F5A1195388D20070C39A /* Main_iPhone.storyboard in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
