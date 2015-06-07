@@ -8,11 +8,10 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Installation
 
-Qwasi is available as a private CocoaPod [Qwasi](https://code.qwasi.com/projects/SDK/repos/ios-library/browse). To install
+Qwasi is available from [CocoaPods](http://cocoapods.org/). To install
 it, simply add the following lines to your Podfile:
 
 ```ruby
-source 'https://code.qwasi.com/scm/osrc/pods.git'
 
 pod "Qwasi"
 ```
