@@ -1,5 +1,5 @@
 //
-//  QAppDelegate.m
+//  AppDelegate.m
 //  Qwasi
 //
 //  Created by CocoaPods on 06/02/2015.
