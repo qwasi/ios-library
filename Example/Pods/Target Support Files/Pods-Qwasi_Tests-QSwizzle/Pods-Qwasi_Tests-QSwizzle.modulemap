@@ -1,6 +1,0 @@
-framework module QSwizzle {
-  umbrella header "Pods-Qwasi_Tests-QSwizzle-umbrella.h"
-
-  export *
-  module * { export * }
-}

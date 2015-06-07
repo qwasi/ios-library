@@ -8,6 +8,10 @@
 
 // https://github.com/Specta/Specta
 
+#import "Specta.h"
+#import "Expecta.h"
+#import "Qwasi.h"
+
 SpecBegin(InitialSpecs)
 
 describe(@"these will pass", ^{
@@ -18,12 +22,6 @@ describe(@"these will pass", ^{
     
     it(@"can read", ^{
         expect(@"team").toNot.contain(@"I");
-    });
-    
-    it(@"will wait and succeed", ^{
-        waitUntil(^(DoneCallback done) {
-            done();
-        });
     });
 });
 

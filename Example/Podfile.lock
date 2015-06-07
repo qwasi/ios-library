@@ -36,7 +36,7 @@ PODS:
   - Expecta (1.0.0)
   - GBDeviceInfo (3.1.0)
   - QSwizzle (0.2.2)
-  - Qwasi (2.1.0-3):
+  - Qwasi (2.1.0-4):
     - AFJSONRPCClient
     - CocoaLumberjack
     - Emitter
@@ -62,7 +62,7 @@ SPEC CHECKSUMS:
   Expecta: 32604574add2c46a36f8d2f716b6c5736eb75024
   GBDeviceInfo: 3b22a82dc6e2313144b7af71af7ba11a0a3bb74f
   QSwizzle: cbf9af5302838d6f7857319331970f461ba91a2a
-  Qwasi: 814672e46d370a93c2e0a06320c1ad9305cb661f
+  Qwasi: b3e998b759d5570711f3fe31a93504b291dbc6f0
   Specta: 097be314a75de103703a3bf9a529dc1a398509d7
 
 COCOAPODS: 0.37.2

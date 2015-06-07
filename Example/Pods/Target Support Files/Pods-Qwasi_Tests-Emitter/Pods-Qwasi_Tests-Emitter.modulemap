@@ -1,6 +1,0 @@
-framework module Emitter {
-  umbrella header "Pods-Qwasi_Tests-Emitter-umbrella.h"
-
-  export *
-  module * { export * }
-}

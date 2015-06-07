@@ -5,7 +5,6 @@ target 'AcmePush', :exclusive => true do
 end
 
 target 'Qwasi_Tests', :exclusive => true do
-  use_frameworks!
   pod "Qwasi", :path => "../"
 
   pod 'Specta'
