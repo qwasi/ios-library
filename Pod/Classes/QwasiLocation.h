@@ -30,16 +30,19 @@ typedef NS_ENUM(NSInteger, QwasiLocationState) {
 @property (nonatomic,readonly) NSString* id;
 @property (nonatomic,readonly) NSString* name;
 @property (nonatomic,readonly) CLLocationDistance geofenceRadius;
+@property (nonatomic,readonly) NSDictionary* geometry;
 @property (nonatomic,readonly) NSTimeInterval dwellTime;
 @property (nonatomic,readonly) NSUUID* beaconUUID;
-@property (nonatomic,readonly) CLProximity beaconProximity;
+@property (nonatomic,readonly) CLLocationDistance beaconProximity;
 @property (nonatomic,readonly) CLBeaconMajorValue beaconMajorVersion;
 @property (nonatomic,readonly) CLBeaconMinorValue beaconMinorVersion;
 @property (nonatomic,readonly) CLRegion* region;
+@property (nonatomic,readonly) CLBeacon* beacon;
 
 - (id)initWithLocation:(CLLocation*)location;
 - (id)initWithLocationData:(NSDictionary*)data;
 
 - (void)enter;
+- (void)enterWithBeacon:(CLBeacon*)beacon;
 - (void)exit;
 @end

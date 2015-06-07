@@ -166,6 +166,10 @@ QwasiLocationManager* _activeManager = nil;
     [tmp removeAllObjects];
 }
 
+- (NSArray*)locations {
+    return [_regionMap allValues];
+}
+
 #pragma mark - CLLocationManagerDelegate
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     
@@ -202,6 +206,8 @@ QwasiLocationManager* _activeManager = nil;
     
     if (location) {
         DDLogVerbose(@"Did start monitoring for %@ %@", (location.type == QwasiLocationTypeGeofence ? @"geofence" : @"beacon"), location);
+        
+        [_manager requestStateForRegion: region];
     }
 }
 
@@ -209,6 +215,26 @@ QwasiLocationManager* _activeManager = nil;
     QwasiLocation* location = [_regionMap objectForKey: region.identifier];
     
     if (location) {
+        
+        if (error.domain == kCLErrorDomain) {
+            switch (error.code) {
+                case kCLErrorRegionMonitoringFailure:
+                    {
+                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                            [_manager startMonitoringForRegion: region];
+                        });
+                    }
+                    return;
+                    
+                case kCLErrorRegionMonitoringResponseDelayed:
+                case kCLErrorRegionMonitoringSetupDelayed:
+                    return;
+                    
+                default:
+                    break;
+            }
+        }
+        
         DDLogVerbose(@"Failed to start monitoring for %@ %@, %@", (location.type == QwasiLocationTypeGeofence ? @"geofence" : @"beacon"), location, error);
         
         [self emit: @"error", [QwasiError location: location monitoringFailed: error]];
@@ -237,13 +263,38 @@ QwasiLocationManager* _activeManager = nil;
     }
 }
 
+- (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region {
+    QwasiLocation* location = [_regionMap objectForKey: region.identifier];
+    
+    if (location) {
+        switch (state) {
+            case CLRegionStateInside:
+                if (location.type == QwasiLocationTypeBeacon) {
+                    [_manager startRangingBeaconsInRegion: (CLBeaconRegion*)region];
+                }
+                else {
+                    [location enter];
+                }
+                break;
+            
+            case CLRegionStateOutside:
+                [location exit];
+                break;
+                
+            default:
+                break;
+        }
+    }
+}
+
 - (void)locationManager:(CLLocationManager *)manager didRangeBeacons:(NSArray *)beacons inRegion:(CLBeaconRegion *)region {
     QwasiLocation* location = [_regionMap objectForKey: region.identifier];
     CLBeacon* beacon = beacons.count > 0 ? beacons[0] : nil;
     
     if (location && beacon) {
-        if (beacon.proximity >= location.beaconProximity) {
-            [location enter];
+    
+        if (beacon.accuracy <= location.beaconProximity) {
+            [location enterWithBeacon: beacon];
         }
         else {
             [location exit];

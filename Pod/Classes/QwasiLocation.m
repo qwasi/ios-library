@@ -12,9 +12,12 @@
 #import <objc/runtime.h>
 
 @implementation QwasiLocation {
-    NSDictionary* _geometry;
     NSTimeInterval _dwellInterval;
+    NSTimeInterval _dwellStart;
+    NSTimeInterval _exitDelay;
+    
     BOOL _dwell;
+    BOOL _inside;
 }
 
 - (id)initWithLocation:(CLLocation *)location {
@@ -38,19 +41,23 @@
     NSArray* coord = [data valueForKeyPath: @"geofence.geometry.coordinates"];
     
     if (self = [super initWithLatitude: [coord[1] doubleValue] longitude: [coord[0] doubleValue]]) {
+
+        NSDictionary* geofence = data[@"geofence"];
+        NSDictionary* beacon = data[@"beacon"];
+        NSDictionary* properties = data[@"properties"];
+        
         _id = data[@"id"];
         _name = data[@"name"];
-        _geometry = [data valueForKeyPath: @"geofence.geometry"];
-        _dwellInterval = [[data valueForKeyPath: @"properties.dwell_interval"] doubleValue];
-        _geofenceRadius = [[data valueForKeyPath: @"geofence.properties.radius"] doubleValue];
         
-        if (data[@"beacon"]) {
-            NSString* beaconProximity = [data valueForKeyPath: @"beacon.proximity"];
+        _dwellInterval = [[properties valueForKey: @"dwell_interval"] doubleValue];
+        _geofenceRadius = [[geofence valueForKeyPath: @"properties.radius"] doubleValue];
+        
+        if (beacon) {
             
             _type = QwasiLocationTypeBeacon;
-            _beaconUUID = [[NSUUID alloc] initWithUUIDString: [data valueForKeyPath: @"beacon.id"]];
-            _beaconMajorVersion = [[data valueForKeyPath: @"beacon.maj_ver"] unsignedShortValue];
-            _beaconMinorVersion = [[data valueForKeyPath: @"beacon.min_ver"] unsignedShortValue];
+            _beaconUUID = [[NSUUID alloc] initWithUUIDString: [beacon valueForKey: @"id"]];
+            _beaconMajorVersion = [[beacon valueForKey: @"maj_ver"] unsignedShortValue];
+            _beaconMinorVersion = [[beacon valueForKey: @"min_ver"] unsignedShortValue];
         
             if (_beaconMajorVersion == UINT16_MAX) {
                 _region = [[CLBeaconRegion alloc] initWithProximityUUID: _beaconUUID identifier: _id];
@@ -61,20 +68,16 @@
             else {
                 _region = [[CLBeaconRegion alloc] initWithProximityUUID: _beaconUUID major: _beaconMajorVersion minor: _beaconMinorVersion identifier: _id];
             }
-            
-            if ([beaconProximity isEqualToString: @"far"]) {
-                _beaconProximity = CLProximityFar;
-            }
-            else if ([beaconProximity isEqualToString: @"immediate"]) {
-                _beaconProximity = CLProximityImmediate;
-            }
-            else {
-                _beaconProximity = CLProximityNear;
-            }
+        
+            _beaconProximity = [[beacon valueForKey: @"proximity"] doubleValue];
+            _dwellInterval = 1.0f;
+            _exitDelay = 1.0f;
         }
         else {
+            
             _type = QwasiLocationTypeGeofence;
             _region = [[CLCircularRegion alloc] initWithCenter: self.coordinate radius: _geofenceRadius identifier: _id];
+            _exitDelay = 15.0f;
         }
     }
     
@@ -112,7 +115,7 @@
             return [NSString stringWithFormat: @"%@ %@ %@", _name, _id, [super description]];
             
         case QwasiLocationTypeBeacon:
-            return [NSString stringWithFormat: @"%@ %@ %@ (%u,%u) %@", _name, _id, _beaconUUID.UUIDString, _beaconMajorVersion, _beaconMinorVersion, [super description]];
+            return [NSString stringWithFormat: @"%@ %@ %@ (%u,%u) %ldm %@", _name, _id, _beaconUUID.UUIDString, _beaconMajorVersion, _beaconMinorVersion, (long)_beaconProximity, [super description]];
             
         case QwasiLocationTypeCoordinate:
         default:
@@ -122,28 +125,59 @@
 
 - (void)enter {
     
-    if (!_dwell) {
-        if (_type == QwasiLocationTypeGeofence) {
+    @synchronized(self) {
+        if (!_dwell) {
+            
+            _dwellStart = [NSDate timeIntervalSinceReferenceDate];
+
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(_dwellInterval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                if (_dwell && [QwasiLocationManager currentManager]) {
-                    [[QwasiLocationManager currentManager] emit: @"enter", self];
+                
+                @synchronized(self) {
+                    if (_dwell && !_inside && [QwasiLocationManager currentManager]) {
+                        _inside = YES;
+                        [[QwasiLocationManager currentManager] emit: @"enter", self];
+                    }
                 }
             });
+            
+            _dwell = YES;
         }
-        else {
-            [[QwasiLocationManager currentManager] emit: @"enter", self];
-        }
-        
-        _dwell = YES;
     }
+}
+
+- (void)enterWithBeacon:(CLBeacon*)beacon {
+    _beacon = beacon;
+    
+    [self enter];
 }
 
 - (void)exit {
     
-    if (_dwell) {
-        _dwell = NO;
-
-        [[QwasiLocationManager currentManager] emit: @"exit", self];
+    @synchronized(self) {
+        if (_dwell) {
+            
+            dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(_dwellInterval * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                
+                @synchronized(self) {
+                    if (!_dwell && _inside && [QwasiLocationManager currentManager]) {
+                        _inside = NO;
+                        _beacon = nil;
+                        [[QwasiLocationManager currentManager] emit: @"exit", self];
+                    }
+                }
+            });
+            
+            _dwell = NO;
+        }
     }
+}
+
+- (NSTimeInterval)dwellTime {
+
+    if (_dwell) {
+        return [NSDate timeIntervalSinceReferenceDate] - _dwellStart;
+    }
+    
+    return 0;
 }
 @end

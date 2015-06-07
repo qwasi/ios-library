@@ -19,6 +19,7 @@
 @property (nonatomic,readwrite) CLLocationDistance updateDistance;
 @property (nonatomic,readwrite) NSTimeInterval updateInterval;
 @property (nonatomic,readonly) QwasiLocation* lastLocation;
+@property (nonatomic,readonly) NSArray* locations;
 
 + (instancetype)currentManager;
 + (instancetype)foregroundManager;

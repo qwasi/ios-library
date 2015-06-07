@@ -18,6 +18,8 @@
 
 extern NSString* const kEventApplicationState;
 extern NSString* const kEventLocationUpdate;
+extern NSString* const kEventLocationEnter;
+extern NSString* const kEventLocationExit;
 
 @interface Qwasi : NSObject
 
@@ -32,7 +34,7 @@ extern NSString* const kEventLocationUpdate;
 @property (nonatomic,readwrite) CLLocationDistance locationUpdateFilter;
 @property (nonatomic,readwrite) CLLocationDistance locationEventFilter;
 @property (nonatomic,readwrite) CLLocationDistance locationSyncFilter;
-@property (nonatomic,readonly) CLLocation* lastLocation;
+@property (nonatomic,readonly) QwasiLocation* lastLocation;
 
 + (instancetype)shared;
 

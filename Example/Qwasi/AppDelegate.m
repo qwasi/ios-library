@@ -62,12 +62,20 @@
                 break;
                 
             case QwasiLocationTypeGeofence:
-            case QwasiLocationTypeBeacon:
                 if (state == QwasiLocationStateInside) {
                     DDLogInfo(@"Entered location %@.", location.name);
                 }
                 else {
                     DDLogInfo(@"Exited location %@.", location.name);
+                }
+                break;
+                
+            case QwasiLocationTypeBeacon:
+                if (state == QwasiLocationStateInside) {
+                    DDLogInfo(@"Triggered beacon %@.", location.name);
+                }
+                else {
+                    DDLogInfo(@"Cleared beacon %@.", location.name);
                 }
                 break;
                 
