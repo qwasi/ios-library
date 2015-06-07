@@ -1,1 +1,1 @@
-PODS_QWASI_TESTS_QWASI_OTHER_LDFLAGS = -framework "CoreLocation" -framework "Foundation"
+PODS_QWASI_TESTS_QWASI_OTHER_LDFLAGS = -framework "CoreLocation"

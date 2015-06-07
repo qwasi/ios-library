@@ -1,1 +1,1 @@
-PODS_ACMEPUSH_QWASI_OTHER_LDFLAGS = -framework "CoreLocation" -framework "Foundation"
+PODS_ACMEPUSH_QWASI_OTHER_LDFLAGS = -framework "CoreLocation"

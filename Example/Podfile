@@ -1,5 +1,4 @@
 source 'https://github.com/CocoaPods/Specs.git'
-source 'https://code.qwasi.com/scm/osrc/pods.git'
 
 target 'AcmePush', :exclusive => true do
   pod "Qwasi", :path => "../"
