@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		494AFD87A7EBF8F09ED48013 /* libPods-Qwasi_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = CCEAC89F46AC7B20C6874C26 /* libPods-Qwasi_Tests.a */; };
 		4FE46F3EBAC8202E14F9E762 /* libPods-AcmePush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C3193B4C97F30A2EB1AAE57 /* libPods-AcmePush.a */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
@@ -24,6 +23,7 @@
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
+		8F64A6C0C498371C4A5787C5 /* Pods_Qwasi_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 14BFFA464FC53A944D8A56A1 /* Pods_Qwasi_Tests.framework */; settings = {ATTRIBUTES = (Weak, ); }; };
 		D44005681B1E2367008B80B1 /* Qwasi.plist in Resources */ = {isa = PBXBuildFile; fileRef = D44005671B1E2367008B80B1 /* Qwasi.plist */; };
 /* End PBXBuildFile section */
 
@@ -38,6 +38,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		14BFFA464FC53A944D8A56A1 /* Pods_Qwasi_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Qwasi_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		416D945E793C9F6ACE4F6C09 /* Pods_Qwasi_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Qwasi_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58A195388D20070C39A /* AcmePush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AcmePush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -64,7 +65,6 @@
 		AE719FB6C0C2C63D194AA37E /* Pods-Qwasi_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Qwasi_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Qwasi_Tests/Pods-Qwasi_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		B04A6F727881ABA0750F25F3 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
 		BA00615680AA0D9A6A7484F9 /* Pods-Qwasi_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Qwasi_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Qwasi_Tests/Pods-Qwasi_Tests.release.xcconfig"; sourceTree = "<group>"; };
-		CCEAC89F46AC7B20C6874C26 /* libPods-Qwasi_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Qwasi_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		D44005671B1E2367008B80B1 /* Qwasi.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Qwasi.plist; sourceTree = "<group>"; };
 		D440056A1B1F6B03008B80B1 /* Pods-AcmePush.debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-AcmePush.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AcmePush/Pods-AcmePush.debug.xcconfig"; sourceTree = "<group>"; };
 		D440056B1B1F6B03008B80B1 /* Pods-AcmePush.release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-AcmePush.release.xcconfig"; path = "Pods/Target Support Files/Pods-AcmePush/Pods-AcmePush.release.xcconfig"; sourceTree = "<group>"; };
@@ -92,7 +92,7 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				494AFD87A7EBF8F09ED48013 /* libPods-Qwasi_Tests.a in Frameworks */,
+				8F64A6C0C498371C4A5787C5 /* Pods_Qwasi_Tests.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,7 +130,7 @@
 				6003F5AF195388D20070C39A /* XCTest.framework */,
 				416D945E793C9F6ACE4F6C09 /* Pods_Qwasi_Example.framework */,
 				8C3193B4C97F30A2EB1AAE57 /* libPods-AcmePush.a */,
-				CCEAC89F46AC7B20C6874C26 /* libPods-Qwasi_Tests.a */,
+				14BFFA464FC53A944D8A56A1 /* Pods_Qwasi_Tests.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -234,6 +234,7 @@
 				6003F5AB195388D20070C39A /* Frameworks */,
 				6003F5AC195388D20070C39A /* Resources */,
 				34234A02CAB7BB691A2B32D7 /* Copy Pods Resources */,
+				C305FC2124ACBA1C164E1A80 /* Embed Pods Frameworks */,
 			);
 			buildRules = (
 			);
@@ -357,6 +358,21 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		C305FC2124ACBA1C164E1A80 /* Embed Pods Frameworks */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Qwasi_Tests/Pods-Qwasi_Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 		D757D52DE9418972E3C8BEF5 /* Check Pods Manifest.lock */ = {
@@ -566,6 +582,7 @@
 					"$(inherited)",
 				);
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Qwasi_Example.app/Qwasi_Example";
 				WRAPPER_EXTENSION = xctest;
@@ -585,6 +602,7 @@
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Qwasi_Example.app/Qwasi_Example";
 				WRAPPER_EXTENSION = xctest;
