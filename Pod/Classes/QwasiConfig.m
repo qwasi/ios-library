@@ -23,6 +23,7 @@
 }
 
 + (instancetype)configWithFile:(NSString*)path {
+    
     NSDictionary* config = [NSDictionary dictionaryWithContentsOfFile: path];
     NSURL* url = [NSURL URLWithString: config[@"apiUrl"]];
     NSString* app = config[@"appId"];
@@ -37,9 +38,9 @@
 
 - (id)initWithURL:(NSURL*)url withApplication:(NSString*)app withKey:(NSString*)key {
     if (self = [super init]) {
-        _url = url;
-        _application = app;
-        _key = key;
+        _url = url ? url : [NSURL URLWithString: @"https://api.qwasi.com/v1"];
+        _application = app ? app : @"INVALID_APP_ID";
+        _key = key ? key : @"INVALID_API_KEY";
     }
     
     return self;

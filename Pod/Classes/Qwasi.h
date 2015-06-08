@@ -61,6 +61,10 @@ extern NSString* const kEventLocationExit;
 
 - (void)registerDevice:(NSString*)deviceToken;
 
+- (void)unregisterDevice:(NSString*)deviceToken
+                 success:(void(^)())success
+                 failure:(void(^)(NSError* err))failure;
+
 - (void)registerForNotifications:(void(^)(NSString* pushToken))success
                          failure:(void(^)(NSError* err))failure;
 

@@ -14,6 +14,7 @@ typedef NS_ENUM(NSInteger, QwasiErrorCode) {
     QwasiErrorNone = 0,
     QwasiErrorDeviceNotRegistered,
     QwasiErrorDeviceRegistrationFailed,
+    QwasiErrorDeviceUnregisterFailed,
     QwasiErrorPushRegistrationFailed,
     QwasiErrorMessageFetchFailed,
     QwasiErrorLocationFetchFailed,
@@ -32,6 +33,7 @@ typedef NS_ENUM(NSInteger, QwasiErrorCode) {
 @interface QwasiError : NSObject
 + (NSError*)apiError:(NSDictionary*)err;
 + (NSError*)deviceRegistrationFailed:(NSError*)reason;
++ (NSError*)deviceUnregisterFailed:(NSError*)reason;
 + (NSError*)pushRegistrationFailed:(NSError*)reason;
 + (NSError*)messageFetchFailed:(NSError*)reason;
 + (NSError*)locationFetchFailed:(NSError*)reason;

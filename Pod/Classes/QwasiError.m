@@ -37,6 +37,10 @@ NSString* const kQwasiErrorDomain = @"com.qwasi.sdk";
     return [self errorWithCode: QwasiErrorDeviceRegistrationFailed withMessage: @"Device registration failed." withInnerError: reason];
 }
 
++ (NSError*)deviceUnregisterFailed:(NSError*)reason {
+    return [self errorWithCode: QwasiErrorDeviceUnregisterFailed withMessage: @"Device unregister failed." withInnerError: reason];
+}
+
 + (NSError*)pushRegistrationFailed:(NSError*)reason {
     return [self errorWithCode: QwasiErrorPushRegistrationFailed withMessage: @"Push registration failed." withInnerError: reason];
 }

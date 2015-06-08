@@ -12,16 +12,48 @@
 #import "Expecta.h"
 #import "Qwasi.h"
 
+NSString* _deviceToken;
+
 SpecBegin(InitialSpecs)
 
-describe(@"these will pass", ^{
+describe(@"Test Qwasi API Client", ^{
     
-    it(@"can do maths", ^{
-        expect(1).beLessThan(23);
+    it(@"Will register for a device token", ^{
+        
+        [Qwasi shared].config = [QwasiConfig configWithURL: [NSURL URLWithString: @"https://sandbox.qwasi.com/v1"]
+                                           withApplication: @"552f5e6e3e73ca104b46191d"
+                                                   withKey: @"7e459638914ae77e9ee2b0037e1f73f1"];
+        
+        waitUntil(^(DoneCallback done) {
+           [[Qwasi shared] registerDevice: nil withName: @"Test Device" withUserToken: @"CI Tests" success:^(NSString *deviceToken) {
+               
+               _deviceToken = deviceToken;
+               
+               done();
+               
+           } failure:^(NSError *err) {
+               
+               expect(err).to.beNil();
+               
+               done();
+           }];
+        });
     });
     
-    it(@"can read", ^{
-        expect(@"team").toNot.contain(@"I");
+    it(@"Will unregister the device token", ^{
+        waitUntil(^(DoneCallback done) {
+            [[Qwasi shared] unregisterDevice: _deviceToken success:^() {
+                
+                done();
+                
+            } failure:^(NSError *err) {
+                
+                expect(err).to.beNil();
+                
+                done();
+            }];
+        });
+
     });
 });
 

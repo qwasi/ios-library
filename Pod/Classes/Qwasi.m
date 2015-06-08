@@ -297,6 +297,37 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                 }];
 }
 
+- (void)unregisterDevice:(NSString*)deviceToken success:(void(^)())success failure:(void(^)(NSError* err))failure {
+    if (_registered) {
+        
+        [_client invokeMethod: @"device.unregister"
+               withParameters: @{ @"id": _deviceToken }
+                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                          
+                          _registered = NO;
+                          _deviceToken = nil;
+                          
+                          if (success) success();
+                          
+                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          
+                          error = [QwasiError deviceUnregisterFailed: error];
+                          
+                          if (failure) failure(error);
+                      }];
+        
+    }
+    else {
+        NSError* error = [QwasiError deviceUnregisterFailed: [QwasiError deviceNotRegistered]];
+        
+        if (failure) {
+            failure(error);
+        }
+        
+        [self emit: @"error", error];
+    }
+}
+
 - (void)registerForNotifications:(void(^)(NSString* pushToken))success
                          failure:(void(^)(NSError* err))failure {
     if (_registered) {
@@ -473,6 +504,9 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                               if (success) success([QwasiMessage messageWithData: responseObject]);
                                                    
                           } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                              
+                              error = [QwasiError messageFetchFailed: error];
+                              
                               if (failure) failure(error);
                           }];
         }
@@ -509,6 +543,9 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           if (success) success([QwasiMessage messageWithData: responseObject]);
                           
                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          
+                          error = [QwasiError messageFetchFailed: error];
+                          
                           if (failure) failure(error);
                       }];
 
@@ -544,6 +581,9 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           if (success) success();
                           
                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          
+                          error = [QwasiError postEvent: event failedWithReason: error];
+                          
                           if (failure) failure(error);
                       }];
         
@@ -582,6 +622,9 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           }
                           
                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          
+                          error = [QwasiError locationFetchFailed: error];
+                          
                           if (failure) failure(error);
                       }];
         
