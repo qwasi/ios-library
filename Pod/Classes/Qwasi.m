@@ -467,10 +467,12 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
             [application registerUserNotificationSettings: [UIUserNotificationSettings settingsForTypes: UIUserNotificationTypeAlert categories: nil]];
             [application registerForRemoteNotifications];
         }
+#if __IPHONE_OS_VERSION_MAX_ALLOWED < 80000
         else {
             // ios 7.1+
             [application registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert];
         }
+#endif
         
     }
     else {

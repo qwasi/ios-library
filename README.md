@@ -18,7 +18,7 @@ it, simply add the following lines to your Podfile:
 
 ```ruby
 
-pod "Qwasi"
+pod 'Qwasi', '~>2.1.0-10'
 ```
 
 ## Author
