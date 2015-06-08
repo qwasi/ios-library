@@ -112,6 +112,9 @@
     [aCoder encodeBool: YES forKey: @"selected"];
 }
 
+- (BOOL)silent {
+    return (_alert == nil);
+}
 - (NSString*)description {
     
     if ([_payloadType caseInsensitiveCompare: @"application/json"] == NSOrderedSame) {

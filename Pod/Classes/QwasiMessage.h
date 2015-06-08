@@ -17,6 +17,7 @@
 @property (nonatomic,readonly) NSString* payloadType;
 @property (nonatomic,readonly) id payload;
 @property (nonatomic,readonly) NSArray* tags;
+@property (nonatomic,readonly) BOOL silent;
 @property (nonatomic,readonly) BOOL selected;
 @property (nonatomic,readonly) BOOL fetched;
 
