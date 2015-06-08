@@ -44,8 +44,15 @@ extern NSString* const kEventLocationExit;
 - (void)registerDevice:(NSString*)deviceToken
               withName:(NSString*)name
          withUserToken:(NSString*)userToken
+          withUserInfo:(NSDictionary*)userInfo
                success:(void(^)(NSString* deviceToken))success
                failure:(void(^)(NSError* err))failure;
+
+- (void)registerDevice:(NSString*)deviceToken
+              withName:(NSString*)name
+         withUserToken:(NSString*)userToken
+          withUserInfo:(NSDictionary*)userInfo
+               success:(void(^)(NSString* deviceToken))success;
 
 - (void)registerDevice:(NSString*)deviceToken
               withName:(NSString*)name
@@ -54,6 +61,11 @@ extern NSString* const kEventLocationExit;
 
 - (void)registerDevice:(NSString*)deviceToken
          withUserToken:(NSString*)userToken
+               success:(void(^)(NSString* deviceToken))success;
+
+- (void)registerDevice:(NSString*)deviceToken
+         withUserToken:(NSString*)userToken
+          withUserInfo:(NSDictionary*)userInfo
                success:(void(^)(NSString* deviceToken))success;
 
 - (void)registerDevice:(NSString*)deviceToken

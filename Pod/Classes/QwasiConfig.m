@@ -45,4 +45,17 @@
     
     return self;
 }
+
+- (BOOL)isValid {
+    if (!_url) {
+        return NO;
+    }
+    if (!_application) {
+        return NO;
+    }
+    if (!_key) {
+        return NO;
+    }
+    return YES;
+}
 @end

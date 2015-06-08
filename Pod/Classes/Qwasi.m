@@ -203,33 +203,49 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
               withName:(NSString*)name
          withUserToken:(NSString*)userToken
                success:(void(^)(NSString* deviceToken))success {
-    [self registerDevice: deviceToken withName: name withUserToken: userToken success: success failure: nil];
+    [self registerDevice: deviceToken withName: name withUserToken: userToken withUserInfo: nil success: success failure: nil];
+}
+
+- (void)registerDevice:(NSString*)deviceToken
+              withName:(NSString*)name
+         withUserToken:(NSString*)userToken
+          withUserInfo:(NSDictionary*)userInfo
+               success:(void(^)(NSString* deviceToken))success {
+    [self registerDevice: deviceToken withName: name withUserToken: userToken withUserInfo: userInfo success: success failure: nil];
 }
 
 - (void)registerDevice:(NSString*)deviceToken
          withUserToken:(NSString*)userToken
                success:(void(^)(NSString* deviceToken))success {
     
-    [self registerDevice: deviceToken withName: nil withUserToken: userToken success: success failure: nil];
+    [self registerDevice: deviceToken withName: nil withUserToken: userToken withUserInfo: nil success: success failure: nil];
 }
 
 - (void)registerDevice:(NSString*)deviceToken
                success:(void(^)(NSString* deviceToken))success {
-    [self registerDevice: deviceToken withName: nil withUserToken: nil success: success failure: nil];
+    [self registerDevice: deviceToken withName: nil withUserToken: nil withUserInfo: nil success: success failure: nil];
 }
 
 - (void)registerDevice:(NSString*)deviceToken
          withUserToken:(NSString*)userToken {
-    [self registerDevice: deviceToken withName: nil withUserToken: userToken success: nil failure: nil];
+    [self registerDevice: deviceToken withName: nil withUserToken: userToken withUserInfo: nil success: nil failure: nil];
 }
 
 - (void)registerDevice:(NSString*)deviceToken {
-    [self registerDevice: deviceToken withName: nil withUserToken: nil success: nil failure: nil];
+    [self registerDevice: deviceToken withName: nil withUserToken: nil withUserInfo: nil success: nil failure: nil];
+}
+
+- (void)registerDevice:(NSString*)deviceToken
+         withUserToken:(NSString*)userToken
+          withUserInfo:(NSDictionary*)userInfo
+               success:(void(^)(NSString* deviceToken))success {
+    [self registerDevice: deviceToken withName: nil withUserToken: userToken withUserInfo: userInfo success: success failure: nil];
 }
 
 - (void)registerDevice:(NSString*)deviceToken
               withName: (NSString*)name
          withUserToken:(NSString*)userToken
+          withUserInfo:(NSDictionary *)userInfo
                success:(void(^)(NSString* deviceToken))success
                failure:(void(^)(NSError* err))failure {
     
@@ -246,7 +262,13 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         userToken = @"";
     }
     
-    NSDictionary* info = @{
+    NSMutableDictionary* info = [[NSMutableDictionary alloc] init];
+    
+    if (userInfo) {
+        [info addEntriesFromDictionary: userInfo];
+    }
+    
+    NSDictionary* deviceInfo = @{
 #if DEBUG
                            @"debug": [NSNumber numberWithBool: YES],
 #else   
@@ -257,6 +279,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                            @"model": [GBDeviceInfo deviceInfo].modelString,
                            @"sdkVersion": @"2.1.0" 
                            };
+    
+    [info addEntriesFromDictionary: deviceInfo];
     
     [_client invokeMethod: @"device.register"
            withParameters: @{ @"id": deviceToken,

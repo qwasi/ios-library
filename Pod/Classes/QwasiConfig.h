@@ -12,6 +12,7 @@
 @property (nonatomic,readonly) NSURL* url;
 @property (nonatomic,readonly) NSString* application;
 @property (nonatomic,readonly) NSString* key;
+@property (nonatomic,readonly) BOOL isValid;
 
 + (instancetype)default;
 
