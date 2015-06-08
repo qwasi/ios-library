@@ -1,10 +1,15 @@
 # Qwasi
 
+[![Build Status](https://travis-ci.org/qwasi/ios-library.svg?branch=master)](https://travis-ci.org/qwasi/ios-library)
+
 ## Usage
 
 To run the example project, clone the repo, and run `pod install` from the Example directory first.
 
 ## Requirements
+
+1. XCode 6.1+
+2. Cocoapods
 
 ## Installation
 
