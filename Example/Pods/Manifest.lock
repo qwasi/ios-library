@@ -35,8 +35,8 @@ PODS:
     - BlocksKit/DynamicDelegate
   - Expecta (1.0.0)
   - GBDeviceInfo (3.1.0)
-  - QSwizzle (0.2.2)
-  - Qwasi (2.1.0-6):
+  - QSwizzle (0.2.3)
+  - Qwasi (2.1.0-10):
     - AFJSONRPCClient
     - CocoaLumberjack
     - Emitter
@@ -61,8 +61,8 @@ SPEC CHECKSUMS:
   Emitter: cf50bf44fc8817535018fbd6c4fd576b87803e78
   Expecta: 32604574add2c46a36f8d2f716b6c5736eb75024
   GBDeviceInfo: 3b22a82dc6e2313144b7af71af7ba11a0a3bb74f
-  QSwizzle: cbf9af5302838d6f7857319331970f461ba91a2a
-  Qwasi: f7f935d1d8983a5223c0897d716d6d1e6df89491
+  QSwizzle: 9365d52b4f4335dc969bbfbd025a0600f34bfe93
+  Qwasi: ef61a947bbd796a5c1e252eff22d6cf8da933ae4
   Specta: 097be314a75de103703a3bf9a529dc1a398509d7
 
 COCOAPODS: 0.37.2

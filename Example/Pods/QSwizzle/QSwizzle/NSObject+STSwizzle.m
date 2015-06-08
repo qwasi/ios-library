@@ -191,4 +191,36 @@ static char isSwizzledKey;
 	}
 }
 
++(void)swizzleSelector: (SEL)orig
+             fromClass:(Class)source
+            toSelector: (SEL)repl
+               toClass:(Class)target {
+    
+    Method origMethod = class_getInstanceMethod(source, orig);
+    Method newMethod = class_getInstanceMethod(target, repl);
+    
+    if (origMethod) {
+        class_addMethod(source, repl, method_getImplementation(origMethod), method_getTypeEncoding(origMethod));
+        method_exchangeImplementations(origMethod, newMethod);
+    }
+    else {
+        class_addMethod(source, orig, method_getImplementation(newMethod), method_getTypeEncoding(newMethod));
+    }
+}
+
++(void)swizzleSelector:(SEL)orig
+            toSelector:(SEL)repl
+              forClass:(Class)cls {
+    
+    Method origMethod = class_getInstanceMethod(cls, orig);
+    Method newMethod = class_getInstanceMethod(cls, repl);
+    
+    // swizzle one-way
+    if(class_addMethod(cls, orig, method_getImplementation(newMethod), method_getTypeEncoding(newMethod))) {
+        class_replaceMethod(cls, repl, method_getImplementation(origMethod), method_getTypeEncoding(origMethod));
+    }
+    else {
+        method_exchangeImplementations(origMethod, newMethod);
+    }
+}
 @end

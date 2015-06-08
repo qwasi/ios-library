@@ -81,6 +81,10 @@ NSString* const kQwasiErrorDomain = @"com.qwasi.sdk";
     return [self errorWithCode: QwasiErrorDeviceNotRegistered withMessage: @"Device has not registered with server."];
 }
 
++ (NSError*)pushNotEnabled {
+    return [self errorWithCode: QwasiErrorPushNotEnabled withMessage: @"User has disabled push notifications for the device."];
+}
+
 + (NSError*)invalidMessage {
     return [self errorWithCode: QwasiErrorInvalidMessage withMessage: @"Invalid message identifier"];
 }

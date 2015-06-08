@@ -50,7 +50,13 @@
     
     // Add a message handler anywhere in code
     [[Qwasi shared] on: @"message" listener: ^(QwasiMessage* message) {
-        DDLogInfo(@"Got a message: %@", message);
+        
+        if (message.selected) {
+            DDLogInfo(@"Opened application %@ message: %@", message.application, message);
+        }
+        else {
+            DDLogInfo(@"Got application %@ message: %@", message.application, message);
+        }
     }];
     
     // Location updates
@@ -84,7 +90,7 @@
         }
 
     }];
-    
+
     return YES;
 }
 

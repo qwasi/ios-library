@@ -131,4 +131,13 @@ typedef id implementation_block;
  */
 - (void)rollbackMethodReplacements;
 
++(void)swizzleSelector: (SEL)orig
+             fromClass:(Class)source
+            toSelector: (SEL)repl
+               toClass:(Class)target;
+
++(void)swizzleSelector:(SEL)orig
+            toSelector:(SEL)repl
+              forClass:(Class)cls;
+
 @end

@@ -12,10 +12,11 @@ extern NSString* const kQwasiErrorDomain;
 
 typedef NS_ENUM(NSInteger, QwasiErrorCode) {
     QwasiErrorNone = 0,
-    QwasiErrorDeviceNotRegistered,
+    QwasiErrorDeviceNotRegistered = 9000,
     QwasiErrorDeviceRegistrationFailed,
     QwasiErrorDeviceUnregisterFailed,
     QwasiErrorPushRegistrationFailed,
+    QwasiErrorPushNotEnabled,
     QwasiErrorMessageFetchFailed,
     QwasiErrorLocationFetchFailed,
     QwasiErrorLocationSyncFailed,
@@ -42,6 +43,7 @@ typedef NS_ENUM(NSInteger, QwasiErrorCode) {
 + (NSError*)location:(QwasiLocation*)location beaconRangingFailed:(NSError*)reason;
 + (NSError*)postEvent:(NSString*)event failedWithReason:(NSError*)reason;
 + (NSError*)deviceNotRegistered;
++ (NSError*)pushNotEnabled;
 + (NSError*)invalidMessage;
 + (NSError*)locationAccessDenied;
 + (NSError*)locationAccessInsufficient;

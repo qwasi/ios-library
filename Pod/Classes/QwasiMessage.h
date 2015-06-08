@@ -8,14 +8,17 @@
 
 #import <Foundation/Foundation.h>
 
-@interface QwasiMessage : NSObject
+@interface QwasiMessage : NSObject<NSCoding>
 
 @property (nonatomic,readonly) NSString* alert;
 @property (nonatomic,readonly) NSTimeInterval timestamp;
 @property (nonatomic,readonly) NSString* messageId;
+@property (nonatomic,readonly) NSString* application;
 @property (nonatomic,readonly) NSString* payloadType;
-@property (nonatomic,readonly) NSData* payload;
+@property (nonatomic,readonly) id payload;
 @property (nonatomic,readonly) NSArray* tags;
+@property (nonatomic,readonly) BOOL selected;
+@property (nonatomic,readonly) BOOL fetched;
 
 + (instancetype)messageWithData:(NSDictionary*)data;
 @end

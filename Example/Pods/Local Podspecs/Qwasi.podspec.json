@@ -1,6 +1,6 @@
 {
   "name": "Qwasi",
-  "version": "2.1.0-6",
+  "version": "2.1.0-10",
   "summary": "Qwasi iOS Library",
   "homepage": "https://code.qwasi.com/scm/sdk/ios-library",
   "license": "MIT",
@@ -9,7 +9,7 @@
   },
   "source": {
     "git": "https://code.qwasi.com/scm/sdk/ios-library.git",
-    "tag": "2.1.0-6"
+    "tag": "2.1.0-10"
   },
   "platforms": {
     "ios": "7.1"

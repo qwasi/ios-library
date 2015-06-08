@@ -12,6 +12,7 @@
 #import "QwasiConfig.h"
 #import "QwasiClient.h"
 #import "QwasiMessage.h"
+#import "QwasiNotificationManager.h"
 #import "QwasiLocationManager.h"
 #import "CocoaLumberjack.h"
 #import "Emitter.h"
@@ -27,16 +28,18 @@ extern NSString* const kEventLocationExit;
 @property (nonatomic,readwrite) QwasiConfig* config;
 @property (nonatomic,readonly) QwasiClient* client;
 @property (nonatomic,readwrite) QwasiLocationManager* locationManager;
-@property (nonatomic,readonly) NSString* pushToken;
 @property (nonatomic,readonly) NSString* deviceToken;
 @property (nonatomic,readwrite) BOOL pushEnabled;
 @property (nonatomic,readwrite) BOOL locationEnabled;
+@property (nonatomic,readwrite) BOOL useLocalNotifications;
 @property (nonatomic,readwrite) CLLocationDistance locationUpdateFilter;
 @property (nonatomic,readwrite) CLLocationDistance locationEventFilter;
 @property (nonatomic,readwrite) CLLocationDistance locationSyncFilter;
 @property (nonatomic,readonly) QwasiLocation* lastLocation;
 
 + (instancetype)shared;
+
+- (id)initWithConfig:(QwasiConfig*)config;
 
 - (void)registerDevice:(NSString*)deviceToken
               withName:(NSString*)name
@@ -67,6 +70,9 @@ extern NSString* const kEventLocationExit;
 
 - (void)registerForNotifications:(void(^)(NSString* pushToken))success
                          failure:(void(^)(NSError* err))failure;
+
+- (void)unregisterForNotifications:(void(^)())success
+                           failure:(void(^)(NSError* err))failure;
 
 - (void)fetchMessageForNotification:(NSDictionary*)userInfo
                             success:(void(^)(QwasiMessage* message))success
