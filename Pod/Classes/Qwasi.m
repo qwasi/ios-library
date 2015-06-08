@@ -368,9 +368,11 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
             
             [[QwasiNotificationManager shared] on: @"notification" listener: ^(NSDictionary* userInfo) {
                 [self fetchMessageForNotification: userInfo success:^(QwasiMessage *message) {
+                    
                     [self emit: @"message", message];
                     
-                    [[QwasiNotificationManager shared] emit: @"message", message];
+                    [[QwasiNotificationManager shared] emit: @"message", message, YES];
+                    
                 } failure:^(NSError *err) {
                     
                     err = [QwasiError messageFetchFailed: err];
@@ -379,8 +381,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                 }];
             }];
             
-            [[QwasiNotificationManager shared] on: @"message" listener: ^(QwasiMessage* message) {
-                if ([message.application isEqualToString: _config.application]) {
+            [[QwasiNotificationManager shared] on: @"message" listener: ^(QwasiMessage* message, BOOL _self) {
+                if ([message.application isEqualToString: _config.application] && !_self) {
                     [self emit: @"message", message];
                 }
             }];

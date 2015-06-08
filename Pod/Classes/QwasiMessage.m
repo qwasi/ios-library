@@ -8,6 +8,12 @@
 
 #import "QwasiMessage.h"
 
+#ifdef __IPHONE_8_0
+#define GregorianCalendar NSCalendarIdentifierGregorian
+#else
+#define GregorianCalendar NSGregorianCalendar
+#endif
+
 @implementation QwasiMessage {
     NSString* _encodedPayload;
 }
@@ -62,7 +68,7 @@
         
         [dateFormatter setDateFormat:@"yyyy-MM-dd'T'HH:mm:ss.SSSz"];
         [dateFormatter setTimeZone:[NSTimeZone timeZoneForSecondsFromGMT:0]];
-        [dateFormatter setCalendar:[[NSCalendar alloc] initWithCalendarIdentifier:NSGregorianCalendar]];
+        [dateFormatter setCalendar:[[NSCalendar alloc] initWithCalendarIdentifier:GregorianCalendar]];
         [dateFormatter setLocale:[[NSLocale alloc] initWithLocaleIdentifier:@"en_US_POSIX"]];
         
         timestamp = [dateFormatter dateFromString: [data objectForKey: @"created_at"]];
@@ -107,6 +113,17 @@
 }
 
 - (NSString*)description {
+    
+    if ([_payloadType caseInsensitiveCompare: @"application/json"] == NSOrderedSame) {
+        NSError* jsonError;
+        
+        NSData* jsonData = [NSJSONSerialization dataWithJSONObject: _payload options: NSJSONWritingPrettyPrinted error: &jsonError];
+        
+        if (jsonData && !jsonError) {
+            return [NSString stringWithUTF8String: [jsonData bytes]];
+        }
+    }
+
     return [_payload description];
 }
 @end
