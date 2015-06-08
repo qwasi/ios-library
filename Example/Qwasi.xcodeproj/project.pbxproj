@@ -271,9 +271,6 @@
 							};
 						};
 					};
-					6003F5AD195388D20070C39A = {
-						TestTargetID = 6003F589195388D20070C39A;
-					};
 				};
 			};
 			buildConfigurationList = 6003F585195388D10070C39A /* Build configuration list for PBXProject "Qwasi" */;
@@ -559,7 +556,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = AE719FB6C0C2C63D194AA37E /* Pods-Qwasi_Tests.debug.xcconfig */;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -573,7 +569,6 @@
 				);
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Qwasi_Example.app/Qwasi_Example";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Debug;
@@ -582,7 +577,6 @@
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = BA00615680AA0D9A6A7484F9 /* Pods-Qwasi_Tests.release.xcconfig */;
 			buildSettings = {
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
 					"$(inherited)",
@@ -592,7 +586,6 @@
 				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/Qwasi_Example.app/Qwasi_Example";
 				WRAPPER_EXTENSION = xctest;
 			};
 			name = Release;
