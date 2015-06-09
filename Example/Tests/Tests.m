@@ -25,7 +25,7 @@ describe(@"Test Qwasi API Client", ^{
                                                    withKey: @"7e459638914ae77e9ee2b0037e1f73f1"];
         
         waitUntil(^(DoneCallback done) {
-           [[Qwasi shared] registerDevice: nil withName: @"Test Device" withUserToken: @"CI Tests" success:^(NSString *deviceToken) {
+            [[Qwasi shared] registerDevice: nil withName: @"Test Device" withUserToken: @"CI Tests" withUserInfo: nil success:^(NSString *deviceToken) {
                
                _deviceToken = deviceToken;
                
