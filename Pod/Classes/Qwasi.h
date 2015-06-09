@@ -105,5 +105,5 @@ extern NSString* const kEventLocationExit;
 - (void)fetchLocationsNear:(CLLocation*)location
                    success:(void(^)(NSArray* locations))success
                    failure:(void(^)(NSError* err))failure;
-;
+
 @end

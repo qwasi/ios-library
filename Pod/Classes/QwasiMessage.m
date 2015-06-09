@@ -120,10 +120,10 @@
     if ([_payloadType caseInsensitiveCompare: @"application/json"] == NSOrderedSame) {
         NSError* jsonError;
         
-        NSData* jsonData = [NSJSONSerialization dataWithJSONObject: _payload options: NSJSONWritingPrettyPrinted error: &jsonError];
+        NSData* jsonData = [NSJSONSerialization dataWithJSONObject: _payload options: 0 error: &jsonError];
         
         if (jsonData && !jsonError) {
-            return [NSString stringWithUTF8String: [jsonData bytes]];
+            return [[NSString alloc] initWithData: jsonData encoding: NSUTF8StringEncoding];
         }
     }
 
