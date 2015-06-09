@@ -28,6 +28,7 @@ extern NSString* const kEventLocationExit;
 @property (nonatomic,readwrite) QwasiConfig* config;
 @property (nonatomic,readonly) QwasiClient* client;
 @property (nonatomic,readwrite) QwasiLocationManager* locationManager;
+@property (nonatomic,readonly) NSString* applicationName;
 @property (nonatomic,readonly) NSString* deviceToken;
 @property (nonatomic,readwrite) BOOL pushEnabled;
 @property (nonatomic,readwrite) BOOL locationEnabled;

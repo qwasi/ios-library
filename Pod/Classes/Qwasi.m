@@ -293,6 +293,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                       _registered = YES;
                       
                       _deviceToken = [responseObject valueForKey: @"id"];
+                      _applicationName = [responseObject valueForKeyPath: @"application.name"];
                       
                       if (success) {
                           success(_deviceToken);
@@ -393,7 +394,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
             [[QwasiNotificationManager shared] on: @"notification" listener: ^(NSDictionary* userInfo) {
                 [self fetchMessageForNotification: userInfo success:^(QwasiMessage *message) {
                     
-                    [[QwasiNotificationManager shared] emit: @"message", message];
+                    [[QwasiNotificationManager shared] emit: @"message", message, self];
                     
                 } failure:^(NSError *err) {
                     
