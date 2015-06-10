@@ -299,7 +299,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           success(_deviceToken);
                       }
                       
-                      DDLogInfo(@"Device %@ registered successfully.", _deviceToken);
+                      DDLogInfo(@"Device %@ registered successfully for application %@.", _deviceToken, _applicationName);
                       
                       [self emit: @"registered", _deviceToken];
                     
@@ -364,7 +364,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                   
                                   if (success) success(pushToken);
                                   
-                                  DDLogInfo(@"Push token %@ set successfully.", pushToken);
+                                  DDLogInfo(@"Device %@ push token %@ set successfully.", _deviceToken, pushToken);
                                   
                               } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                   
