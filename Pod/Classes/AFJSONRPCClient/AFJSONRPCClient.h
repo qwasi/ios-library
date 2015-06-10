@@ -21,7 +21,7 @@
 // OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
 // THE SOFTWARE.
 
-#import "AFHTTPRequestOperationManager.h"
+#import <AFNetworking/AFHTTPRequestOperationManager.h>
 
 /**
  AFJSONRPCClient objects communicate with web services using the JSON-RPC 2.0 protocol.
