@@ -160,7 +160,10 @@ QwasiLocationManager* _activeManager = nil;
     
     for (NSString* _id in tmp) {
         QwasiLocation* location = (QwasiLocation*)[tmp objectForKey: _id];
+        
         [_manager stopMonitoringForRegion: location.region];
+        
+        [location exit];
     }
     
     [tmp removeAllObjects];

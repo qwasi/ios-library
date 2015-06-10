@@ -14,8 +14,11 @@
 #import "QwasiAppManager.h"
 
 #define LOCATION_EVENT_FILTER 50.0f
-#define LOCATION_UPDATE_FILTER 10.0f
-#define LOCATION_SYNC_FILTER 100.0f
+#define LOCATION_UPDATE_FILTER 100.0f
+#define LOCATION_SYNC_FILTER 200.0f
+#define PED_FILTER 10.0f
+
+#define UPDATE_FILTER(speed, filter) (speed / PED_FILTER) * filter
 
 NSString* const kEventApplicationState = @"com.qwasi.event.application.state";
 NSString* const kEventLocationUpdate = @"com.qwasi.event.location.update";
@@ -104,7 +107,12 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         dispatch_once(&_locationOnce, ^{
             [_locationManager on: @"location" listener: ^(QwasiLocation* location) {
                 @synchronized(self) {
-                    if (!_lastLocationEvent || [location distanceFromLocation: _lastLocationEvent] > MAX(LOCATION_EVENT_FILTER, _locationEventFilter)) {
+                    CLLocationSpeed speed = location.speed;
+                    
+                    _lastLocation = [[QwasiLocation alloc] initWithLocation: location];
+                    
+                    
+                    if (!_lastLocationEvent || [location distanceFromLocation: _lastLocationEvent] > MAX(LOCATION_EVENT_FILTER, UPDATE_FILTER(speed, _locationEventFilter))) {
                         
                         [self postEvent: kEventLocationUpdate withData:@{ @"lat": [NSNumber numberWithFloat: location.coordinate.latitude],
                                                                           @"lng": [NSNumber numberWithFloat: location.coordinate.longitude] }];
@@ -112,14 +120,14 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                         _lastLocationEvent = location;
                     }
                     
-                    if (!_lastLocationUpdate || [location distanceFromLocation: _lastLocationUpdate] > _locationUpdateFilter) {
+                    if (!_lastLocationUpdate || [location distanceFromLocation: _lastLocationUpdate] > UPDATE_FILTER(speed, _locationUpdateFilter)) {
                         
                         [self emit: @"location", location];
                         
                         _lastLocationUpdate = location;
                     }
                     
-                    if (!_lastLocationSync || [location distanceFromLocation: _lastLocationSync] > MAX(LOCATION_SYNC_FILTER, _locationSyncFilter)) {
+                    if (!_lastLocationSync || [location distanceFromLocation: _lastLocationSync] > MAX(LOCATION_SYNC_FILTER, UPDATE_FILTER(speed, _locationSyncFilter))) {
 
                         [self fetchLocationsNear: location success:^(NSArray* locations){
                             [_locationManager stopMonitoringAllLocations];
@@ -136,7 +144,6 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                         _lastLocationSync = location;
                     }
                     
-                    _lastLocation = [[QwasiLocation alloc] initWithLocation: location];
                 }
             }];
             
@@ -670,7 +677,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         [_client invokeMethod: @"location.fetch"
                withParameters: @{ @"near": @{ @"lng": [NSNumber numberWithDouble: location.coordinate.longitude],
                                               @"lat": [NSNumber numberWithDouble: location.coordinate.latitude],
-                                              @"radius": [NSNumber numberWithDouble: _locationSyncFilter * 20] },
+                                              @"radius": [NSNumber numberWithDouble: _locationSyncFilter * 10] },
                                   @"options": @{ @"schema": @"2.0" } }
                       success:^(AFHTTPRequestOperation *operation, id responseObject) {
                           
