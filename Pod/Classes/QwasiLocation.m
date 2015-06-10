@@ -146,7 +146,10 @@
 }
 
 - (CLLocationDistance)distance {
-    if ([QwasiLocationManager currentManager]) {
+    if (_beacon) {
+        return _beacon.accuracy;
+    }
+    else if ([QwasiLocationManager currentManager]) {
         return [[QwasiLocationManager currentManager].lastLocation distanceFromLocation: self];
     }
     return 0;
