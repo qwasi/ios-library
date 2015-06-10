@@ -8,7 +8,7 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
-#import "Emitter.h"
+#import <Emitter/Emitter.h>
 
 #import "QwasiError.h"
 #import "QwasiLocation.h"

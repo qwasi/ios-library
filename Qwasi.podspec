@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "Qwasi"
-  s.version          = "2.1.0-17"
+  s.version          = "2.1.0-18"
   s.summary          = "Qwasi iOS Library"
   s.homepage         = "https://code.qwasi.com/scm/sdk/ios-library"
   s.license          = 'MIT'
@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
   s.source_files = 'Pod/**/*'
 
   s.dependency 'CocoaLumberjack'
-  s.dependency 'AFJSONRPCClient'
+  s.dependency 'AFNetworking'
   s.dependency 'GBDeviceInfo', '~> 3.1.0'
   s.dependency 'Emitter'
   s.dependency 'QSwizzle', '~> 0.2.0'

@@ -1,6 +1,4 @@
 PODS:
-  - AFJSONRPCClient (2.1.1):
-    - AFNetworking (~> 2.1)
   - AFNetworking (2.5.4):
     - AFNetworking/NSURLConnection (= 2.5.4)
     - AFNetworking/NSURLSession (= 2.5.4)
@@ -36,8 +34,8 @@ PODS:
   - Expecta (1.0.0)
   - GBDeviceInfo (3.1.0)
   - QSwizzle (0.2.3)
-  - Qwasi (2.1.0-11):
-    - AFJSONRPCClient
+  - Qwasi (2.1.0-18):
+    - AFNetworking
     - CocoaLumberjack
     - Emitter
     - GBDeviceInfo (~> 3.1.0)
@@ -54,7 +52,6 @@ EXTERNAL SOURCES:
     :path: ../
 
 SPEC CHECKSUMS:
-  AFJSONRPCClient: 333bada91e6e45398446b8bd84e238e6f2389b1b
   AFNetworking: 05edc0ac4c4c8cf57bcf4b84be5b0744b6d8e71e
   BlocksKit: 7f422b971407001178d181a43b99014ea2591fe6
   CocoaLumberjack: a6f77d987d65dc7ba86b0f84db7d0b9084f77bcb
@@ -62,7 +59,7 @@ SPEC CHECKSUMS:
   Expecta: 32604574add2c46a36f8d2f716b6c5736eb75024
   GBDeviceInfo: 3b22a82dc6e2313144b7af71af7ba11a0a3bb74f
   QSwizzle: 9365d52b4f4335dc969bbfbd025a0600f34bfe93
-  Qwasi: b6eb14b293e896af0089ef632d44caf3945c0ab4
+  Qwasi: 66b3ad09cd515be48c85a9915e743824155b6008
   Specta: 097be314a75de103703a3bf9a529dc1a398509d7
 
 COCOAPODS: 0.37.2
