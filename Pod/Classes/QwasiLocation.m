@@ -145,6 +145,13 @@
     }
 }
 
+- (CLLocationDistance)distance {
+    if ([QwasiLocationManager currentManager]) {
+        return [[QwasiLocationManager currentManager].lastLocation distanceFromLocation: self];
+    }
+    return 0;
+}
+
 - (void)enterWithBeacon:(CLBeacon*)beacon {
     _beacon = beacon;
     
