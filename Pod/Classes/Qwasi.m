@@ -33,6 +33,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     CLLocation* _lastLocationSync;
     
     NSCache* _messageCache;
+    NSArray* _locations;
     
     dispatch_once_t _locationOnce;
     dispatch_once_t _pushOnce;
@@ -130,7 +131,12 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                     if (!_lastLocationSync || [location distanceFromLocation: _lastLocationSync] > MAX(LOCATION_SYNC_FILTER, UPDATE_FILTER(speed, _locationSyncFilter))) {
 
                         [self fetchLocationsNear: location success:^(NSArray* locations){
-                            [_locationManager stopMonitoringAllLocations];
+                            
+                            for (QwasiLocation* location in _locations) {
+                                [_locationManager stopMonitoringLocation: location];
+                            }
+                            
+                            _locations = locations;
                             
                             for (QwasiLocation* location in locations) {
                                 [_locationManager startMonitoringLocation: location];
