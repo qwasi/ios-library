@@ -18,8 +18,9 @@ typedef NS_ENUM(NSInteger, QwasiLocationType) {
 
 typedef NS_ENUM(NSInteger, QwasiLocationState) {
     QwasiLocationStateUnknown = 0,
-    QwasiLocationStateInside,
-    QwasiLocationStateOutside
+    QwasiLocationStateOutside,
+    QwasiLocationStatePending,
+    QwasiLocationStateInside
 };
 
 @interface QwasiLocation : CLLocation

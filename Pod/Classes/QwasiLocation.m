@@ -18,6 +18,7 @@
     
     BOOL _dwell;
     BOOL _inside;
+    QwasiLocationState _state;
 }
 
 - (id)initWithLocation:(CLLocation *)location {
@@ -31,6 +32,7 @@
         
         _type = QwasiLocationTypeCoordinate;
         _region = [[CLCircularRegion alloc] initWithCenter: self.coordinate radius: 0 identifier: _id];
+        _state = QwasiLocationStateUnknown;
     }
     
     return self;
@@ -86,19 +88,15 @@
 
 - (QwasiLocationState)state {
     
-    QwasiLocationManager* currentManager = [QwasiLocationManager currentManager];
-    
-    if (currentManager && currentManager.lastLocation) {
-        CLCircularRegion* tmp = [[CLCircularRegion alloc] initWithCenter: self.coordinate radius: _geofenceRadius identifier: _id];
-        
-        if ([tmp containsCoordinate: currentManager.lastLocation.coordinate]) {
-            return QwasiLocationStateInside;
-        }
-        
-        return QwasiLocationStateOutside;
+    if (_inside) {
+        return QwasiLocationStateInside;
     }
-
-    return QwasiLocationStateUnknown;
+    else if (_dwell) {
+        return QwasiLocationStatePending;
+    }
+    else {
+        return QwasiLocationStateUnknown;
+    }
 }
 
 - (CLLocationDegrees)longitude {
