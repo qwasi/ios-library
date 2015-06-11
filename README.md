@@ -191,7 +191,7 @@ If necessary a device can be unregistered using:
 Qwasi supports a simplified registration for push notifications. Once the device is registered you can either set `pushEnabled` on the instance or call the method:
 
 ```objectivec
-- (void)unregisterForNotifications:(void(^)())success failure:(void(^)(NSError* err))failure;
+- (void)registerForNotifications:(void(^)())success failure:(void(^)(NSError* err))failure;
 ```
 
 Example:
