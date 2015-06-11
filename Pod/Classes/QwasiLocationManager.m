@@ -79,6 +79,11 @@ QwasiLocationManager* _activeManager = nil;
 #if !TARGET_IPHONE_SIMULATOR
         _manager.pausesLocationUpdatesAutomatically = NO;
 #endif
+        
+        // Clear any existing regions
+        for (CLRegion* region in _manager.monitoredRegions) {
+            [_manager stopMonitoringForRegion: region];
+        }
     }
     return self;
 }
