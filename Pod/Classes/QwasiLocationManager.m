@@ -146,6 +146,7 @@ QwasiLocationManager* _activeManager = nil;
         if ([_regionMap objectForKey: location.id]) {
             [_manager stopMonitoringForRegion: location.region];
             [_regionMap removeObjectForKey: location.id];
+            [location exit];
         }
     }
 }
@@ -296,7 +297,8 @@ QwasiLocationManager* _activeManager = nil;
     
     if (location && beacon) {
     
-        if (beacon.accuracy <= location.beaconProximity) {
+        if ((beacon.accuracy > 0) &&
+            (beacon.accuracy <= location.beaconProximity)) {
             [location enterWithBeacon: beacon];
         }
         else {
