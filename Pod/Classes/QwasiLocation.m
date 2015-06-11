@@ -94,6 +94,9 @@
     else if (_dwell) {
         return QwasiLocationStatePending;
     }
+    else if (_type == QwasiLocationTypeBeacon) {
+        return QwasiLocationStateOutside;
+    }
     else {
         return QwasiLocationStateUnknown;
     }
