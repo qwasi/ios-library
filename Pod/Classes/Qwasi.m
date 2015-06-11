@@ -69,6 +69,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
         _messageCache = [[NSCache alloc] init];
         
+        _userToken = @"";
+        
         [[QwasiAppManager shared] on: @"willEnterForeground" listener: ^() {
             [self postEvent: kEventApplicationState withData: @{ @"state": @"foreground" } success: nil failure: nil];
         }];
@@ -272,7 +274,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     }
     
     if (userToken == nil) {
-        userToken = @"";
+        userToken = _userToken;
     }
     
     NSMutableDictionary* info = [[NSMutableDictionary alloc] init];
@@ -306,6 +308,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                       _registered = YES;
                       
                       _deviceToken = [responseObject valueForKey: @"id"];
+                      
                       _applicationName = [responseObject valueForKeyPath: @"application.name"];
                       
                       if (success) {
@@ -328,6 +331,27 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                       
                       DDLogError(@"Device registration failed %@.", error);
                 }];
+}
+
+- (void)setUserToken:(NSString *)userToken {
+    _userToken = userToken;
+    
+    if (_registered) {
+        [_client invokeMethod: @"device.set_user_token" withParameters: @{@"id": _deviceToken,
+                                                                          @"user_token": _userToken }
+                                                                          success:^(AFHTTPRequestOperation *operation, id responseObject)
+        {
+            
+            DDLogVerbose(@"Set usertoken for application %@ succeed.", _applicationName);
+            
+        } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+            error = [QwasiError setUserTokenFailed: error];
+            
+            [self emit: @"error", error];
+            
+            DDLogError(@"Set usertoken failed %@.", error);
+        }];
+    }
 }
 
 - (void)unregisterDevice:(NSString*)deviceToken success:(void(^)())success failure:(void(^)(NSError* err))failure {

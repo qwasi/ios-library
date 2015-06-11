@@ -23,6 +23,7 @@ typedef NS_ENUM(NSInteger, QwasiErrorCode) {
     QwasiErrorLocationMonitoringFailed,
     QwasiErrorLocationBeaconRangingFailed,
     QwasiErrorPostEventFailed,
+    QwasiErrorSetUserTokenFailed,
     QwasiErrorInvalidMessage,
     QwasiErrorLocationAccessDenied,
     QwasiErrorLocationAccessInsufficient,
@@ -39,6 +40,7 @@ typedef NS_ENUM(NSInteger, QwasiErrorCode) {
 + (NSError*)messageFetchFailed:(NSError*)reason;
 + (NSError*)locationFetchFailed:(NSError*)reason;
 + (NSError*)locationSyncFailed:(NSError*)reason;
++ (NSError*)setUserTokenFailed:(NSError*)reason;
 + (NSError*)location:(QwasiLocation*)location monitoringFailed:(NSError*)reason;
 + (NSError*)location:(QwasiLocation*)location beaconRangingFailed:(NSError*)reason;
 + (NSError*)postEvent:(NSString*)event failedWithReason:(NSError*)reason;
