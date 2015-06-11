@@ -61,6 +61,18 @@ NSString* const kQwasiErrorDomain = @"com.qwasi.sdk";
     return [self errorWithCode: QwasiErrorLocationSyncFailed withMessage: @"Location sync failed." withInnerError: reason];
 }
 
++ (NSError*)channel:(NSString*)channel subscribeFailed:(NSError*)reason {
+    return [self errorWithCode: QwasiErrorChannelSubscribeFailed
+                   withMessage: [NSString stringWithFormat: @"Channel %@ subscribe failed.", channel]
+                withInnerError: reason];
+}
+
++ (NSError*)channel:(NSString*)channel unsubscribeFailed:(NSError*)reason; {
+    return [self errorWithCode: QwasiErrorChannelUnsubscribeFailed
+                   withMessage: [NSString stringWithFormat: @"Channel %@ unsubscribe failed.", channel]
+                withInnerError: reason];
+}
+
 + (NSError*)location:(QwasiLocation *)location monitoringFailed:(NSError *)reason {
     return [self errorWithCode: QwasiErrorLocationMonitoringFailed
                    withMessage: [NSString stringWithFormat: @"Failed to monitor location %@ (%@).", location.id, location.name]

@@ -107,4 +107,16 @@ extern NSString* const kEventLocationExit;
                    success:(void(^)(NSArray* locations))success
                    failure:(void(^)(NSError* err))failure;
 
+- (void)subscribeToChannel:(NSString*)channel;
+
+- (void)subscribeToChannel:(NSString*)channel
+                   success:(void(^)(void))success
+                   failure:(void(^)(NSError* err))failure;
+
+- (void)unsubscribeFromChannel:(NSString*)channel;
+
+- (void)unsubscribeFromChannel:(NSString*)channel
+                       success:(void(^)(void))success
+                       failure:(void(^)(NSError* err))failure;
+
 @end

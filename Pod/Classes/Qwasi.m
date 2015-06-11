@@ -685,6 +685,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           error = [QwasiError postEvent: event failedWithReason: error];
                           
                           if (failure) failure(error);
+                          
+                          [self emit: @"error", error];
                       }];
         
     }
@@ -726,6 +728,9 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           error = [QwasiError locationFetchFailed: error];
                           
                           if (failure) failure(error);
+                          
+                          [self emit: @"error", error];
+                          
                       }];
         
     }
@@ -738,6 +743,87 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
         [self emit: @"error", error];
     }
+}
 
+- (void)subscribeToChannel:(NSString*)channel {
+    [self subscribeToChannel: channel success: nil failure: nil];
+}
+
+- (void)subscribeToChannel:(NSString*)channel
+                   success:(void(^)(void))success
+                   failure:(void(^)(NSError* err))failure {
+    if (_registered) {
+        
+        [_client invokeMethod: @"channel.subscribe"
+               withParameters: @{ @"device": _deviceToken,
+                                  @"channel": channel }
+                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                          
+                          DDLogVerbose(@"Subscribed to channel %@ for application %@.", channel, _applicationName);
+                          
+                          if (success) {
+                              success();
+                          }
+                          
+                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          
+                          error = [QwasiError channel: channel subscribeFailed: error];
+                          
+                          if (failure) failure(error);
+                          
+                          [self emit: @"error", error];
+                      }];
+        
+    }
+    else {
+        NSError* error = [QwasiError locationFetchFailed: [QwasiError deviceNotRegistered]];
+        
+        if (failure) {
+            failure(error);
+        }
+        
+        [self emit: @"error", error];
+    }
+}
+
+- (void)unsubscribeFromChannel:(NSString*)channel {
+    [self unsubscribeFromChannel: channel success: nil failure: nil];
+}
+
+- (void)unsubscribeFromChannel:(NSString*)channel
+                       success:(void(^)(void))success
+                       failure:(void(^)(NSError* err))failure {
+    if (_registered) {
+        
+        [_client invokeMethod: @"channel.unsubscribe"
+               withParameters: @{ @"device": _deviceToken,
+                                  @"channel": channel }
+                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                          
+                          DDLogVerbose(@"Unsubscribed to channel %@ for application %@.", channel, _applicationName);
+                          
+                          if (success) {
+                              success();
+                          }
+                          
+                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          
+                          error = [QwasiError channel: channel subscribeFailed: error];
+                          
+                          if (failure) failure(error);
+                          
+                          [self emit: @"error", error];
+                      }];
+        
+    }
+    else {
+        NSError* error = [QwasiError locationFetchFailed: [QwasiError deviceNotRegistered]];
+        
+        if (failure) {
+            failure(error);
+        }
+        
+        [self emit: @"error", error];
+    }
 }
 @end
