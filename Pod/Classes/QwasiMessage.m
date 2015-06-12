@@ -101,6 +101,31 @@
     return self;
 }
 
+- (id)initWithAlert:(NSString*)alert
+        withPayload:(id)payload
+    withPayloadType:(NSString*)payloadType
+           withTags:(NSArray*)tags {
+    
+    if (self = [super init]) {
+        _alert = alert;
+        _payload = payload;
+        _payloadType = payloadType;
+        _tags = [[NSArray alloc] initWithArray: tags];
+        _timestamp = [[NSDate dateWithTimeIntervalSince1970:0] timeIntervalSince1970];
+        
+        if (_payloadType == nil) {
+            if ([NSJSONSerialization isValidJSONObject: _payload]) {
+                _payloadType = @"application/json";
+            }
+            else if ([_payload isKindOfClass: [NSString class]]) {
+                _payloadType = @"text/plain";
+            }
+        }
+    }
+    
+    return self;
+}
+
 - (void)encodeWithCoder:(NSCoder *)aCoder {
     [aCoder encodeObject: _messageId forKey: @"id"];
     [aCoder encodeObject: _application forKey: @"application"];

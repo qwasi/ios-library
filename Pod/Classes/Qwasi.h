@@ -119,4 +119,25 @@ extern NSString* const kEventLocationExit;
                        success:(void(^)(void))success
                        failure:(void(^)(NSError* err))failure;
 
+- (void)setDeviceValue:(id)value forKey:(NSString*)key
+               success:(void(^)(void))success
+               failure:(void(^)(NSError* err))failure;
+
+- (void)setDeviceValue:(id)value forKey:(NSString*)key;
+
+- (void)deviceValueForKey:(NSString*)key
+                  success:(void(^)(id value))success
+                  failure:(void(^)(NSError* err))failure;
+
+- (void)filterTag:(NSString*)tag;
+- (void)unfilterTag:(NSString*)tag;
+
+- (void)sendMessage:(QwasiMessage*)message
+        toUserToken:(NSString*)userToken
+            success:(void(^)())success
+            failure:(void(^)(NSError* err))failure;
+
+- (void)sendMessage:(QwasiMessage*)message
+        toUserToken:(NSString*)userToken;
+
 @end

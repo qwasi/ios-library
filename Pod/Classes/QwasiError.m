@@ -85,6 +85,24 @@ NSString* const kQwasiErrorDomain = @"com.qwasi.sdk";
                 withInnerError: reason];
 }
 
++ (NSError*)setDeviceDataForKey:(NSString*)key failed:(NSError*)reason {
+    return [self errorWithCode: QwasiErrorSetDeviceDataFailed
+                   withMessage: [NSString stringWithFormat: @"Failed to set data for key %@.", key]
+                withInnerError: reason];
+}
+
++ (NSError*)getDeviceDataForKey:(NSString*)key failed:(NSError*)reason {
+    return [self errorWithCode: QwasiErrorGetDeviceDataFailed
+                   withMessage: [NSString stringWithFormat: @"Failed to get data for key %@.", key]
+                withInnerError: reason];
+}
+
++ (NSError*)sendMessageToUserToken:(NSString*)userToken failed:(NSError*)reason {
+    return [self errorWithCode: QwasiErrorSendMessageFailed
+                   withMessage: [NSString stringWithFormat: @"Failed to send message to user %@.", userToken]
+                withInnerError: reason];
+}
+
 + (NSError*)postEvent:(NSString*)event failedWithReason:(NSError*)reason {
     return [self errorWithCode: QwasiErrorPostEventFailed withMessage: [NSString stringWithFormat: @"Post event %@ failed.", event] withInnerError: reason];
 }

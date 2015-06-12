@@ -30,5 +30,6 @@
 
 - (void)startMonitoringLocation:(QwasiLocation*)location;
 - (void)stopMonitoringLocation:(QwasiLocation*)location;
-- (void)stopMonitoringAllLocations;
+- (void)startMonitoringLocations;
+- (void)stopMonitoringLocations;
 @end

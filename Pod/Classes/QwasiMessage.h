@@ -22,5 +22,10 @@
 @property (nonatomic,readonly) BOOL fetched;
 
 + (instancetype)messageWithData:(NSDictionary*)data;
+
+- (id)initWithAlert:(NSString*)alert
+        withPayload:(id)payload
+    withPayloadType:(NSString*)payloadType
+           withTags:(NSArray*)tags;
 @end
 

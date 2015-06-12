@@ -129,6 +129,8 @@ QwasiLocationManager* _activeManager = nil;
 - (void)stopLocationUpdates {
     [_manager stopUpdatingLocation];
     
+    [self stopMonitoringLocations];
+    
     _started = NO;
 }
 
@@ -156,7 +158,15 @@ QwasiLocationManager* _activeManager = nil;
     }
 }
 
-- (void)stopMonitoringAllLocations {
+- (void)startMonitoringLocations {
+    for (NSString* _id in _regionMap) {
+        QwasiLocation* location = (QwasiLocation*)[_regionMap objectForKey: _id];
+        
+        [self startMonitoringLocation: location];
+    }
+}
+
+- (void)stopMonitoringLocations {
     NSMutableDictionary* tmp;
     
     @synchronized(self) {

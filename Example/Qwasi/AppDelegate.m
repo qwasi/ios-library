@@ -32,8 +32,22 @@
         [Qwasi shared].pushEnabled = YES;
         
         // The default is for foreground location only, set the location manager to get background updates
-        [Qwasi shared].locationManager = [QwasiLocationManager backgroundManager];
-        [Qwasi shared].locationEnabled = YES; 
+        // [Qwasi shared].locationManager = [QwasiLocationManager backgroundManager];
+        [Qwasi shared].locationEnabled = YES;
+        
+        QwasiMessage* welcome = [[QwasiMessage alloc] initWithAlert: @"sup foo" withPayload: @"not much" withPayloadType: @"text/plain" withTags: nil];
+        
+        [[Qwasi shared] sendMessage: welcome toUserToken: USER_TOKEN];
+        
+        [[Qwasi shared] setDeviceValue: @"rodriguise" forKey: @"user.displayname" success:^{
+            [[Qwasi shared] deviceValueForKey: @"user.displayname" success:^(id value) {
+                NSLog(@"%@", value);
+            } failure:^(NSError *err) {
+                
+            }];
+        } failure:^(NSError *err) {
+            
+        }];
     }];
     
     [[Qwasi shared] on: @"error" listener: ^(NSError* error) {

@@ -20,7 +20,7 @@ it, simply add the following lines to your Podfile:
 
 ```ruby
 
-pod 'Qwasi', '~>2.1.0-20'
+pod 'Qwasi', '~>2.1.0-31'
 ```
 ## License
 
@@ -255,6 +255,20 @@ Example:
 ###### SDK Error - `QwasiErrorMessageFetchFailed`
 ###### API Method - N/A
 
+### Tag based callbacks
+The `qwasi` instance will emit special events for tags contained in a message, these can be used to filter callbacks based on special tags.
+
+Example:
+
+```objectivec
+	// call this so messages with this tag won't get emitter to the default message
+    // hander as well
+	[qwasi filterTag: @"myCustomTag"];
+
+	[qwasi on: @"tag#myCustomTag listener: ^(QwasiMessage* message) {
+		// handle the message with the tag
+	}];
+```
 
 ## Message Channels
 `Qwasi` AIM supports arbitraty message groups via channels. The API is simple.
@@ -369,7 +383,83 @@ Example:
 ###### SDK Error - N/A
 ###### API Method - N/A
 
+## Device Data
+Qwasi supports a key value based cloud data storage system. This data stored device specific. The key can be a deep object path using dot-notication.
 
+### Set Device Data
 
+```objectivec
+- (void)setDeviceValue:(id)value forKey:(NSString*)key
+               success:(void(^)(void))success
+               failure:(void(^)(NSError* err))failure;
 
+- (void)setDeviceValue:(id)value forKey:(NSString*)key;
+```
+###### SDK Event - N/A
+###### SDK Error - `QwasiErrorSetDeviceDataFailed`
+###### API Method - `device.set_data`
 
+### Get Device Data
+
+```objectivec
+- (void)deviceValueForKey:(NSString*)key
+                  success:(void(^)(id value))success
+                  failure:(void(^)(NSError* err))failure;
+```
+###### SDK Event - N/A
+###### SDK Error - `QwasiErrorGetDeviceDataFailed`
+###### API Method - `device.set_data`
+
+Example:
+
+```objectivec
+[qwasi setDeviceValue: @"hotrod99"
+			    forKey: @"user.displayname"];
+
+[qwasi deviceValueForKey: @"user.displayname" 
+		              success:^(id value) {
+                
+				NSLog(@"%@", value);
+            } 
+			       failure:^(NSError *err) {
+            }];				
+```
+## Sending Message
+With the Qwasi API and SDK it is possible to send message to other users, this could facilitate a 2-way communication or chat application. Qwasi does not explictly support this functionality so much of the implementation is left to the developer. You will need to manage mapping your own userTokens to some useful data, which can be stored in the device record as described above.
+
+```objectivec
+- (void)sendMessage:(QwasiMessage*)message
+        toUserToken:(NSString*)userToken
+            success:(void(^)())success
+            failure:(void(^)(NSError* err))failure;
+
+- (void)sendMessage:(QwasiMessage*)message
+        toUserToken:(NSString*)userToken;
+```
+###### SDK Event - N/A
+###### SDK Error - `QwasiErrorSendMessageFailed`
+###### API Method - `message.send`
+
+Example Receiver:
+
+```objectivec
+	// filter out our chat tags
+	[qwasi filterTag: @"chatMessage"];
+
+	[qwasi on: @"tag#chatMessage listener: ^(QwasiMessage* message) {
+		// handle the message with the tag
+		NSString* displayName [message.payload: @"from"];
+		NSLog(@"Got a message from %@", displayName);
+	}];
+```
+
+Example Sender:
+
+```objectivec
+	QwasiMessage* welcome = [[QwasiMessage alloc] initWithAlert: @"sup foo" 
+												   withPayload: @{ @"from": @"notbob98" }
+											   withPayloadType: nil 
+												        withTags: @[@"chatMessage"]];
+
+	[qwasi sendMessage: message toUserToken: @"scurry88"];
+```
