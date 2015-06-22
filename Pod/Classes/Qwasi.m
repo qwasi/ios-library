@@ -450,9 +450,11 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                     BOOL filter = NO;
                     
                     for (NSString* tag in message.tags) {
-                        [self emit: [NSString stringWithFormat: @"tag#%@", tag], message];
                         
                         if ([_filteredTags indexOfObject: tag] != NSNotFound) {
+                            
+                            [self emit: [NSString stringWithFormat: @"tag#%@", tag], message];
+                        
                             filter = YES;
                         }
                     }
