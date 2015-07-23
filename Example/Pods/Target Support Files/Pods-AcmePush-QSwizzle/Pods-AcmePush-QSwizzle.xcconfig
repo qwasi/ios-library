@@ -1,1 +1,0 @@
-PODS_ACMEPUSH_QSWIZZLE_OTHER_LDFLAGS = -framework "Foundation"

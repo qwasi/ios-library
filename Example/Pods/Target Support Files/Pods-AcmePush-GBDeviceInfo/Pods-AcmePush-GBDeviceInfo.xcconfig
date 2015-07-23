@@ -1,1 +1,0 @@
-PODS_ACMEPUSH_GBDEVICEINFO_OTHER_LDFLAGS = -framework "Foundation"

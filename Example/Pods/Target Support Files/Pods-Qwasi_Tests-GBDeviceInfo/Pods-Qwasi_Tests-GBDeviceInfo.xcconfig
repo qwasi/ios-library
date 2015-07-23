@@ -1,1 +1,0 @@
-PODS_QWASI_TESTS_GBDEVICEINFO_OTHER_LDFLAGS = -framework "Foundation"

@@ -28,7 +28,7 @@ Qwasi is available under the MIT license. See the LICENSE file for more info.
 
 ## Pod Dependencies
 ```
- 'CocoaLumberjack'
+ 'CocoaLumberjack', '2.0.0'
  'AFJSONRPCClient'
  'GBDeviceInfo', '~> 3.1.0'
  'Emitter'
@@ -36,7 +36,7 @@ Qwasi is available under the MIT license. See the LICENSE file for more info.
 
 ```
 
-## Library initialization `Qwasi`
+## Library Initialization `Qwasi`
 
 ### Default Shared Qwasi
 There is a default singleton Qwasi object that is best for most use cases.
@@ -345,7 +345,7 @@ There can only be one active `QwasiLocationManager`, you must set this before yo
 ###### API Method - `location.fetch`
 
 ### Handling Location Events
-Like messages locations events are delivered via an emitter on your instance.
+Like messages, locations events are delivered via an emitter on your instance.
 
 Example:
 
@@ -446,9 +446,9 @@ Example Receiver:
 	// filter out our chat tags
 	[qwasi filterTag: @"chatMessage"];
 
-	[qwasi on: @"tag#chatMessage listener: ^(QwasiMessage* message) {
+	[qwasi on: @"tag#chatMessage" listener: ^(QwasiMessage* message) {
 		// handle the message with the tag
-		NSString* displayName [message.payload: @"from"];
+		NSString* displayName = [message.payload: @"from"];
 		NSLog(@"Got a message from %@", displayName);
 	}];
 ```
@@ -456,10 +456,10 @@ Example Receiver:
 Example Sender:
 
 ```objectivec
-	QwasiMessage* welcome = [[QwasiMessage alloc] initWithAlert: @"sup foo" 
-												   withPayload: @{ @"from": @"notbob98" }
+	QwasiMessage* welcome = [[QwasiMessage alloc] initWithAlert: @"You have a new message" 
+												   withPayload: @{ @"from": @"myusername" }
 											   withPayloadType: nil 
 												        withTags: @[@"chatMessage"]];
 
-	[qwasi sendMessage: message toUserToken: @"scurry88"];
+	[qwasi sendMessage: message toUserToken: @"anotheruser"];
 ```
