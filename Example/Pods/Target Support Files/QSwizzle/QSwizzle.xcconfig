@@ -1,0 +1,1 @@
+QSWIZZLE_OTHER_LDFLAGS = -framework "Foundation"

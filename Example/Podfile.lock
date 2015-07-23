@@ -34,13 +34,13 @@ PODS:
   - Expecta (1.0.0)
   - GBDeviceInfo (3.1.0)
   - QSwizzle (0.2.3)
-  - Qwasi (2.1.0-18):
+  - Qwasi (2.1.0-31):
     - AFNetworking
-    - CocoaLumberjack
+    - CocoaLumberjack (= 2.0.0)
     - Emitter
     - GBDeviceInfo (~> 3.1.0)
     - QSwizzle (~> 0.2.0)
-  - Specta (1.0.1)
+  - Specta (1.0.2)
 
 DEPENDENCIES:
   - Expecta
@@ -59,7 +59,7 @@ SPEC CHECKSUMS:
   Expecta: 32604574add2c46a36f8d2f716b6c5736eb75024
   GBDeviceInfo: 3b22a82dc6e2313144b7af71af7ba11a0a3bb74f
   QSwizzle: 9365d52b4f4335dc969bbfbd025a0600f34bfe93
-  Qwasi: 66b3ad09cd515be48c85a9915e743824155b6008
-  Specta: 097be314a75de103703a3bf9a529dc1a398509d7
+  Qwasi: 28eff455c9d61ca7c8d2be24522b995b2103cabe
+  Specta: 9cec98310dca411f7c7ffd6943552b501622abfe
 
-COCOAPODS: 0.37.2
+COCOAPODS: 0.38.0

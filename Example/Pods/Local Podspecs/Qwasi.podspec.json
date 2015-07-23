@@ -1,6 +1,6 @@
 {
   "name": "Qwasi",
-  "version": "2.1.0-18",
+  "version": "2.1.0-31",
   "summary": "Qwasi iOS Library",
   "homepage": "https://code.qwasi.com/scm/sdk/ios-library",
   "license": "MIT",
@@ -9,7 +9,7 @@
   },
   "source": {
     "git": "https://code.qwasi.com/scm/sdk/ios-library.git",
-    "tag": "2.1.0-18"
+    "tag": "2.1.0-31"
   },
   "platforms": {
     "ios": "7.1"
@@ -22,7 +22,7 @@
   "source_files": "Pod/**/*",
   "dependencies": {
     "CocoaLumberjack": [
-
+      "2.0.0"
     ],
     "AFNetworking": [
 

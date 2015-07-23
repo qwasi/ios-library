@@ -1,0 +1,20 @@
+{
+  "name": "ios-library",
+  "version": "2.1.0-32",
+  "description": "Qwasi iOS Library",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "ssh://git@code.qwasi.com/~rrodriguez/ios-library.git"
+  },
+  "author": "",
+  "license": "PRIVATE",
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-bump": "^0.3.1",
+    "podspec-bump": "git+https://github.com/ModelRocket/podspec-bump.git"
+  }
+}
