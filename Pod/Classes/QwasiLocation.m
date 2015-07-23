@@ -18,6 +18,7 @@
     
     BOOL _dwell;
     BOOL _inside;
+    NSInteger _dwellCounter;
     QwasiLocationState _state;
 }
 
@@ -52,6 +53,8 @@
         _name = data[@"name"];
         
         _dwellInterval = [[properties valueForKey: @"dwell_interval"] doubleValue];
+        _dwellCounter = 0;
+        
         _geofenceRadius = [[geofence valueForKeyPath: @"properties.radius"] doubleValue];
         
         if (beacon) {
@@ -135,8 +138,12 @@
                 
                 @synchronized(self) {
                     if (_dwell && !_inside && [QwasiLocationManager currentManager]) {
+                        
                         _inside = YES;
+                        
                         [[QwasiLocationManager currentManager] emit: @"enter", self];
+                        
+                        [self dwell];
                     }
                 }
             });
@@ -144,6 +151,19 @@
             _dwell = YES;
         }
     }
+}
+
+- (void)dwell {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(_dwellInterval * NSEC_PER_SEC * _dwellCounter++)), dispatch_get_main_queue(), ^{
+        
+        @synchronized(self) {
+            if (_dwell && _inside && [QwasiLocationManager currentManager]) {
+                [[QwasiLocationManager currentManager] emit: @"dwell", self];
+                
+                [self dwell];
+            }
+        }
+    });
 }
 
 - (CLLocationDistance)distance {

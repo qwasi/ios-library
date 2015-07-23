@@ -23,6 +23,7 @@
 NSString* const kEventApplicationState = @"com.qwasi.event.application.state";
 NSString* const kEventLocationUpdate = @"com.qwasi.event.location.update";
 NSString* const kEventLocationEnter = @"com.qwasi.event.location.enter";
+NSString* const kEventLocationDwell= @"com.qwasi.event.location.dwell";
 NSString* const kEventLocationExit = @"com.qwasi.event.location.exit";
 
 typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
@@ -165,6 +166,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                 data[@"name"] = location.name;
                 data[@"lng"] = [NSNumber numberWithDouble: _lastLocation.longitude];
                 data[@"lat"] = [NSNumber numberWithDouble: _lastLocation.latitude];
+                data[@"dwellTime"] = [NSNumber numberWithDouble: location.dwellTime];
                 
                 if (location.type == QwasiLocationTypeBeacon) {
                     data[@"distance"] = [NSNumber numberWithDouble: location.beacon.accuracy];
@@ -179,6 +181,30 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                 [self postEvent: kEventLocationEnter withData: data];
                 
                 [self emit:@"location", location, QwasiLocationStateInside];
+            }];
+            
+            [_locationManager on: @"dwell" listener: ^(QwasiLocation* location) {
+                NSMutableDictionary* data = [[NSMutableDictionary alloc] init];
+                
+                data[@"id"] = location.id;
+                data[@"name"] = location.name;
+                data[@"lng"] = [NSNumber numberWithDouble: _lastLocation.longitude];
+                data[@"lat"] = [NSNumber numberWithDouble: _lastLocation.latitude];
+                data[@"dwellTime"] = [NSNumber numberWithDouble: location.dwellTime];
+                
+                if (location.type == QwasiLocationTypeBeacon) {
+                    data[@"distance"] = [NSNumber numberWithDouble: location.beacon.accuracy];
+                    data[@"beacon"] = @{ @"id": location.beaconUUID.UUIDString,
+                                         @"maj_ver": [NSNumber numberWithDouble: location.beaconMajorVersion],
+                                         @"min_ver": [NSNumber numberWithDouble: location.beaconMinorVersion] };
+                }
+                else {
+                    data[@"distance"] = [NSNumber numberWithDouble: [_lastLocation distanceFromLocation: location]];
+                }
+                
+                [self postEvent: kEventLocationDwell withData: data];
+                
+                [self emit:@"location", location, QwasiLocationStateDwell];
             }];
             
             [_locationManager on: @"exit" listener: ^(QwasiLocation* location) {

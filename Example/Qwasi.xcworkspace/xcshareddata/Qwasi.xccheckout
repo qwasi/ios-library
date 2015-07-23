@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>79A87229-3974-4D8D-87B1-418277060173</string>
+	<key>IDESourceControlProjectName</key>
+	<string>Qwasi</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>C87623A7D9097637E9FFF624E25AB79C664DBCEF</key>
+		<string>ssh://code.qwasi.com/sdk/ios-library.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Example/Qwasi.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>C87623A7D9097637E9FFF624E25AB79C664DBCEF</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://code.qwasi.com/sdk/ios-library.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>C87623A7D9097637E9FFF624E25AB79C664DBCEF</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>C87623A7D9097637E9FFF624E25AB79C664DBCEF</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ios-library</string>
+		</dict>
+	</array>
+</dict>
+</plist>
