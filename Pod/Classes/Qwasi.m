@@ -347,6 +347,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                       DDLogInfo(@"Device %@ registered successfully for application %@.", _deviceToken, _applicationName);
                       
                       [self emit: @"registered", _deviceToken];
+                      
+                      [[QwasiAppManager shared] registerApplicationEventHooks];
                     
                 }
                   failure: ^(AFHTTPRequestOperation *operation, NSError *error) {

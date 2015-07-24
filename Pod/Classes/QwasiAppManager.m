@@ -41,48 +41,42 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
 - (id)init {
     if (self = [super init]) {
         
-        UIApplication* application = [UIApplication sharedApplication];
-        NSObject* appDelegate = application.delegate;
-        
-        // Add hooks to send application state events
-        [appDelegate replaceMethodForSelector: @selector(applicationWillEnterForeground:) orAddWithTypes: "v@:@" implementation: ^(id _self, UIApplication* _unused) {
-            
-            [self emit: @"willEnterForeground"];
-            
-            [_self callOnSuper:^{
-                if ([_self respondsToSelector:@selector(applicationWillEnterForeground:)]) {
-                    [_self applicationWillEnterForeground: application];
-                }
-            }];
-        }];
-        
-        [appDelegate replaceMethodForSelector: @selector(applicationDidEnterBackground:) orAddWithTypes: "v@:@" implementation: ^(id _self, UIApplication* _unused) {
-            
-            [self emit: @"didEnterBackground"];
-            
-            [_self callOnSuper:^{
-                if ([_self respondsToSelector:@selector(applicationDidEnterBackground:)]) {
-                    [_self applicationDidEnterBackground: application];
-                }
-            }];
-        }];
-        
-        [appDelegate replaceMethodForSelector: @selector(application:performFetchWithCompletionHandler:)
-                               orAddWithTypes: "v@:@@"
-                               implementation: ^(id _self, UIApplication* application, fetchCompletionHander completionHandler)
-         {
-             [self emit: @"backgroundFetch"];
-             
-             [_self callOnSuper:^{
-                 if ([_self respondsToSelector:@selector(application:performFetchWithCompletionHandler:)]) {
-                     [_self application: application performFetchWithCompletionHandler: completionHandler];
-                 }
-                 else if (completionHandler) {
-                     completionHandler(UIBackgroundFetchResultNewData);
-                 }
-             }];
-         }];
+
     }
     return self;
+}
+
+- (void)registerApplicationEventHooks {
+    
+    UIApplication* application = [UIApplication sharedApplication];
+    NSObject* appDelegate = application.delegate;
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnterForegroundNotification:) name:UIApplicationWillEnterForegroundNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackgroundNotification:) name:UIApplicationDidEnterBackgroundNotification object:nil];
+    
+    [appDelegate replaceMethodForSelector: @selector(application:performFetchWithCompletionHandler:)
+                           orAddWithTypes: "v@:@@"
+                           implementation: ^(id _self, UIApplication* application, fetchCompletionHander completionHandler)
+     {
+         [self emit: @"backgroundFetch"];
+         
+         [_self callOnSuper:^{
+             if ([_self respondsToSelector:@selector(application:performFetchWithCompletionHandler:)]) {
+                 [_self application: application performFetchWithCompletionHandler: completionHandler];
+             }
+             else if (completionHandler) {
+                 completionHandler(UIBackgroundFetchResultNewData);
+             }
+         }];
+     }];
+}
+
+- (void)willEnterForegroundNotification:(NSNotification*)note {
+    [self emit: @"willEnterForeground"];
+}
+
+- (void)didEnterBackgroundNotification:(NSNotification*)note {
+    [self emit: @"didEnterBackground"];
 }
 @end
