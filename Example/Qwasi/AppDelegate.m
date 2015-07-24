@@ -48,6 +48,13 @@
         } failure:^(NSError *err) {
             
         }];
+        
+        [[Qwasi shared] subscribeToChannel: @"SomeChannel" success:^{
+            NSLog(@"Did it: %@", [Qwasi shared].channels);
+            [[Qwasi shared] unsubscribeFromChannel: @"SomeChannel"];
+        } failure:^(NSError *err) {
+            
+        }];
     }];
     
     [[Qwasi shared] on: @"error" listener: ^(NSError* error) {
