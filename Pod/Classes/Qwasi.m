@@ -320,11 +320,11 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                            @"sdkVersion": @"2.1.0" 
                            };
     
+    [info addEntriesFromDictionary: deviceInfo];
+    
     if (userInfo) {
         [info addEntriesFromDictionary: userInfo];
     }
-    
-    [info addEntriesFromDictionary: deviceInfo];
     
     [_client invokeMethod: @"device.register"
            withParameters: @{ @"id": deviceToken,
