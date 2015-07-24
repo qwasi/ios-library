@@ -717,6 +717,11 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
          withData:(id)data
           success:(void(^)(void))success
           failure:(void(^)(NSError* err))failure {
+    
+    if (data == nil) {
+        data = @{};
+    }
+    
     if (_registered) {
         
         [_client invokeMethod: @"event.post"
