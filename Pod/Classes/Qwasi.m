@@ -308,10 +308,6 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     
     NSMutableDictionary* info = [[NSMutableDictionary alloc] init];
     
-    if (userInfo) {
-        [info addEntriesFromDictionary: userInfo];
-    }
-    
     NSDictionary* deviceInfo = @{
 #if DEBUG
                            @"debug": [NSNumber numberWithBool: YES],
@@ -323,6 +319,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                            @"model": [GBDeviceInfo deviceInfo].modelString,
                            @"sdkVersion": @"2.1.0" 
                            };
+    
+    if (userInfo) {
+        [info addEntriesFromDictionary: userInfo];
+    }
     
     [info addEntriesFromDictionary: deviceInfo];
     
