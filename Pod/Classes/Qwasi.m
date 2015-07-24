@@ -39,6 +39,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     
     dispatch_once_t _locationOnce;
     dispatch_once_t _pushOnce;
+    
+    NSMutableArray* _channels;
 }
     
 + (instancetype)shared {
@@ -317,7 +319,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                            @"version": [UIDevice currentDevice].systemVersion,
                            @"system": [UIDevice currentDevice].systemName,
                            @"model": [GBDeviceInfo deviceInfo].modelString,
-                           @"sdkVersion": @"2.1.0" 
+                           @"sdkVersion": @"2.1.4" 
                            };
     
     [info addEntriesFromDictionary: deviceInfo];
@@ -337,6 +339,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                       _registered = YES;
                       
                       _deviceToken = [responseObject valueForKey: @"id"];
+                      
+                      _channels = [NSMutableArray arrayWithArray: [responseObject valueForKey: @"channels"]];
                       
                       _applicationName = [responseObject valueForKeyPath: @"application.name"];
                       
@@ -815,10 +819,14 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           
                           DDLogVerbose(@"Subscribed to channel %@ for application %@.", channel, _applicationName);
                           
+                          if (![_channels containsObject: channel]) {
+                              [_channels addObject: channel];
+                          }
+                          
                           if (success) {
                               success();
                           }
-                          
+   
                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                           
                           error = [QwasiError channel: channel subscribeFailed: error];
@@ -856,10 +864,14 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           
                           DDLogVerbose(@"Unsubscribed to channel %@ for application %@.", channel, _applicationName);
                           
+                          if ([_channels containsObject: channel]) {
+                              [_channels removeObject: channel];
+                          }
+                          
                           if (success) {
                               success();
                           }
-                          
+                        
                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                           
                           error = [QwasiError channel: channel subscribeFailed: error];
@@ -1025,6 +1037,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
         [self emit: @"error", error];
     }
+}
+
+- (NSArray*)channels {
+    return [NSArray arrayWithArray: _channels];
 }
 
 - (void)sendMessage:(QwasiMessage*)message
