@@ -162,6 +162,11 @@ QwasiLocationManager* _activeManager = nil;
     for (NSString* _id in _regionMap) {
         QwasiLocation* location = (QwasiLocation*)[_regionMap objectForKey: _id];
         
+        // Beacons require always authorization status to monitor
+        if (location.type == QwasiLocationTypeBeacon && _authStatus != kCLAuthorizationStatusAuthorizedAlways) {
+            continue;
+        }
+        
         [self startMonitoringLocation: location];
     }
 }

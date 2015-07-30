@@ -9,7 +9,7 @@
 #import "AppDelegate.h"
 #import "Qwasi.h"
 
-#define USER_TOKEN          @"201-867-5309"
+#define USER_TOKEN          @"+14089167525"
 #define DEVICE_TOKEN_KEY    @"deviceToken"
 
 @implementation AppDelegate
