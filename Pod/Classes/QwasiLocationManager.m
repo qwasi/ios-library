@@ -231,8 +231,6 @@ QwasiLocationManager* _activeManager = nil;
     
     if (location) {
         DDLogVerbose(@"Did start monitoring for %@ %@", (location.type == QwasiLocationTypeGeofence ? @"geofence" : @"beacon"), location);
-        
-        [_manager requestStateForRegion: region];
     }
 }
 
@@ -249,7 +247,7 @@ QwasiLocationManager* _activeManager = nil;
                             [_manager startMonitoringForRegion: region];
                         });
                     }
-                    return;
+                    break;
                     
                 case kCLErrorRegionMonitoringResponseDelayed:
                 case kCLErrorRegionMonitoringSetupDelayed:
@@ -285,30 +283,6 @@ QwasiLocationManager* _activeManager = nil;
     
     if (location) {
         [location exit];
-    }
-}
-
-- (void)locationManager:(CLLocationManager *)manager didDetermineState:(CLRegionState)state forRegion:(CLRegion *)region {
-    QwasiLocation* location = [_regionMap objectForKey: region.identifier];
-    
-    if (location) {
-        switch (state) {
-            case CLRegionStateInside:
-                if (location.type == QwasiLocationTypeBeacon) {
-                    [_manager startRangingBeaconsInRegion: (CLBeaconRegion*)region];
-                }
-                else {
-                    [location enter];
-                }
-                break;
-            
-            case CLRegionStateOutside:
-                [location exit];
-                break;
-                
-            default:
-                break;
-        }
     }
 }
 
