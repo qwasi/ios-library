@@ -139,10 +139,16 @@ QwasiLocationManager* _activeManager = nil;
     @synchronized(self) {
         if (![_regionMap objectForKey: location.id]) {
             
-            _regionMap[location.id] = location;
+            // Beacons require always authorization status to monitor
+            if (location.type == QwasiLocationTypeBeacon && _authStatus != kCLAuthorizationStatusAuthorizedAlways) {
+                DDLogDebug(@"Background auth required to monitor beacons, beacon %@ will not be monitored", location.name);
+            }
+            else {
+                _regionMap[location.id] = location;
             
-            [_manager startMonitoringForRegion: location.region];
-            [_manager disallowDeferredLocationUpdates];
+                [_manager startMonitoringForRegion: location.region];
+                [_manager disallowDeferredLocationUpdates];
+            }
         }
     }
 }
@@ -161,11 +167,6 @@ QwasiLocationManager* _activeManager = nil;
 - (void)startMonitoringLocations {
     for (NSString* _id in _regionMap) {
         QwasiLocation* location = (QwasiLocation*)[_regionMap objectForKey: _id];
-        
-        // Beacons require always authorization status to monitor
-        if (location.type == QwasiLocationTypeBeacon && _authStatus != kCLAuthorizationStatusAuthorizedAlways) {
-            continue;
-        }
         
         [self startMonitoringLocation: location];
     }
