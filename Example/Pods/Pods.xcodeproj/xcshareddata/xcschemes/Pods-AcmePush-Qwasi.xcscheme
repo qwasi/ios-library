@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "F0BBDCED988D4DF3F5217FC9"
+               BlueprintIdentifier = "05482D7E45944140773C5517"
                BuildableName = "libPods-AcmePush-Qwasi.a"
                BlueprintName = "Pods-AcmePush-Qwasi"
                ReferencedContainer = "container:Pods.xcodeproj">

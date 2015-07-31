@@ -139,10 +139,16 @@ QwasiLocationManager* _activeManager = nil;
     @synchronized(self) {
         if (![_regionMap objectForKey: location.id]) {
             
-            _regionMap[location.id] = location;
-            
-            [_manager startMonitoringForRegion: location.region];
-            [_manager disallowDeferredLocationUpdates];
+            // Beacons require always authorization status to monitor
+            if (location.type == QwasiLocationTypeBeacon && _authStatus != kCLAuthorizationStatusAuthorizedAlways) {
+                DDLogDebug(@"Background auth required to monitor beacons, beacon %@ will not be monitored", location.name);
+            }
+            else {
+                _regionMap[location.id] = location;
+                
+                [_manager startMonitoringForRegion: location.region];
+                [_manager disallowDeferredLocationUpdates];
+            }
         }
     }
 }
@@ -226,7 +232,7 @@ QwasiLocationManager* _activeManager = nil;
     if (location) {
         DDLogVerbose(@"Did start monitoring for %@ %@", (location.type == QwasiLocationTypeGeofence ? @"geofence" : @"beacon"), location);
         
-        [_manager requestStateForRegion: region];
+        [_manager requestStateForRegion: location.region];
     }
 }
 
@@ -238,12 +244,12 @@ QwasiLocationManager* _activeManager = nil;
         if (error.domain == kCLErrorDomain) {
             switch (error.code) {
                 case kCLErrorRegionMonitoringFailure:
-                    {
-                        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
-                            [_manager startMonitoringForRegion: region];
-                        });
-                    }
-                    return;
+                {
+                    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+                        [_manager startMonitoringForRegion: region];
+                    });
+                }
+                    break;
                     
                 case kCLErrorRegionMonitoringResponseDelayed:
                 case kCLErrorRegionMonitoringSetupDelayed:
@@ -295,7 +301,7 @@ QwasiLocationManager* _activeManager = nil;
                     [location enter];
                 }
                 break;
-            
+                
             case CLRegionStateOutside:
                 [location exit];
                 break;
@@ -311,9 +317,10 @@ QwasiLocationManager* _activeManager = nil;
     CLBeacon* beacon = beacons.count > 0 ? beacons[0] : nil;
     
     if (location && beacon) {
-    
+        
         if ((beacon.accuracy > 0) &&
             (beacon.accuracy <= location.beaconProximity)) {
+            
             [location enterWithBeacon: beacon];
         }
         else {

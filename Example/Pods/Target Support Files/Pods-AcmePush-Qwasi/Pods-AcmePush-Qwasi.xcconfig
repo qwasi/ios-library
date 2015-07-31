@@ -1,1 +1,0 @@
-PODS_ACMEPUSH_QWASI_OTHER_LDFLAGS = -framework "CoreLocation"

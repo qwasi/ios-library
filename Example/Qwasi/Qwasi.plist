@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>apiUrl</key>
-	<string>https://sandbox.qwasi.com/v1</string>
+	<string>http://192.168.3.23:8000/v1</string>
 	<key>apiKey</key>
-	<string>7e459638914ae77e9ee2b0037e1f73f1</string>
+	<string>ec4a9d95ebe5e283822c99b36a9521b50fca7aeb392dcbc24b92cfeda9ceac60</string>
 	<key>appId</key>
-	<string>552f5e6e3e73ca104b46191d</string>
+	<string>55510f3fa2026f9535153de5</string>
 </dict>
 </plist>

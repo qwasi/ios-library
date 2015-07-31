@@ -12,6 +12,7 @@
 #import "GBDeviceInfo.h"
 #import "NSObject+STSwizzle.h"
 #import "QwasiAppManager.h"
+#import "Version.h"
 
 #define LOCATION_EVENT_FILTER 50.0f
 #define LOCATION_UPDATE_FILTER 100.0f
@@ -23,6 +24,7 @@
 NSString* const kEventApplicationState = @"com.qwasi.event.application.state";
 NSString* const kEventLocationUpdate = @"com.qwasi.event.location.update";
 NSString* const kEventLocationEnter = @"com.qwasi.event.location.enter";
+NSString* const kEventLocationDwell= @"com.qwasi.event.location.dwell";
 NSString* const kEventLocationExit = @"com.qwasi.event.location.exit";
 
 typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
@@ -38,6 +40,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     
     dispatch_once_t _locationOnce;
     dispatch_once_t _pushOnce;
+    
+    NSMutableArray* _channels;
 }
     
 + (instancetype)shared {
@@ -165,6 +169,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                 data[@"name"] = location.name;
                 data[@"lng"] = [NSNumber numberWithDouble: _lastLocation.longitude];
                 data[@"lat"] = [NSNumber numberWithDouble: _lastLocation.latitude];
+                data[@"dwellTime"] = [NSNumber numberWithDouble: location.dwellTime];
                 
                 if (location.type == QwasiLocationTypeBeacon) {
                     data[@"distance"] = [NSNumber numberWithDouble: location.beacon.accuracy];
@@ -181,6 +186,30 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                 [self emit:@"location", location, QwasiLocationStateInside];
             }];
             
+            [_locationManager on: @"dwell" listener: ^(QwasiLocation* location) {
+                NSMutableDictionary* data = [[NSMutableDictionary alloc] init];
+                
+                data[@"id"] = location.id;
+                data[@"name"] = location.name;
+                data[@"lng"] = [NSNumber numberWithDouble: _lastLocation.longitude];
+                data[@"lat"] = [NSNumber numberWithDouble: _lastLocation.latitude];
+                data[@"dwellTime"] = [NSNumber numberWithDouble: location.dwellTime];
+                
+                if (location.type == QwasiLocationTypeBeacon) {
+                    data[@"distance"] = [NSNumber numberWithDouble: location.beacon.accuracy];
+                    data[@"beacon"] = @{ @"id": location.beaconUUID.UUIDString,
+                                         @"maj_ver": [NSNumber numberWithDouble: location.beaconMajorVersion],
+                                         @"min_ver": [NSNumber numberWithDouble: location.beaconMinorVersion] };
+                }
+                else {
+                    data[@"distance"] = [NSNumber numberWithDouble: [_lastLocation distanceFromLocation: location]];
+                }
+                
+                [self postEvent: kEventLocationDwell withData: data];
+                
+                [self emit:@"location", location, QwasiLocationStateDwell];
+            }];
+            
             [_locationManager on: @"exit" listener: ^(QwasiLocation* location) {
                 NSMutableDictionary* data = [[NSMutableDictionary alloc] init];
                 
@@ -188,7 +217,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                 data[@"name"] = location.name;
                 data[@"lng"] = [NSNumber numberWithDouble: _lastLocation.longitude];
                 data[@"lat"] = [NSNumber numberWithDouble: _lastLocation.latitude];
-                
+                data[@"dwellTime"] = [NSNumber numberWithDouble: location.dwellTime];
                 
                 if (location.type == QwasiLocationTypeBeacon) {
                     data[@"distance"] = [NSNumber numberWithDouble: location.beacon.accuracy];
@@ -282,10 +311,6 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     
     NSMutableDictionary* info = [[NSMutableDictionary alloc] init];
     
-    if (userInfo) {
-        [info addEntriesFromDictionary: userInfo];
-    }
-    
     NSDictionary* deviceInfo = @{
 #if DEBUG
                            @"debug": [NSNumber numberWithBool: YES],
@@ -295,10 +320,14 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                            @"version": [UIDevice currentDevice].systemVersion,
                            @"system": [UIDevice currentDevice].systemName,
                            @"model": [GBDeviceInfo deviceInfo].modelString,
-                           @"sdkVersion": @"2.1.0" 
+                           @"sdkVersion": VERSION_STRING
                            };
     
     [info addEntriesFromDictionary: deviceInfo];
+    
+    if (userInfo) {
+        [info addEntriesFromDictionary: userInfo];
+    }
     
     [_client invokeMethod: @"device.register"
            withParameters: @{ @"id": deviceToken,
@@ -312,6 +341,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                       
                       _deviceToken = [responseObject valueForKey: @"id"];
                       
+                      _channels = [NSMutableArray arrayWithArray: [responseObject valueForKey: @"channels"]];
+                      
                       _applicationName = [responseObject valueForKeyPath: @"application.name"];
                       
                       if (success) {
@@ -321,6 +352,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                       DDLogInfo(@"Device %@ registered successfully for application %@.", _deviceToken, _applicationName);
                       
                       [self emit: @"registered", _deviceToken];
+                      
+                      [[QwasiAppManager shared] registerApplicationEventHooks];
                     
                 }
                   failure: ^(AFHTTPRequestOperation *operation, NSError *error) {
@@ -691,6 +724,11 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
          withData:(id)data
           success:(void(^)(void))success
           failure:(void(^)(NSError* err))failure {
+    
+    if (data == nil) {
+        data = @{};
+    }
+    
     if (_registered) {
         
         [_client invokeMethod: @"event.post"
@@ -782,10 +820,14 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           
                           DDLogVerbose(@"Subscribed to channel %@ for application %@.", channel, _applicationName);
                           
+                          if (![_channels containsObject: channel]) {
+                              [_channels addObject: channel];
+                          }
+                          
                           if (success) {
                               success();
                           }
-                          
+   
                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                           
                           error = [QwasiError channel: channel subscribeFailed: error];
@@ -823,10 +865,14 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           
                           DDLogVerbose(@"Unsubscribed to channel %@ for application %@.", channel, _applicationName);
                           
+                          if ([_channels containsObject: channel]) {
+                              [_channels removeObject: channel];
+                          }
+                          
                           if (success) {
                               success();
                           }
-                          
+                        
                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                           
                           error = [QwasiError channel: channel subscribeFailed: error];
@@ -992,6 +1038,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
         [self emit: @"error", error];
     }
+}
+
+- (NSArray*)channels {
+    return [NSArray arrayWithArray: _channels];
 }
 
 - (void)sendMessage:(QwasiMessage*)message

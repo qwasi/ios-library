@@ -10,4 +10,5 @@
 
 @interface QwasiAppManager : NSObject
 + (instancetype)shared;
+- (void)registerApplicationEventHooks;
 @end
