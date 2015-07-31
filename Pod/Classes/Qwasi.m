@@ -324,7 +324,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                            @"version": [UIDevice currentDevice].systemVersion,
                            @"system": [UIDevice currentDevice].systemName,
                            @"model": [GBDeviceInfo deviceInfo].modelString,
-                           @"sdkVersion": VERSION_STRING
+                           @"sdkVersion": [Qwasi version]
                            };
     
     [info addEntriesFromDictionary: deviceInfo];
