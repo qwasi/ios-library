@@ -12,6 +12,7 @@
 #import "GBDeviceInfo.h"
 #import "NSObject+STSwizzle.h"
 #import "QwasiAppManager.h"
+#import "Version.h"
 
 #define LOCATION_EVENT_FILTER 50.0f
 #define LOCATION_UPDATE_FILTER 100.0f
@@ -319,7 +320,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                            @"version": [UIDevice currentDevice].systemVersion,
                            @"system": [UIDevice currentDevice].systemName,
                            @"model": [GBDeviceInfo deviceInfo].modelString,
-                           @"sdkVersion": @"2.1.4" 
+                           @"sdkVersion": VERSION_STRING
                            };
     
     [info addEntriesFromDictionary: deviceInfo];

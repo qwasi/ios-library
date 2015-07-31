@@ -631,6 +631,7 @@
 		CFCC7B4254B967493E6749376858BA97 /* AFURLSessionManager.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = AFURLSessionManager.m; path = AFNetworking/AFURLSessionManager.m; sourceTree = "<group>"; };
 		D06085E3090C54A41F0C0AF56912B64E /* QwasiClient.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = QwasiClient.h; sourceTree = "<group>"; };
 		D37CE9D8425F868D0AB96A74B9FA3680 /* UIActivityIndicatorView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIActivityIndicatorView+AFNetworking.h"; path = "UIKit+AFNetworking/UIActivityIndicatorView+AFNetworking.h"; sourceTree = "<group>"; };
+		D415EAF81B6BDB930073BC5A /* Version.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = Version.h; sourceTree = "<group>"; };
 		D450FF92F84B61A31710D53B0BA31059 /* UIWebView+AFNetworking.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "UIWebView+AFNetworking.h"; path = "UIKit+AFNetworking/UIWebView+AFNetworking.h"; sourceTree = "<group>"; };
 		D7123431A0DA886D7C3DF29B8AB90028 /* SpectaUtility.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = SpectaUtility.m; path = Specta/Specta/SpectaUtility.m; sourceTree = "<group>"; };
 		D79C02E556027B8FDFD54956238D67CC /* EXPMatchers+endWith.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = "EXPMatchers+endWith.h"; path = "Expecta/Matchers/EXPMatchers+endWith.h"; sourceTree = "<group>"; };
@@ -1188,6 +1189,7 @@
 		C5CE9F30E3B38FAFF67DF6ABF2AD8BCE /* Classes */ = {
 			isa = PBXGroup;
 			children = (
+				D415EAF81B6BDB930073BC5A /* Version.h */,
 				7F3D7EC84C941823C276C1EAC8CE2349 /* Qwasi.h */,
 				CAB277226C0A2561D1AF69756D937464 /* Qwasi.m */,
 				E1B314B42F440B75B74110C13AD4EFF8 /* QwasiAppManager.h */,
