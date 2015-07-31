@@ -16,10 +16,15 @@ module.exports = function(grunt) {
 
 	return release;
     }
+
+   var getPackage = function() {
+        return grunt.file.readJSON('package.json');
+    }
     
     // Do grunt-related things in here
     require('load-grunt-tasks')(grunt);
     grunt.initConfig({
+	getPackage: getPackage,
 	package: grunt.file.readJSON('package.json'),
 	gitcheckout: {
     	    default: {
@@ -34,7 +39,7 @@ module.exports = function(grunt) {
             	    featureRegex: /^(.*)implements (IOSSDK-\d+)(.*)/gi,
             	    fixRegex: /^(.*)fixes (IOSSDK-\d+)(.*)/gi,
             	    dest: 'CHANGELOG.md',
-            	    template: '## SDK Version <%= package.version %> / {{date}}\n\n{{> features}}{{> fixes}}',
+            	    template: '## SDK Version <%= getPackage().version %> / {{date}}\n\n{{> features}}{{> fixes}}',
             	    partials: {
                 	features: '{{#each features}}{{> feature}}{{/each}}',
                 	feature: '- [NEW] {{this}}\n',
@@ -88,7 +93,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('changeLog', 'Build changelog and add jira links', ['changelog', 'replace']);
 
-    grunt.registerTask('bump-all', ['bump-only:prerelease', 'shell', 'writeVersionHeader', 'changelog']);
+    grunt.registerTask('bump-all', ['bump-only:prerelease', 'shell:bump_pod', 'writeVersionHeader', 'changelog']);
 
     grunt.registerTask('writeVersionHeader', function() {
 	var package = grunt.file.readJSON('package.json');
