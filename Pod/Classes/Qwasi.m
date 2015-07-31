@@ -59,6 +59,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     return [[Qwasi alloc] initWithConfig: config];
 }
 
++ (NSString*)version {
+    return VERSION_STRING;
+}
+
 - (id)initWithConfig:(QwasiConfig*)config {
     if (self = [super init]) {
         
