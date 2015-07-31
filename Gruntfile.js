@@ -69,7 +69,7 @@ module.exports = function(grunt) {
 		tagMessage: 'Version %VERSION%',
 		push: false,
 		pushTo: 'origin',
-		prereleaseName: dev,
+		prereleaseName: 'dev',
 		gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
 		globalReplace: false
 	    }
