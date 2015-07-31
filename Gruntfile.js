@@ -14,7 +14,7 @@ module.exports = function(grunt) {
 
 	release = +release[release.length-1];
 
-	return release + 1;
+	return release;
     }
     
     // Do grunt-related things in here
@@ -87,7 +87,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('changeLog', 'Build changelog and add jira links', ['changelog', 'replace']);
 
-    grunt.registerTask('bump-all', ['changelog', 'bump-only:prerelease', 'shell', 'writeVersionHeader']);
+    grunt.registerTask('bump-all', ['bump-only:prerelease', 'shell', 'writeVersionHeader', 'changelog']);
 
     grunt.registerTask('writeVersionHeader', function() {
 	var package = grunt.file.readJSON('package.json');
