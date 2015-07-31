@@ -216,7 +216,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                 data[@"name"] = location.name;
                 data[@"lng"] = [NSNumber numberWithDouble: _lastLocation.longitude];
                 data[@"lat"] = [NSNumber numberWithDouble: _lastLocation.latitude];
-                
+                data[@"dwellTime"] = [NSNumber numberWithDouble: location.dwellTime];
                 
                 if (location.type == QwasiLocationTypeBeacon) {
                     data[@"distance"] = [NSNumber numberWithDouble: location.beacon.accuracy];
