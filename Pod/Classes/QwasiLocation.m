@@ -201,7 +201,7 @@
 
 - (NSTimeInterval)dwellTime {
     
-    if (_dwell) {
+    if (_dwellStart) {
         return [NSDate timeIntervalSinceReferenceDate] - _dwellStart;
     }
     
