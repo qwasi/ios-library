@@ -42,6 +42,8 @@ extern NSString* const kEventLocationExit;
 
 + (instancetype)shared;
 
++ (NSString*)version;
+
 - (id)initWithConfig:(QwasiConfig*)config;
 
 - (void)registerDevice:(NSString*)deviceToken
