@@ -210,7 +210,7 @@
 }
 
 - (NSTimeInterval)dwellTime {
-    if (_dwellExit) {
+    if (!_inside && _exit && _dwellExit) {
         return _dwellExit;
     }
     else if (_dwellStart) {
