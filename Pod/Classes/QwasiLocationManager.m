@@ -324,7 +324,7 @@ QwasiLocationManager* _activeManager = nil;
             [location enterWithBeacon: beacon];
         }
         else {
-            [location exit];
+            [location exitWithBeacon: beacon];
         }
     }
 }
