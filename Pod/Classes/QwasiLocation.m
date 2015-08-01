@@ -198,6 +198,12 @@
     }
 }
 
+- (void)exitWithBeacon:(CLBeacon*)beacon {
+    _beacon = beacon;
+    
+    [self exit];
+}
+
 - (void)exit {
     @synchronized(self) {
         if (_inside) {

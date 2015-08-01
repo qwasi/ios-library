@@ -48,4 +48,5 @@ typedef NS_ENUM(NSInteger, QwasiLocationState) {
 - (void)enter;
 - (void)enterWithBeacon:(CLBeacon*)beacon;
 - (void)exit;
+- (void)exitWithBeacon:(CLBeacon*)beacon;
 @end
