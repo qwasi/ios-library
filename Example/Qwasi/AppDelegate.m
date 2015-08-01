@@ -85,12 +85,15 @@
     
         switch (location.type) {
             case QwasiLocationTypeCoordinate:
-                DDLogInfo(@"Location updated: %@", location);
+                // DDLogInfo(@"Location updated: %@", location);
                 break;
                 
             case QwasiLocationTypeGeofence:
                 if (state == QwasiLocationStateInside) {
                     DDLogInfo(@"Entered location %@.", location.name);
+                }
+                else if (state == QwasiLocationStateDwell) {
+                    DDLogInfo(@"Dwell location %@.", location.name);
                 }
                 else {
                     DDLogInfo(@"Exited location %@.", location.name);
@@ -100,6 +103,9 @@
             case QwasiLocationTypeBeacon:
                 if (state == QwasiLocationStateInside) {
                     DDLogInfo(@"Triggered beacon %@.", location.name);
+                }
+                else if (state == QwasiLocationStateDwell) {
+                    DDLogInfo(@"Dwell beacon %@.", location.name);
                 }
                 else {
                     DDLogInfo(@"Cleared beacon %@.", location.name);

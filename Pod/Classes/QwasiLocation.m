@@ -140,6 +140,11 @@
             _inside = YES;
             
             if (!_dwell) {
+                
+                _dwellStart = [NSDate timeIntervalSinceReferenceDate];
+                
+                _dwellExit = 0;
+                
                 [[QwasiLocationManager currentManager] emit: @"enter", self];
             }
             
@@ -156,7 +161,6 @@
         if (_inside && !_dwellTimer) {
             dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
             
-            _dwellStart = [NSDate timeIntervalSinceReferenceDate];
             _dwellExit = 0;
             
             _dwellTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
@@ -168,10 +172,10 @@
                     if (_inside) {
                         if (_exit) {
                             _inside = NO;
-                            _dwellExit = [NSDate timeIntervalSinceReferenceDate];
                         }
                         else {
                             _dwell = YES;
+                            
                             _dwellExit = 0;
                             
                             [[QwasiLocationManager currentManager] emit: @"dwell", self];
@@ -197,6 +201,9 @@
 - (void)exit {
     @synchronized(self) {
         if (_inside) {
+            
+            _dwellExit = [NSDate timeIntervalSinceReferenceDate] - _dwellStart;
+            
             _exit = YES;
         }
     }
@@ -204,7 +211,7 @@
 
 - (NSTimeInterval)dwellTime {
     if (_dwellExit) {
-        return [NSDate timeIntervalSinceReferenceDate] - _dwellExit;
+        return _dwellExit;
     }
     else if (_dwellStart) {
         return [NSDate timeIntervalSinceReferenceDate] - _dwellStart;

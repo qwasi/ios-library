@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>apiUrl</key>
-	<string>http://192.168.3.23:8000/v1</string>
+	<string>http://192.168.1.39:8000/v1</string>
 	<key>apiKey</key>
 	<string>ec4a9d95ebe5e283822c99b36a9521b50fca7aeb392dcbc24b92cfeda9ceac60</string>
 	<key>appId</key>
