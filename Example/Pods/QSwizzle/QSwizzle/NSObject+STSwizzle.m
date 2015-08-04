@@ -132,7 +132,7 @@ static char isSwizzledKey;
 	if (hacked)
 	{
 		Class hackClass = [self class];
-        class_addMethod(hackClass, selector, imp_implementationWithBlock(impl), types);
+		class_addMethod(hackClass, selector, imp_implementationWithBlock(impl), types);
 	}
 }
 
