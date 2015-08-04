@@ -18,6 +18,13 @@ module.exports = function(grunt) {
 	return release;
     }
 
+    var isRelease = function() {
+    	var package = grunt.file.readJSON('package.json');
+        var semver = semverUtils.parse(package.version);
+
+	return semver.release == null; 
+    }
+
     // Do grunt-related things in here
     require('load-grunt-tasks')(grunt);
     grunt.initConfig({
@@ -71,7 +78,7 @@ module.exports = function(grunt) {
 		tagMessage: 'Release %VERSION%',
 		push: true,
 		pushTo: 'origin',
-		prereleaseName: 'dev',
+		prereleaseName: isRelease() ? false : 'dev',
 		gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
 		globalReplace: false
 	    }
@@ -90,7 +97,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('changeLog', 'Build changelog and add jira links', ['changelog', 'replace']);
 
-    grunt.registerTask('bump-all', ['bump-only:prerelease', 'shell:bump_pod', 'writeVersionHeader', 'changelog']);
+    grunt.registerTask('bump-all', [isRelease() ? 'bump-only:patch' : 'bump-only:prerelease', 'shell:bump_pod', 'writeVersionHeader', 'changelog']);
 
     grunt.registerTask('writeVersionHeader', function() {
 	var package = grunt.file.readJSON('package.json');
