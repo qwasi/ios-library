@@ -72,7 +72,7 @@ module.exports = function(grunt) {
 		updateConfigs: [],
 		commit: true,
 		commitMessage: '#bump Release %VERSION%',
-		commitFiles: ['package.json', 'CHANGELOG.md'],
+		commitFiles: ['package.json'],
 		createTag: true,
 		tagName: '%VERSION%',
 		tagMessage: 'Release %VERSION%',
