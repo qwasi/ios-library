@@ -71,7 +71,7 @@ module.exports = function(grunt) {
 		tagMessage: 'Release %VERSION%',
 		push: true,
 		pushTo: 'origin',
-		prereleaseName: 'dev',
+		prereleaseName: false,
 		gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
 		globalReplace: false
 	    }
@@ -90,7 +90,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('changeLog', 'Build changelog and add jira links', ['changelog', 'replace']);
 
-    grunt.registerTask('bump-all', ['bump-only:prerelease', 'shell:bump_pod', 'writeVersionHeader', 'changelog']);
+    grunt.registerTask('bump-all', ['bump-only:patch', 'shell:bump_pod', 'writeVersionHeader', 'changelog']);
 
     grunt.registerTask('writeVersionHeader', function() {
 	var package = grunt.file.readJSON('package.json');
