@@ -98,6 +98,9 @@
                 _payload = [[NSString alloc] initWithData: _payload encoding: NSUTF8StringEncoding];
             }
         }
+        else {
+            _payload = [[NSDictionary alloc] init];
+        }
     }
     
     return self;
