@@ -10,21 +10,18 @@ module.exports = function(grunt) {
 	var package = grunt.file.readJSON('package.json');
 	var semver = semverUtils.parse(package.version);
 
-	var release = semver.release.split('.');
+	var release = semver.release ? semver.release.split('.') : 1000;
 
-	release = +release[release.length-1];
-
+	if (Array.isArray(release)) {
+		release = +release[release.length-1];
+	}
 	return release;
     }
 
-   var getPackage = function() {
-        return grunt.file.readJSON('package.json');
-    }
-    
     // Do grunt-related things in here
     require('load-grunt-tasks')(grunt);
     grunt.initConfig({
-	getPackage: getPackage,
+	getPackage: function() { return grunt.file.readJSON('package.json'); },
 	package: grunt.file.readJSON('package.json'),
 	gitcheckout: {
     	    default: {
