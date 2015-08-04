@@ -59,6 +59,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     return [[Qwasi alloc] initWithConfig: config];
 }
 
++ (NSString*)version {
+    return VERSION_STRING;
+}
+
 - (id)initWithConfig:(QwasiConfig*)config {
     if (self = [super init]) {
         
@@ -320,7 +324,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                            @"version": [UIDevice currentDevice].systemVersion,
                            @"system": [UIDevice currentDevice].systemName,
                            @"model": [GBDeviceInfo deviceInfo].modelString,
-                           @"sdkVersion": VERSION_STRING
+                           @"sdkVersion": [Qwasi version]
                            };
     
     [info addEntriesFromDictionary: deviceInfo];

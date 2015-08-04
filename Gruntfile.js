@@ -17,7 +17,7 @@ module.exports = function(grunt) {
 	}
 	return release;
     }
-    
+
     // Do grunt-related things in here
     require('load-grunt-tasks')(grunt);
     grunt.initConfig({
@@ -64,14 +64,14 @@ module.exports = function(grunt) {
 		files: ['package.json'],
 		updateConfigs: [],
 		commit: true,
-		commitMessage: '#bump v%VERSION%',
-		commitFiles: ['package.json'],
+		commitMessage: '#bump Release %VERSION%',
+		commitFiles: ['-a'],
 		createTag: true,
 		tagName: '%VERSION%',
-		tagMessage: 'Version %VERSION%',
-		push: false,
+		tagMessage: 'Release %VERSION%',
+		push: true,
 		pushTo: 'origin',
-		prereleaseName: false,
+		prereleaseName: 'dev',
 		gitDescribeOptions: '--tags --always --abbrev=1 --dirty=-d',
 		globalReplace: false
 	    }
@@ -90,7 +90,7 @@ module.exports = function(grunt) {
 
     grunt.registerTask('changeLog', 'Build changelog and add jira links', ['changelog', 'replace']);
 
-    grunt.registerTask('bump-all', ['bump-only:patch', 'shell', 'writeVersionHeader', 'changelog']);
+    grunt.registerTask('bump-all', ['bump-only:prerelease', 'shell:bump_pod', 'writeVersionHeader', 'changelog']);
 
     grunt.registerTask('writeVersionHeader', function() {
 	var package = grunt.file.readJSON('package.json');

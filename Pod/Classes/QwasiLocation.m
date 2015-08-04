@@ -14,6 +14,7 @@
 @implementation QwasiLocation {
     NSTimeInterval _dwellInterval;
     NSTimeInterval _dwellStart;
+    NSTimeInterval _dwellExit;
     dispatch_source_t _dwellTimer;
     
     BOOL _dwell;
@@ -89,13 +90,13 @@
 
 - (QwasiLocationState)state {
     
-    if (_inside) {
+    if (_dwell) {
+        return QwasiLocationStateDwell;
+    }
+    else if (_inside) {
         return QwasiLocationStateInside;
     }
-    else if (_dwell) {
-        return QwasiLocationStatePending;
-    }
-    else if (_type == QwasiLocationTypeBeacon) {
+    else if (_exit) {
         return QwasiLocationStateOutside;
     }
     else {
@@ -139,6 +140,11 @@
             _inside = YES;
             
             if (!_dwell) {
+                
+                _dwellStart = [NSDate timeIntervalSinceReferenceDate];
+                
+                _dwellExit = 0;
+                
                 [[QwasiLocationManager currentManager] emit: @"enter", self];
             }
             
@@ -155,7 +161,7 @@
         if (_inside && !_dwellTimer) {
             dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
             
-            _dwellStart = [NSDate timeIntervalSinceReferenceDate];
+            _dwellExit = 0;
             
             _dwellTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
             
@@ -169,6 +175,8 @@
                         }
                         else {
                             _dwell = YES;
+                            
+                            _dwellExit = 0;
                             
                             [[QwasiLocationManager currentManager] emit: @"dwell", self];
                         }
@@ -190,18 +198,29 @@
     }
 }
 
-- (void)exit {
+- (void)exitWithBeacon:(CLBeacon*)beacon {
+    _beacon = beacon;
     
+    [self exit];
+}
+
+- (void)exit {
     @synchronized(self) {
         if (_inside) {
+            
+            _dwellExit = [NSDate timeIntervalSinceReferenceDate] - _dwellStart;
+            
             _exit = YES;
         }
     }
 }
 
 - (NSTimeInterval)dwellTime {
-    if (_dwellStart) {
-        return [NSDate timeIntervalSinceReferenceDate] - (_dwellStart + (_exit ? _dwellInterval : 0));
+    if (!_inside && _exit && _dwellExit) {
+        return _dwellExit;
+    }
+    else if (_dwellStart) {
+        return [NSDate timeIntervalSinceReferenceDate] - _dwellStart;
     }
     
     return 0;
