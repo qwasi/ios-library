@@ -40,8 +40,8 @@ module.exports = function(grunt) {
 	changelog: {
 	    'ios-library': {
 		options: {
-            	    featureRegex: /^(.*)implements (IOSSDK-\d+)(.*)/gi,
-            	    fixRegex: /^(.*)fixes (IOSSDK-\d+)(.*)/gi,
+            	    featureRegex: /^(.*)implements (IOSSDK-\d+)(.*)/gim,
+            	    fixRegex: /^(.*)fixes (IOSSDK-\d+)(.*)/gim,
             	    dest: 'CHANGELOG.md',
             	    template: '## SDK Version <%= getPackage().version %> / {{date}}\n\n{{> features}}{{> fixes}}',
             	    partials: {
