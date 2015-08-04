@@ -82,19 +82,21 @@
         // decode the payload
         _encodedPayload = [data objectForKey: @"payload"];
         
-        _payload = [[NSData alloc] initWithBase64EncodedString: _encodedPayload options: 0];
-        
-        if ([_payloadType caseInsensitiveCompare: @"application/json"] == NSOrderedSame) {
-            NSError* jsonError;
+        if (_encodedPayload) {
+            _payload = [[NSData alloc] initWithBase64EncodedString: _encodedPayload options: 0];
             
-            id payload = [NSJSONSerialization JSONObjectWithData: _payload options: 0 error: &jsonError];
-            
-            if (!jsonError) {
-                _payload = payload;
+            if ([_payloadType caseInsensitiveCompare: @"application/json"] == NSOrderedSame) {
+                NSError* jsonError;
+                
+                id payload = [NSJSONSerialization JSONObjectWithData: _payload options: 0 error: &jsonError];
+                
+                if (!jsonError) {
+                    _payload = payload;
+                }
             }
-        }
-        else if ([_payloadType rangeOfString: @"text"].location != NSNotFound) {
-            _payload = [[NSString alloc] initWithData: _payload encoding: NSUTF8StringEncoding];
+            else if ([_payloadType rangeOfString: @"text"].location != NSNotFound) {
+                _payload = [[NSString alloc] initWithData: _payload encoding: NSUTF8StringEncoding];
+            }
         }
     }
     
