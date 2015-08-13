@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "780285E1ADCB8D9A4D008DC3"
+               BlueprintIdentifier = "88FD0D4FE96893F0682DA67E"
                BuildableName = "libQwasi.a"
                BlueprintName = "Qwasi"
                ReferencedContainer = "container:Pods.xcodeproj">
