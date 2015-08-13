@@ -230,7 +230,7 @@ QwasiLocationManager* _activeManager = nil;
     QwasiLocation* location = [_regionMap objectForKey: region.identifier];
     
     if (location) {
-        DDLogVerbose(@"Did start monitoring for %@ %@", (location.type == QwasiLocationTypeGeofence ? @"geofence" : @"beacon"), location);
+        DDLogVerbose(@"Did start monitoring %@", location);
         
         [_manager requestStateForRegion: location.region];
     }
@@ -260,7 +260,7 @@ QwasiLocationManager* _activeManager = nil;
             }
         }
         
-        DDLogVerbose(@"Failed to start monitoring for %@ %@, %@", (location.type == QwasiLocationTypeGeofence ? @"geofence" : @"beacon"), location, error);
+        DDLogVerbose(@"Failed to start monitoring %@, %@", location, error);
         
         [self emit: @"error", [QwasiError location: location monitoringFailed: error]];
     }
@@ -333,7 +333,7 @@ QwasiLocationManager* _activeManager = nil;
     QwasiLocation* location = [_regionMap objectForKey: region.identifier];
     
     if (location) {
-        DDLogVerbose(@"Failed to range for beacon for location %@, %@", location.name, error);
+        DDLogVerbose(@"Failed to range %@, %@", location, error);
         
         [self emit: @"error", [QwasiError location: location beaconRangingFailed: error]];
     }
