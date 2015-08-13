@@ -24,7 +24,7 @@
         
         // Add a new message handler for the view
         [[Qwasi shared] on: @"message" listener: ^(QwasiMessage* message) {
-            [_messages appendFormat: @"<hr><b>alert</b>: %@<br/><b>payload</b>:%@</br></br>",
+            [_messages appendFormat: @"<hr><b>Alert:</b> %@<br/><b>Message:</b>%@</br></br>",
              message.alert,
              message.payload];
             
