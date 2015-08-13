@@ -777,10 +777,22 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                       success:^(AFHTTPRequestOperation *operation, id responseObject) {
                           
                           if (success) {
+                              NSArray* response = (NSArray*)responseObject;
                               NSMutableArray* locations = [[NSMutableArray alloc] init];
                               
-                              for (NSDictionary* data in responseObject) {
-                                  [locations addObject: [[QwasiLocation alloc] initWithLocationData: data]];
+                              DDLogVerbose(@"Fetched %lu locations from server.", (unsigned long)response.count);
+                              
+                              for (NSDictionary* data in response) {
+                                  QwasiLocation* _loc = [[QwasiLocation alloc] initWithLocationData: data];
+                                  
+                                  if ((_loc.type != QwasiLocationTypeBeacon) ||
+                                      [_loc.vendor isEqualToString: @"ibeacon"]) {
+                                      
+                                      [locations addObject: _loc];
+                                  }
+                                  else {
+                                      DDLogVerbose(@"Ignoring unsupported location %@", _loc);
+                                  }
                               }
                           
                               success(locations);

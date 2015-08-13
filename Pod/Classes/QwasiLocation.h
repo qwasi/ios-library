@@ -31,6 +31,7 @@ typedef NS_ENUM(NSInteger, QwasiLocationState) {
 @property (nonatomic,readonly) CLLocationDegrees latitude;
 @property (nonatomic,readonly) NSString* id;
 @property (nonatomic,readonly) NSString* name;
+@property (nonatomic,readonly) NSString* vendor;
 @property (nonatomic,readonly) CLLocationDistance geofenceRadius;
 @property (nonatomic,readonly) NSDictionary* geometry;
 @property (nonatomic,readonly) CLLocationDistance distance;

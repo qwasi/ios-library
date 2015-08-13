@@ -62,9 +62,17 @@
         if (beacon) {
             
             _type = QwasiLocationTypeBeacon;
-            _beaconUUID = [[NSUUID alloc] initWithUUIDString: [beacon valueForKey: @"id"]];
-            _beaconMajorVersion = [[beacon valueForKey: @"maj_ver"] unsignedShortValue];
-            _beaconMinorVersion = [[beacon valueForKey: @"min_ver"] unsignedShortValue];
+            
+            NSArray* _ids = [beacon valueForKey: @"id"];
+            
+            _vendor = [beacon valueForKey: @"type"];
+            
+            if ([_ids isKindOfClass:[NSArray class]] &&
+                 [_vendor isEqualToString:@"ibeacon"]) {
+                _beaconUUID = (_ids.count > 0) ? [[NSUUID alloc] initWithUUIDString: _ids[0]] : nil;
+                _beaconMajorVersion = (_ids.count > 1) ? [_ids[1] unsignedShortValue] : -1;
+                _beaconMinorVersion = (_ids.count > 2) ? [_ids[2] unsignedShortValue] : -1;
+            }
             
             if (_beaconMajorVersion == UINT16_MAX) {
                 _region = [[CLBeaconRegion alloc] initWithProximityUUID: _beaconUUID identifier: _id];
@@ -113,17 +121,38 @@
 }
 
 - (NSString*)description {
+    NSMutableDictionary* desc = [[NSMutableDictionary alloc] init];
+    
+    desc[@"id"] = _id;
+    desc[@"name"] = _name;
+    desc[@"region"] = [super description];
+    
     switch (_type) {
-        case QwasiLocationTypeGeofence:
-            return [NSString stringWithFormat: @"%@ %@ %@", _name, _id, [super description]];
-            
         case QwasiLocationTypeBeacon:
-            return [NSString stringWithFormat: @"%@ %@ %@ (%u,%u) %ldm %@", _name, _id, _beaconUUID.UUIDString, _beaconMajorVersion, _beaconMinorVersion, (long)_beaconProximity, [super description]];
+        {
+            NSDictionary* beac = @{ @"vendor": _vendor,
+                                    @"uuid": _beaconUUID ? _beaconUUID.UUIDString : @"unknown",
+                                    @"maj_ver": [NSNumber numberWithDouble: _beaconMajorVersion],
+                                    @"min_ver": [NSNumber numberWithDouble: _beaconMinorVersion],
+                                    @"proximity": [NSNumber numberWithDouble: _beaconProximity] };
+            desc[@"beacon"] = beac;
+        }
+            break;
+            
+        case QwasiLocationTypeGeofence:
+            desc[@"type"] = @"geofence";
+            break;
             
         case QwasiLocationTypeCoordinate:
+            desc[@"type"] = @"coordinate";
+            break;
+            
         default:
-            return [super description];
+            desc[@"type"] = @"unknown";
+            break;
     }
+    
+    return [NSString stringWithFormat: @"%@", desc];
 }
 
 - (void)enterWithBeacon:(CLBeacon*)beacon {
