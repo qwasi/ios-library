@@ -41,7 +41,6 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
 - (id)init {
     if (self = [super init]) {
         
-
     }
     return self;
 }

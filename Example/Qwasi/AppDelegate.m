@@ -35,8 +35,9 @@
         // [Qwasi shared].locationManager = [QwasiLocationManager backgroundManager];
         [Qwasi shared].locationEnabled = YES;
         
-        QwasiMessage* welcome = [[QwasiMessage alloc] initWithAlert: @"sup foo" withPayload: @"not much" withPayloadType: @"text/plain" withTags: nil];
+        QwasiMessage* welcome = [[QwasiMessage alloc] initWithAlert: @"You have a new message" withPayload: @"Test Message" withPayloadType: @"text/plain" withTags: nil];
         
+        // Send ourselves a test message
         [[Qwasi shared] sendMessage: welcome toUserToken: USER_TOKEN];
         
         [[Qwasi shared] setDeviceValue: @"rodriguise" forKey: @"user.displayname" success:^{
