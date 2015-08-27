@@ -11,10 +11,10 @@ Pod::Spec.new do |s|
   s.name             = "Qwasi"
   s.version          = "2.1.16-dev.126"
   s.summary          = "Qwasi iOS Library"
-  s.homepage         = "https://code.qwasi.com/scm/sdk/ios-library"
+  s.homepage         = "https://github.com/qwasi/ios-library"
   s.license          = 'MIT'
   s.author           = { "Rob Rodriguez" => "rob.rodriguez@qwasi.com" }
-  s.source           = { :git => "https://code.qwasi.com/scm/sdk/ios-library.git", :tag => s.version.to_s }
+  s.source           = { :git => "https://github.com/qwasi/ios-library.git", :tag => s.version.to_s }
 
   s.platform     = :ios, '7.0'
   s.requires_arc = true
