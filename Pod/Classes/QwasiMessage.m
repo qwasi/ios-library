@@ -34,20 +34,7 @@
                      
         _encodedPayload = [aDecoder decodeObjectForKey: @"encodedPayload"];
         
-        _payload = [[NSData alloc] initWithBase64EncodedString: _encodedPayload options: 0];
-        
-        if ([_payloadType caseInsensitiveCompare: @"application/json"] == NSOrderedSame) {
-            NSError* jsonError;
-            
-            id payload = [NSJSONSerialization JSONObjectWithData: _payload options: 0 error: &jsonError];
-            
-            if (!jsonError) {
-                _payload = payload;
-            }
-        }
-        else if ([_payloadType rangeOfString: @"text"].location != NSNotFound) {
-            _payload = [[NSString alloc] initWithData: _payload encoding: NSUTF8StringEncoding];
-        }
+        _payload = [QwasiMessage decodePayload: _encodedPayload withType: _payloadType];
     }
     return self;
 }
@@ -82,25 +69,7 @@
         // decode the payload
         _encodedPayload = [data objectForKey: @"payload"];
         
-        if (_encodedPayload) {
-            _payload = [[NSData alloc] initWithBase64EncodedString: _encodedPayload options: 0];
-            
-            if ([_payloadType caseInsensitiveCompare: @"application/json"] == NSOrderedSame) {
-                NSError* jsonError;
-                
-                id payload = [NSJSONSerialization JSONObjectWithData: _payload options: 0 error: &jsonError];
-                
-                if (!jsonError) {
-                    _payload = payload;
-                }
-            }
-            else if ([_payloadType rangeOfString: @"text"].location != NSNotFound) {
-                _payload = [[NSString alloc] initWithData: _payload encoding: NSUTF8StringEncoding];
-            }
-        }
-        else {
-            _payload = [[NSDictionary alloc] init];
-        }
+        _payload = [QwasiMessage decodePayload: _encodedPayload withType: _payloadType];
     }
     
     return self;
@@ -145,6 +114,7 @@
 - (BOOL)silent {
     return (_alert == nil);
 }
+
 - (NSString*)description {
     
     if ([_payloadType caseInsensitiveCompare: @"application/json"] == NSOrderedSame) {
@@ -158,5 +128,41 @@
     }
 
     return [_payload description];
+}
+
+
++ (id)decodePayload:(NSString*)encodedPayload withType:(NSString*)type {
+    
+    NSData* payloadData = [[NSData alloc] initWithBase64EncodedString: encodedPayload options: 0];
+    id rval = nil;
+    
+    if (!payloadData) {
+        return nil;
+    }
+    
+    if ([type caseInsensitiveCompare: @"application/json"] == NSOrderedSame) {
+        NSError* jsonError;
+        
+        id _payload = [NSJSONSerialization JSONObjectWithData: payloadData options: 0 error: &jsonError];
+        
+        if (!jsonError) {
+            rval = _payload;
+        }
+    }
+    else if ([type rangeOfString: @"image/"].location != NSNotFound) {
+        rval = [[UIImage alloc] initWithData: payloadData];
+        
+        if (!rval) {
+            rval = payloadData;
+        }
+    }
+    else if ([type rangeOfString: @"text/"].location != NSNotFound) {
+        rval = [[NSString alloc] initWithData: payloadData encoding: NSUTF8StringEncoding];
+    }
+    else {
+        rval = payloadData;
+    }
+    
+    return rval;
 }
 @end
