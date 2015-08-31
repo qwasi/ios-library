@@ -469,36 +469,35 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
             }];
             
             [[QwasiNotificationManager shared] on: @"notification" listener: ^(NSDictionary* userInfo) {
-                [self fetchMessageForNotification: userInfo success:^(QwasiMessage *message) {
-                    
-                    [[QwasiNotificationManager shared] emit: @"message", message, self];
-                    
-                } failure:^(NSError *err) {
-                    
-                    err = [QwasiError messageFetchFailed: err];
-                    
-                    [self emit: @"error", err];
-                }];
-            }];
-            
-            [[QwasiNotificationManager shared] on: @"message" listener: ^(QwasiMessage* message, BOOL _self) {
                 
-                if ([message.application isEqualToString: _config.application]) {
-                    BOOL filter = NO;
-                    
-                    for (NSString* tag in message.tags) {
+                NSDictionary* qwasi = userInfo[@"qwasi"];
+                NSString* appId = qwasi[@"a"];
+                
+                if ([appId isEqualToString: _config.application]) {
+                    [self fetchMessageForNotification: userInfo success:^(QwasiMessage *message) {
                         
-                        if ([_filteredTags indexOfObject: tag] != NSNotFound) {
+                        BOOL filtered = NO;
+                        
+                        for (NSString* tag in message.tags) {
                             
-                            [self emit: [NSString stringWithFormat: @"tag#%@", tag], message];
-                        
-                            filter = YES;
+                            if ([_filteredTags indexOfObject: tag] != NSNotFound) {
+                                
+                                [self emit: [NSString stringWithFormat: @"tag#%@", tag], message];
+                                
+                                filtered = YES;
+                            }
                         }
-                    }
-                    
-                    if (!filter) {
-                        [self emit: @"message", message];
-                    }
+                        
+                        if (!filtered) {
+                            [self emit: @"message", message];
+                        }
+
+                    } failure:^(NSError *err) {
+                        
+                        err = [QwasiError messageFetchFailed: err];
+                        
+                        [self emit: @"error", err];
+                    }];
                 }
             }];
             
