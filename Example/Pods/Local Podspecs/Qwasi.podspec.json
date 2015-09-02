@@ -2,13 +2,13 @@
   "name": "Qwasi",
   "version": "2.1.16-dev.126",
   "summary": "Qwasi iOS Library",
-  "homepage": "https://code.qwasi.com/scm/sdk/ios-library",
+  "homepage": "https://github.com/qwasi/ios-library",
   "license": "MIT",
   "authors": {
     "Rob Rodriguez": "rob.rodriguez@qwasi.com"
   },
   "source": {
-    "git": "https://code.qwasi.com/scm/sdk/ios-library.git",
+    "git": "https://github.com/qwasi/ios-library.git",
     "tag": "2.1.16-dev.126"
   },
   "platforms": {
