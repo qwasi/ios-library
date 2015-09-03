@@ -44,8 +44,6 @@
         _queue.maxConcurrentOperationCount = 1;
         _queue.suspended = YES;
         
-        __weak __typeof__(_queue) __queue = _queue;
-        
         [[AFNetworkReachabilityManager sharedManager] setReachabilityStatusChangeBlock:^(AFNetworkReachabilityStatus status) {
             
             switch (status) {
