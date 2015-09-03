@@ -729,6 +729,13 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
 
 - (void)postEvent:(NSString*)event
          withData:(id)data
+          success:(void(^)(void))success
+          failure:(void(^)(NSError* err))failure {
+    [self postEvent: event withData: data retry: YES success: success failure: failure];
+}
+
+- (void)postEvent:(NSString*)event
+         withData:(id)data
             retry:(BOOL)retry
           success:(void(^)(void))success
           failure:(void(^)(NSError* err))failure {
