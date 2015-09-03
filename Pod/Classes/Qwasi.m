@@ -83,11 +83,11 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         _filteredTags = [[NSMutableArray alloc] init];
         
         [[QwasiAppManager shared] on: @"willEnterForeground" listener: ^() {
-            [self postEvent: kEventApplicationState withData: @{ @"state": @"foreground" } success: nil failure: nil];
+            [self tryPostEvent: kEventApplicationState withData: @{ @"state": @"foreground" }];
         }];
         
         [[QwasiAppManager shared] on: @"didEnterBackground" listener: ^() {
-            [self postEvent: kEventApplicationState withData: @{ @"state": @"background" } success: nil failure: nil];
+            [self tryPostEvent: kEventApplicationState withData: @{ @"state": @"background" }];
         }];
     }
     return self;
@@ -128,7 +128,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                     
                     if (!_lastLocationEvent || [location distanceFromLocation: _lastLocationEvent] > MAX(LOCATION_EVENT_FILTER, UPDATE_FILTER(speed, _locationEventFilter))) {
                         
-                        [self postEvent: kEventLocationUpdate withData:@{ @"lat": [NSNumber numberWithFloat: location.coordinate.latitude],
+                        [self tryPostEvent: kEventLocationUpdate withData:@{ @"lat": [NSNumber numberWithFloat: location.coordinate.latitude],
                                                                           @"lng": [NSNumber numberWithFloat: location.coordinate.longitude] }];
                         
                         _lastLocationEvent = location;
@@ -185,7 +185,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                     data[@"distance"] = [NSNumber numberWithDouble: [_lastLocation distanceFromLocation: location]];
                 }
                 
-                [self postEvent: kEventLocationEnter withData: data];
+                [self tryPostEvent: kEventLocationEnter withData: data];
                 
                 [self emit:@"location", location, QwasiLocationStateInside];
             }];
@@ -209,7 +209,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                     data[@"distance"] = [NSNumber numberWithDouble: [_lastLocation distanceFromLocation: location]];
                 }
                 
-                [self postEvent: kEventLocationDwell withData: data];
+                [self tryPostEvent: kEventLocationDwell withData: data];
                 
                 [self emit:@"location", location, QwasiLocationStateDwell];
             }];
@@ -233,7 +233,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                     data[@"distance"] = [NSNumber numberWithDouble: [_lastLocation distanceFromLocation: location]];
                 }
                 
-                [self postEvent: kEventLocationExit withData: data];
+                [self tryPostEvent: kEventLocationExit withData: data];
                 
                 [self emit:@"location", location, QwasiLocationStateOutside];
             }];
@@ -712,7 +712,11 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
 
 - (void)postEvent:(NSString*)event
          withData:(id)data {
-    [self postEvent: event withData: data success: nil failure: nil];
+    [self postEvent: event withData: data retry: YES success: nil failure: nil];
+}
+
+- (void)tryPostEvent:(NSString *)event withData:(id)data {
+    [self postEvent: event withData: data retry: NO success: nil failure: nil];
 }
 
 - (void)filterTag:(NSString *)tag {
@@ -725,6 +729,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
 
 - (void)postEvent:(NSString*)event
          withData:(id)data
+            retry:(BOOL)retry
           success:(void(^)(void))success
           failure:(void(^)(NSError* err))failure {
     
@@ -738,6 +743,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                withParameters: @{ @"device": _deviceToken,
                                   @"type": event,
                                   @"data": data }
+                        retry: retry
                       success:^(AFHTTPRequestOperation *operation, id responseObject) {
                           
                           if (success) success();
