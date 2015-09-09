@@ -106,8 +106,8 @@ module.exports = function(grunt) {
 	var header = util.format('\/\/ Version Header\n' + 
 				 '#define SHORT_VERSION @"%s"\n' +
 				 '#define BUILD_VERSION %d\n' +
-				 '#define VERSION_STRING @"%s-%d" \n'
-				 , semver.version, getBuildVersion(), semver.version, getBuildVersion());
+				 '#define VERSION_STRING @"%s-%s" \n'
+				 , semver.version, getBuildVersion(), semver.version, semver.release);
 	
 	fs.writeFileSync('Pod/Classes/Version.h', header);
 	
