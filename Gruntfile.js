@@ -72,7 +72,7 @@ module.exports = function(grunt) {
 		updateConfigs: [],
 		commit: true,
 		commitMessage: '#bump Release %VERSION%',
-		commitFiles: ['package.json'],
+		commitFiles: ['package.json', 'Qwasi.podspec', 'Pod/Classes/Version.h'],
 		createTag: true,
 		tagName: '%VERSION%',
 		tagMessage: 'Release %VERSION%',
