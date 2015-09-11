@@ -240,9 +240,14 @@ QwasiLocationManager* _activeManager = nil;
     QwasiLocation* location = [_regionMap objectForKey: region.identifier];
     
     if (location) {
-        
         if (error.domain == kCLErrorDomain) {
             switch (error.code) {
+                case kCLErrorDenied:
+                case kCLErrorRegionMonitoringDenied:
+                    
+                    DDLogVerbose(@"Failed to start monitoring %@, access denied by user.", location);
+                    break;
+                    
                 case kCLErrorRegionMonitoringFailure:
                 {
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -259,10 +264,11 @@ QwasiLocationManager* _activeManager = nil;
                     break;
             }
         }
-        
-        DDLogVerbose(@"Failed to start monitoring %@, %@", location, error);
-        
-        [self emit: @"error", [QwasiError location: location monitoringFailed: error]];
+        else {
+            DDLogVerbose(@"Failed to start monitoring %@, %@", location, error);
+            
+            [self emit: @"error", [QwasiError location: location monitoringFailed: error]];
+        }
     }
 }
 

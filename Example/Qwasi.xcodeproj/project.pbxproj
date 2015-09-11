@@ -527,7 +527,7 @@
 				INFOPLIST_FILE = "Qwasi/Qwasi-Info.plist";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "994d5ff7-acc4-42db-8f71-012f2ed10c57";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -546,7 +546,7 @@
 				INFOPLIST_FILE = "Qwasi/Qwasi-Info.plist";
 				MODULE_NAME = ExampleApp;
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "";
+				PROVISIONING_PROFILE = "994d5ff7-acc4-42db-8f71-012f2ed10c57";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
