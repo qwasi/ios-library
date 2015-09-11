@@ -33,8 +33,8 @@
                                    speed: location.speed
                                timestamp: location.timestamp]) {
         
-        _id = [NSString stringWithFormat: @"%lul", (unsigned long)self.hash];
-        _name = [NSString stringWithFormat: @"CLLocation_%lul", (unsigned long)self.hash];
+        _id = [NSString stringWithFormat: @"%lu", (unsigned long)self.hash];
+        _name = [NSString stringWithFormat: @"CLLocation_%lu", (unsigned long)self.hash];
         _type = QwasiLocationTypeCoordinate;
         _region = [[CLCircularRegion alloc] initWithCenter: self.coordinate radius: 0 identifier: _id];
         _state = QwasiLocationStateUnknown;
