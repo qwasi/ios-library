@@ -90,6 +90,8 @@ QwasiLocationManager* _activeManager = nil;
 
 - (void)startLocationUpdates {
     
+     _authStatus = [CLLocationManager authorizationStatus];
+    
     switch (_authStatus) {
         case kCLAuthorizationStatusNotDetermined:
             if (![_manager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
