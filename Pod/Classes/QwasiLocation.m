@@ -33,6 +33,8 @@
                                    speed: location.speed
                                timestamp: location.timestamp]) {
         
+        _id = [NSString stringWithFormat: @"%lul", (unsigned long)self.hash];
+        _name = [NSString stringWithFormat: @"CLLocation_%lul", (unsigned long)self.hash];
         _type = QwasiLocationTypeCoordinate;
         _region = [[CLCircularRegion alloc] initWithCenter: self.coordinate radius: 0 identifier: _id];
         _state = QwasiLocationStateUnknown;
@@ -53,6 +55,7 @@
         NSDictionary* properties = data[@"properties"];
         
         _id = data[@"id"];
+        
         _name = data[@"name"];
         
         _dwellInterval = [[properties valueForKey: @"dwell_interval"] doubleValue];
