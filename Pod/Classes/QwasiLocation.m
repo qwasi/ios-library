@@ -59,6 +59,8 @@
         
         _geofenceRadius = [[geofence valueForKeyPath: @"properties.radius"] doubleValue];
         
+        _geofenceRadius = MAX(3.0f, _geofenceRadius);
+        
         if (beacon) {
             
             _type = QwasiLocationTypeBeacon;

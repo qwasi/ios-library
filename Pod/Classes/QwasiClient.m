@@ -38,6 +38,7 @@
         
         [self.requestSerializer setValue: config.application forHTTPHeaderField: @"X-QWASI-APP-ID"];
         [self.requestSerializer setValue: config.key forHTTPHeaderField: @"X-QWASI-API-KEY"];
+        [self.requestSerializer setValue: @"2.1.0" forHTTPHeaderField: @"Accept-Version"];
         
         // Setup the serialized queue
         _queue = [[NSOperationQueue alloc] init];

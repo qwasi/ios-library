@@ -470,34 +470,37 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
             
             [[QwasiNotificationManager shared] on: @"notification" listener: ^(NSDictionary* userInfo) {
                 
-                NSDictionary* qwasi = userInfo[@"qwasi"];
-                NSString* appId = qwasi[@"a"];
+                NSArray* qwasi = userInfo[@"qwasi"];
                 
-                if ([appId isEqualToString: _config.application]) {
-                    [self fetchMessageForNotification: userInfo success:^(QwasiMessage *message) {
-                        
-                        BOOL filtered = NO;
-                        
-                        for (NSString* tag in message.tags) {
+                if (qwasi && qwasi.count == 3) {
+                    NSString* appId = qwasi[2];
+                    
+                    if (appId && [appId isEqualToString: _config.application]) {
+                        [self fetchMessageForNotification: userInfo success:^(QwasiMessage *message) {
                             
-                            if ([_filteredTags indexOfObject: tag] != NSNotFound) {
+                            BOOL filtered = NO;
+                            
+                            for (NSString* tag in message.tags) {
                                 
-                                [self emit: [NSString stringWithFormat: @"tag#%@", tag], message];
-                                
-                                filtered = YES;
+                                if ([_filteredTags indexOfObject: tag] != NSNotFound) {
+                                    
+                                    [self emit: [NSString stringWithFormat: @"tag#%@", tag], message];
+                                    
+                                    filtered = YES;
+                                }
                             }
-                        }
-                        
-                        if (!filtered) {
-                            [self emit: @"message", message];
-                        }
+                            
+                            if (!filtered) {
+                                [self emit: @"message", message];
+                            }
 
-                    } failure:^(NSError *err) {
-                        
-                        err = [QwasiError messageFetchFailed: err];
-                        
-                        [self emit: @"error", err];
-                    }];
+                        } failure:^(NSError *err) {
+                            
+                            err = [QwasiError messageFetchFailed: err];
+                            
+                            [self emit: @"error", err];
+                        }];
+                    }
                 }
             }];
             
@@ -585,9 +588,11 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     if (_registered) {
         
         NSDictionary* flags = @{ @"opened": [NSNumber numberWithBool: [UIApplication sharedApplication].applicationState == UIApplicationStateInactive] };
-        NSDictionary* qwasi = userInfo[@"qwasi"];
-        NSString* msgId = qwasi[@"m"];
-        NSString* appId = qwasi[@"a"];
+        
+        NSArray* qwasi = userInfo[@"qwasi"];
+        NSString* appId = qwasi[2];
+        NSString* msgId = qwasi[0];
+
         
         if (msgId && appId) {
             if ([appId isEqualToString: _config.application]) {
@@ -785,7 +790,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                withParameters: @{ @"near": @{ @"lng": [NSNumber numberWithDouble: location.coordinate.longitude],
                                               @"lat": [NSNumber numberWithDouble: location.coordinate.latitude],
                                               @"radius": [NSNumber numberWithDouble: _locationSyncFilter * 10] },
-                                  @"options": @{ @"schema": @"2.0" } }
+                                  @"options": @{ @"schema": @"2.0" },
+                                  @"limit": [NSNumber numberWithInt: 20] }
                       success:^(AFHTTPRequestOperation *operation, id responseObject) {
                           
                           if (success) {
