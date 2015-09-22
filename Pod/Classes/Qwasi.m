@@ -377,7 +377,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     _userToken = userToken;
     
     if (_registered) {
-        [_client invokeMethod: @"device.set_user_token" withParameters: @{@"id": _deviceToken,
+        [_client invokeMethod: @"device.register" withParameters: @{@"id": _deviceToken,
                                                                           @"user_token": _userToken }
                                                                           success:^(AFHTTPRequestOperation *operation, id responseObject)
         {
@@ -431,10 +431,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
         dispatch_once(&_pushOnce, ^{
             [[QwasiNotificationManager shared] once: @"pushToken" listener: ^(NSString* pushToken) {
-                [_client invokeMethod: @"device.set_push_token"
+                [_client invokeMethod: @"device.register"
                        withParameters: @{ @"id": _deviceToken,
-                                          @"proto": @"push.apns",
-                                          @"token": pushToken }
+                                          @"push": @{ @"proto": @"push.apns",
+                                                      @"addr": pushToken } }
                               success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                   
                                   _pushEnabled = YES;
@@ -796,11 +796,13 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           
                           if (success) {
                               NSArray* response = (NSArray*)responseObject;
+                              NSInteger count = [[response valueForKey: @"length"] integerValue];
+                              NSDictionary* values = [response valueForKey: @"value"];
                               NSMutableArray* locations = [[NSMutableArray alloc] init];
                               
-                              DDLogVerbose(@"Fetched %lu locations from server.", (unsigned long)response.count);
+                              DDLogVerbose(@"Fetched %lu locations from server.", (unsigned long)count);
                               
-                              for (NSDictionary* data in response) {
+                              for (NSDictionary* data in values) {
                                   QwasiLocation* _loc = [[QwasiLocation alloc] initWithLocationData: data];
                                   
                                   if ((_loc.type != QwasiLocationTypeBeacon) ||

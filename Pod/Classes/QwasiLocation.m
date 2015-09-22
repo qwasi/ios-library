@@ -46,14 +46,21 @@
 
 - (id)initWithLocationData:(NSDictionary*)data {
     
-    NSArray* coord = [data valueForKeyPath: @"geofence.geometry.coordinates"];
+    NSDictionary* geofence = data[@"geofence"];
+    NSDictionary* beacon = data[@"beacon"];
+    NSDictionary* properties = data[@"properties"];
+    
+    NSArray* coord;
+  
+    if (geofence) {
+            coord = [data valueForKeyPath: @"geofence.geometry.coordinates"];
+    }
+    else{
+        // This is not a geofence so use dummy coordinates
+        coord = @[[NSNumber numberWithDouble: 0], [NSNumber numberWithDouble: 0]];
+    }
     
     if (self = [super initWithLatitude: [coord[1] doubleValue] longitude: [coord[0] doubleValue]]) {
-        
-        NSDictionary* geofence = data[@"geofence"];
-        NSDictionary* beacon = data[@"beacon"];
-        NSDictionary* properties = data[@"properties"];
-        
         _id = data[@"id"];
         
         _name = data[@"name"];
@@ -65,7 +72,6 @@
         _geofenceRadius = MAX(3.0f, _geofenceRadius);
         
         if (beacon) {
-            
             _type = QwasiLocationTypeBeacon;
             
             NSArray* _ids = [beacon valueForKey: @"id"];
