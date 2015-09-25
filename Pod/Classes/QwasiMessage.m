@@ -45,7 +45,7 @@
     
     if (self = [super init]) {
         _messageId = [data objectForKey: @"id"];
-        _application = [data valueForKeyPath: @"application.id"];
+        _application = [data valueForKeyPath: @"application"];
         _alert = [data objectForKey: @"text"];
         
         if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
