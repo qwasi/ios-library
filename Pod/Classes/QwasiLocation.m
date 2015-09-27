@@ -71,7 +71,7 @@
         
         _geofenceRadius = MAX(3.0f, _geofenceRadius);
         
-        if (beacon) {
+        if (beacon && ![beacon isKindOfClass: [NSNull class]]) {
             _type = QwasiLocationTypeBeacon;
             
             NSArray* _ids = [beacon valueForKey: @"id"];
