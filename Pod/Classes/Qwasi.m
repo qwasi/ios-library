@@ -548,10 +548,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                            failure:(void(^)(NSError* err))failure {
     if (_registered) {
         
-        [_client invokeMethod: @"device.set_push_token"
+        [_client invokeMethod: @"device.register"
                withParameters: @{ @"id": _deviceToken,
-                                  @"proto": @"push.poll",
-                                  @"token": @"" }
+                                  @"push": @{ @"proto": @"push.poll",
+                                              @"addr": @"" } }
                       success:^(AFHTTPRequestOperation *operation, id responseObject)
         {
                           
