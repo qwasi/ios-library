@@ -17,6 +17,8 @@
     NSTimeInterval _dwellExit;
     dispatch_source_t _dwellTimer;
     
+    double _dwellTic;
+    
     BOOL _dwell;
     BOOL _inside;
     BOOL _exit;
@@ -68,6 +70,8 @@
         _dwellInterval = [[properties valueForKey: @"dwell_interval"] doubleValue];
         
         _dwellInterval = MAX(_dwellInterval, 60.0f);
+        
+        _dwellTic = 1.0;
         
         _geofenceRadius = [[geofence valueForKeyPath: @"properties.radius"] doubleValue];
         
@@ -202,7 +206,7 @@
     @synchronized(self) {
         if (_inside && !_dwellTimer) {
             // How often the event will be fired, up to _dwellInterval
-            NSTimeInterval _timerInterval = MAX(_dwellInterval / 10, 10);
+            __block NSTimeInterval _timerInterval = MAX(_dwellInterval / 10, 10);
             
             dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
             
@@ -225,10 +229,12 @@
                             
                             [[QwasiLocationManager currentManager] emit: @"dwell", self];
                             
-                            // After 2x _dwellInterval slow down the events to every dwellInterval
-                            if (self.dwellTime > _dwellInterval * 1.5) {
+                            // Back off the dwell timers
+                            if (self.dwellTime > _dwellInterval * _dwellTic) {
                                 
-                                dispatch_source_set_timer(_dwellTimer, dispatch_time(DISPATCH_TIME_NOW, _dwellInterval * NSEC_PER_SEC), _dwellInterval * NSEC_PER_SEC, (1ull * NSEC_PER_SEC) / 10);
+                                _timerInterval = _dwellInterval * _dwellTic++;
+                                
+                                dispatch_source_set_timer(_dwellTimer, dispatch_time(DISPATCH_TIME_NOW, _timerInterval * NSEC_PER_SEC), _timerInterval * NSEC_PER_SEC, (1ull * NSEC_PER_SEC) / 10);
                             }
                         }
                     }
