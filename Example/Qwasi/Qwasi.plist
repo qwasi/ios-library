@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>apiUrl</key>
-	<string>http://192.168.1.39:8000/rpc</string>
+	<string>https://sandbox.qwasi.com/rpc</string>
 	<key>apiKey</key>
-	<string>ec4a9d95ebe5e283822c99b36a9521b50fca7aeb392dcbc24b92cfeda9ceac60</string>
+	<string>&lt;changeme&gt;</string>
 	<key>appId</key>
-	<string>55510f3fa2026f9535153de5</string>
+	<string>&lt;changeme&gt;</string>
 </dict>
 </plist>
