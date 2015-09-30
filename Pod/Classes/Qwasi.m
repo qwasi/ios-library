@@ -211,7 +211,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                 
                 [self tryPostEvent: kEventLocationDwell withData: data];
                 
-                [self emit:@"location", location, QwasiLocationStateDwell];
+                [self emit: @"location", location, QwasiLocationStateDwell];
             }];
             
             [_locationManager on: @"exit" listener: ^(QwasiLocation* location) {
