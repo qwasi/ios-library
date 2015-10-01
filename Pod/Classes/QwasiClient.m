@@ -7,7 +7,6 @@
 //
 
 #import "QwasiClient.h"
-#import "CocoaLumberjack.h"
 
 #include <sys/types.h>
 #include <sys/socket.h>
@@ -128,7 +127,7 @@
     @synchronized(self) {
         if ([self connected]) {
             
-            DDLogVerbose(@"Invoking API method %@ with parameters %@", method, parameters);
+            NSLog(@"Invoking API method %@ with parameters %@", method, parameters);
             
             if (!requestId) {
                 requestId = [[NSUUID UUID] UUIDString];
@@ -144,7 +143,7 @@
                             if ([error.domain isEqualToString: NSURLErrorDomain] && retry) {
                                 _queue.suspended = YES;
                                 
-                                DDLogDebug(@"Failed to connect to Qwasi server, retry in 3s.");
+                                NSLog(@"Failed to connect to Qwasi server, retry in 3s.");
                                 
                                 [self pushOperationWithBlock:^{
                                     [self invokeMethod: method withParameters: parameters requestId: requestId retry: retry success: success failure: failure];

@@ -10,7 +10,6 @@
 #import "QwasiError.h"
 #import "QwasiMessage.h"
 #import "Emitter.h"
-#import "CocoaLumberjack.h"
 #import "NSObject+STSwizzle.h"
 
 typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
@@ -121,7 +120,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                    orAddWithTypes:"v@:@@"
                                    implementation:^(id _self, UIApplication* _unused, NSError* error)
              {
-                 DDLogError(@"Push registration failed: %@.", error);
+                 NSLog(@"Push registration failed: %@.", error);
                  
                  [self emit: @"error", [QwasiError pushRegistrationFailed: error]];
                  

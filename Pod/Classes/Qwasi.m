@@ -8,7 +8,6 @@
 
 #import "Qwasi.h"
 #import "QwasiClient.h"
-#import "CocoaLumberjack.h"
 #import "GBDeviceInfo.h"
 #import "NSObject+STSwizzle.h"
 #import "QwasiAppManager.h"
@@ -353,7 +352,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           success(_deviceToken);
                       }
                       
-                      DDLogInfo(@"Device %@ registered successfully for application %@.", _deviceToken, _applicationName);
+                      NSLog(@"Device %@ registered successfully for application %@.", _deviceToken, _applicationName);
                       
                       [self emit: @"registered", _deviceToken];
                       
@@ -369,7 +368,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                       
                       [self emit: @"error", error];
                       
-                      DDLogError(@"Device registration failed %@.", error);
+                      NSLog(@"Device registration failed %@.", error);
                 }];
 }
 
@@ -382,14 +381,14 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                                                           success:^(AFHTTPRequestOperation *operation, id responseObject)
         {
             
-            DDLogVerbose(@"Set usertoken for application %@ succeed.", _applicationName);
+            NSLog(@"Set usertoken for application %@ succeed.", _applicationName);
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             error = [QwasiError setUserTokenFailed: error];
             
             [self emit: @"error", error];
             
-            DDLogError(@"Set usertoken failed %@.", error);
+            NSLog(@"Set usertoken failed %@.", error);
         }];
     }
 }
@@ -441,7 +440,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                   
                                   if (success) success(pushToken);
                                   
-                                  DDLogInfo(@"Device %@ push token %@ set successfully.", _deviceToken, pushToken);
+                                  NSLog(@"Device %@ push token %@ set successfully.", _deviceToken, pushToken);
                                   
                               } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                   
@@ -451,7 +450,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                   
                                   if (failure) failure(error);
                                   
-                                  DDLogError(@"Push registration failed: %@.", error);
+                                  NSLog(@"Push registration failed: %@.", error);
                               }];
             }];
             
@@ -460,7 +459,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                 if (error.code == QwasiErrorPushNotEnabled) {
                     _pushEnabled = NO;
                     
-                    DDLogWarn(@"Remote notifications disabled for device, poll will still work.");
+                    NSLog(@"Remote notifications disabled for device, poll will still work.");
                 }
                 else {
                     [self emit: @"error", error];
@@ -523,7 +522,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                 } failure:^(NSError *err) {
                     if (err.code != QwasiErrorMessageNotFound) {
                         
-                        DDLogError(@"Unexpected server error: %@", err);
+                        NSLog(@"Unexpected server error: %@", err);
                         
                         [self emit: @"error", err];
                     }
@@ -559,7 +558,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
           
           if (success) success();
           
-          DDLogInfo(@"Device unregistered for remote notifications.");
+          NSLog(@"Device unregistered for remote notifications.");
           
       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
           
@@ -567,7 +566,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
           
           if (failure) failure(error);
           
-          DDLogError(@"Push registration failed: %@.", error);
+          NSLog(@"Push registration failed: %@.", error);
       }];
     }
     else {
@@ -620,7 +619,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                           NSDictionary* jsonError = [NSJSONSerialization JSONObjectWithData: errData options: kNilOptions error: &parseError];
                                           
                                           if (parseError) {
-                                              DDLogError(@"Failed to parse server error response: %@", parseError);
+                                              NSLog(@"Failed to parse server error response: %@", parseError);
                                               
                                               [self emit: @"error", parseError];
                                           }
@@ -688,7 +687,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                               NSDictionary* jsonError = [NSJSONSerialization JSONObjectWithData: errData options: kNilOptions error: &parseError];
                               
                               if (parseError) {
-                                  DDLogError(@"Failed to parse server error response: %@", parseError);
+                                  NSLog(@"Failed to parse server error response: %@", parseError);
                                   
                                   [self emit: @"error", parseError];
                               }
@@ -800,7 +799,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                               NSDictionary* values = [response valueForKey: @"value"];
                               NSMutableArray* locations = [[NSMutableArray alloc] init];
                               
-                              DDLogVerbose(@"Fetched %lu locations from server.", (unsigned long)count);
+                              NSLog(@"Fetched %lu locations from server.", (unsigned long)count);
                               
                               for (NSDictionary* data in values) {
                                   QwasiLocation* _loc = [[QwasiLocation alloc] initWithLocationData: data];
@@ -811,7 +810,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                       [locations addObject: _loc];
                                   }
                                   else {
-                                      DDLogVerbose(@"Ignoring unsupported location %@", _loc);
+                                      NSLog(@"Ignoring unsupported location %@", _loc);
                                   }
                               }
                           
@@ -854,7 +853,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                   @"channel": channel }
                       success:^(AFHTTPRequestOperation *operation, id responseObject) {
                           
-                          DDLogVerbose(@"Subscribed to channel %@ for application %@.", channel, _applicationName);
+                          NSLog(@"Subscribed to channel %@ for application %@.", channel, _applicationName);
                           
                           if (![_channels containsObject: channel]) {
                               [_channels addObject: channel];
@@ -899,7 +898,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                   @"channel": channel }
                       success:^(AFHTTPRequestOperation *operation, id responseObject) {
                           
-                          DDLogVerbose(@"Unsubscribed to channel %@ for application %@.", channel, _applicationName);
+                          NSLog(@"Unsubscribed to channel %@ for application %@.", channel, _applicationName);
                           
                           if ([_channels containsObject: channel]) {
                               [_channels removeObject: channel];

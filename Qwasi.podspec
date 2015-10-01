@@ -25,7 +25,6 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Pod/**/*'
 
-  s.dependency 'CocoaLumberjack', '2.0.0'
   s.dependency 'AFNetworking'
   s.dependency 'GBDeviceInfo', '~> 3.1.0'
   s.dependency 'Emitter'

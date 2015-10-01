@@ -16,8 +16,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-    // Setup the logger so we can see what the API is doing
-    [DDLog addLogger:[DDTTYLogger sharedInstance]];
     
     // Get our device token from the defaults
     NSString* deviceToken = [[NSUserDefaults standardUserDefaults] valueForKey: DEVICE_TOKEN_KEY];
@@ -67,17 +65,17 @@
             }
         }
         
-        DDLogError(@"%@", error);
+        NSLog(@"%@", error);
     }];
     
     // Add a message handler anywhere in code
     [[Qwasi shared] on: @"message" listener: ^(QwasiMessage* message) {
         
         if (message.selected) {
-            DDLogInfo(@"Opened application %@ message: %@", message.application, message);
+            NSLog(@"Opened application %@ message: %@", message.application, message);
         }
         else {
-            DDLogInfo(@"Got application %@ message: %@", message.application, message);
+            NSLog(@"Got application %@ message: %@", message.application, message);
         }
     }];
     
@@ -86,30 +84,30 @@
     
         switch (location.type) {
             case QwasiLocationTypeCoordinate:
-                // DDLogInfo(@"Location updated: %@", location);
+                // NSLog(@"Location updated: %@", location);
                 break;
                 
             case QwasiLocationTypeGeofence:
                 if (state == QwasiLocationStateInside) {
-                    DDLogInfo(@"Entered location %@.", location.name);
+                    NSLog(@"Entered location %@.", location.name);
                 }
                 else if (state == QwasiLocationStateDwell) {
-                    DDLogInfo(@"Dwell location %@.", location.name);
+                    NSLog(@"Dwell location %@.", location.name);
                 }
                 else {
-                    DDLogInfo(@"Exited location %@.", location.name);
+                    NSLog(@"Exited location %@.", location.name);
                 }
                 break;
                 
             case QwasiLocationTypeBeacon:
                 if (state == QwasiLocationStateInside) {
-                    DDLogInfo(@"Triggered beacon %@.", location.name);
+                    NSLog(@"Triggered beacon %@.", location.name);
                 }
                 else if (state == QwasiLocationStateDwell) {
-                    DDLogInfo(@"Dwell beacon %@.", location.name);
+                    NSLog(@"Dwell beacon %@.", location.name);
                 }
                 else {
-                    DDLogInfo(@"Cleared beacon %@.", location.name);
+                    NSLog(@"Cleared beacon %@.", location.name);
                 }
                 break;
                 
