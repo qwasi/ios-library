@@ -490,7 +490,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                             }
                             
                             if (!filtered) {
-                                [self emit: @"message", message];
+                                [self emit: @"message", message, self];
                             }
 
                         } failure:^(NSError *err) {
@@ -517,7 +517,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                         [[UIApplication sharedApplication] scheduleLocalNotification:localNotification];
                     }
                     
-                    [self emit: @"message", message];
+                    [self emit: @"message", message, self];
                     
                 } failure:^(NSError *err) {
                     if (err.code != QwasiErrorMessageNotFound) {
