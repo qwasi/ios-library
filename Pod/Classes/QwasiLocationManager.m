@@ -7,7 +7,6 @@
 //
 
 #import "QwasiLocationManager.h"
-#import "CocoaLumberjack.h"
 
 QwasiLocationManager* _activeManager = nil;
 
@@ -143,7 +142,7 @@ QwasiLocationManager* _activeManager = nil;
             
             // Beacons require always authorization status to monitor
             if (location.type == QwasiLocationTypeBeacon && _authStatus != kCLAuthorizationStatusAuthorizedAlways) {
-                DDLogDebug(@"Background auth required to monitor beacons, beacon %@ will not be monitored", location.name);
+                NSLog(@"Background auth required to monitor beacons, beacon %@ will not be monitored", location.name);
             }
             else {
                 _regionMap[location.id] = location;
@@ -232,7 +231,7 @@ QwasiLocationManager* _activeManager = nil;
     QwasiLocation* location = [_regionMap objectForKey: region.identifier];
     
     if (location) {
-        DDLogVerbose(@"Did start monitoring %@", location);
+        NSLog(@"Did start monitoring %@", location);
         
         [_manager requestStateForRegion: location.region];
     }
@@ -247,7 +246,7 @@ QwasiLocationManager* _activeManager = nil;
                 case kCLErrorDenied:
                 case kCLErrorRegionMonitoringDenied:
                     
-                    DDLogVerbose(@"Failed to start monitoring %@, access denied by user.", location);
+                    NSLog(@"Failed to start monitoring %@, access denied by user.", location);
                     break;
                     
                 case kCLErrorRegionMonitoringFailure:
@@ -267,7 +266,7 @@ QwasiLocationManager* _activeManager = nil;
             }
         }
         else {
-            DDLogVerbose(@"Failed to start monitoring %@, %@", location, error);
+            NSLog(@"Failed to start monitoring %@, %@", location, error);
             
             [self emit: @"error", [QwasiError location: location monitoringFailed: error]];
         }
@@ -341,7 +340,7 @@ QwasiLocationManager* _activeManager = nil;
     QwasiLocation* location = [_regionMap objectForKey: region.identifier];
     
     if (location) {
-        DDLogVerbose(@"Failed to range %@, %@", location, error);
+        NSLog(@"Failed to range %@, %@", location, error);
         
         [self emit: @"error", [QwasiError location: location beaconRangingFailed: error]];
     }
