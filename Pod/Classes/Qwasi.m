@@ -323,7 +323,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                            @"version": [UIDevice currentDevice].systemVersion,
                            @"system": [UIDevice currentDevice].systemName,
                            @"model": [GBDeviceInfo deviceInfo].modelString,
-                           @"sdkVersion": [Qwasi version]
+                           @"sdkVersion": [Qwasi version],
+                           @"jailbroken": [NSNumber numberWithBool: [GBDeviceInfo deviceInfo].isJailbroken]
                            };
     
     [info addEntriesFromDictionary: deviceInfo];
@@ -377,8 +378,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     
     if (_registered) {
         [_client invokeMethod: @"device.register" withParameters: @{@"id": _deviceToken,
-                                                                          @"user_token": _userToken }
-                                                                          success:^(AFHTTPRequestOperation *operation, id responseObject)
+                                                            @"user_token": _userToken }
+                                                                  success: ^(AFHTTPRequestOperation *operation, id responseObject)
         {
             
             NSLog(@"Set usertoken for application %@ succeed.", _applicationName);
@@ -398,7 +399,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
         [_client invokeMethod: @"device.unregister"
                withParameters: @{ @"id": _deviceToken }
-                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                      success: ^(AFHTTPRequestOperation *operation, id responseObject) {
                           
                           _registered = NO;
                           _deviceToken = nil;
