@@ -89,7 +89,7 @@ module.exports = function(grunt) {
 		    var package = grunt.file.readJSON('package.json');
 		    var semver = semverUtils.parse(package.version);
 
-		    return 'podspec-bump -w ' + semver;
+		    return '/usr/local/bin/podspec-bump -w ' + semver;
 		}
 	    }
 	}
