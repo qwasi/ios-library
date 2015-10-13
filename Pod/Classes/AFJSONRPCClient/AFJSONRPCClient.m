@@ -255,8 +255,10 @@ typedef void (^AFJSONRPCProxyFailureBlock)(NSError *error);
     [invocation getArgument:&unsafeSuccess atIndex:3];
     [invocation getArgument:&unsafeFailure atIndex:4];
     
+#if 0
     [invocation invokeWithTarget:nil];
-
+#endif
+    
     __strong AFJSONRPCProxySuccessBlock strongSuccess = [unsafeSuccess copy];
     __strong AFJSONRPCProxyFailureBlock strongFailure = [unsafeFailure copy];
 
