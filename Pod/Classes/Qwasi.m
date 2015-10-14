@@ -674,6 +674,23 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     }
 }
 
+- (void)tryFetchUnreadMessages {
+
+    if (_registered) {
+        [self fetchUnreadMessage:^(QwasiMessage *message) {
+            
+            [self emit: @"message", message];
+            
+            [[QwasiNotificationManager shared] emit: @"message", message, self];
+            
+            [self tryFetchUnreadMessages];
+            
+        } failure:^(NSError *err) {
+            
+        }];
+    }
+}
+
 - (void)fetchUnreadMessage:(void(^)(QwasiMessage* message))success
                    failure:(void(^)(NSError* err))failure {
     if (_registered) {
