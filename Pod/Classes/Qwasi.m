@@ -245,7 +245,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         [_locationManager startLocationUpdates];
     }
     else if (_locationManager) {
+        
         [_locationManager stopLocationUpdates];
+        
+        _lastLocation = nil;
     }
 }
 
