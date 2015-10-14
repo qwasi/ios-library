@@ -240,9 +240,9 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
             [_locationManager on: @"error" listener: ^(NSError* error) {
                 [self emit: @"error", error];
             }];
-            
-            [_locationManager startLocationUpdates];
         });
+        
+        [_locationManager startLocationUpdates];
     }
     else if (_locationManager) {
         [_locationManager stopLocationUpdates];
