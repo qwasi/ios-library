@@ -8,12 +8,12 @@
 
 #import <Foundation/Foundation.h>
 #import <CoreLocation/CoreLocation.h>
-#import <Emitter/Emitter.h>
+#import "EventEmitter.h"
 
 #import "QwasiError.h"
 #import "QwasiLocation.h"
 
-@interface QwasiLocationManager : NSObject<CLLocationManagerDelegate>
+@interface QwasiLocationManager : EventEmitter<CLLocationManagerDelegate>
 
 @property (nonatomic,readonly) CLLocationManager* manager;
 @property (nonatomic,readwrite) CLLocationDistance updateDistance;

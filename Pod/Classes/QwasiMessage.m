@@ -155,7 +155,6 @@
     
     NSData* payloadData = [[NSData alloc] initWithBase64EncodedString: encodedPayload options: 0];
     
-    
     id rval = nil;
     
     if (!payloadData) {

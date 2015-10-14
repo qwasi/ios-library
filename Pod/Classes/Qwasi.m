@@ -534,6 +534,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
             }];
             
             [[QwasiNotificationManager shared] registerForRemoteNotification];
+            
         });
     }
     else {
