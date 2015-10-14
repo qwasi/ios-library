@@ -27,6 +27,6 @@ Pod::Spec.new do |s|
 
   s.dependency 'AFNetworking'
   s.dependency 'GBDeviceInfo', '~> 3.5.1'
-  s.dependency 'Emitter'
   s.dependency 'QSwizzle', '~> 0.2.0'
+  s.dependency 'BlocksKit'
 end

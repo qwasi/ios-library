@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "EventEmitter.h"
 
-@interface QwasiAppManager : NSObject
+@interface QwasiAppManager : EventEmitter
 + (instancetype)shared;
 - (void)registerApplicationEventHooks;
 @end

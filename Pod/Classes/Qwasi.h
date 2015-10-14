@@ -14,14 +14,14 @@
 #import "QwasiMessage.h"
 #import "QwasiNotificationManager.h"
 #import "QwasiLocationManager.h"
-#import <Emitter/Emitter.h>
+#import "EventEmitter.h"
 
 extern NSString* const kEventApplicationState;
 extern NSString* const kEventLocationUpdate;
 extern NSString* const kEventLocationEnter;
 extern NSString* const kEventLocationExit;
 
-@interface Qwasi : NSObject
+@interface Qwasi : EventEmitter
 
 @property (nonatomic,readonly) BOOL registered;
 @property (nonatomic,readwrite) QwasiConfig* config;

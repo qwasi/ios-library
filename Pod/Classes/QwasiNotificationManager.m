@@ -9,7 +9,6 @@
 #import "QwasiNotificationManager.h"
 #import "QwasiError.h"
 #import "QwasiMessage.h"
-#import "Emitter.h"
 #import "NSObject+STSwizzle.h"
 
 typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
