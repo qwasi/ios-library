@@ -249,6 +249,9 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         [_locationManager stopLocationUpdates];
         
         _lastLocation = nil;
+        _lastLocationSync = nil;
+        _lastLocationEvent = nil;
+        _lastLocationUpdate = nil;
     }
 }
 
