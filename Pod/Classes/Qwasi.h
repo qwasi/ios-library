@@ -97,6 +97,8 @@ extern NSString* const kEventLocationExit;
 - (void)fetchUnreadMessage:(void(^)(QwasiMessage* message))success
                    failure:(void(^)(NSError* err))failure;
 
+- (void)tryFetchUnreadMessages;
+
 - (void)postEvent:(NSString*)event
          withData:(id)data
           success:(void(^)(void))success
