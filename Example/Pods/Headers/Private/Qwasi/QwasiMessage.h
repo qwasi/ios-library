@@ -1,1 +1,0 @@
-../../../../../Pod/Classes/QwasiMessage.h

@@ -1,7 +1,5 @@
 # Qwasi
 
-[![Build Status](https://travis-ci.org/qwasi/ios-library.svg?branch=master)](https://travis-ci.org/qwasi/ios-library)
-
 The Qwasi `ios-library` provides a convenient method for accessing the Qwasi JSON-RPC API.
 
 ## Usage
@@ -20,7 +18,7 @@ it, simply add the following lines to your Podfile:
 
 ```ruby
 
-pod 'Qwasi', '~>2.1.0-31'
+pod 'Qwasi', '~>2.1.17'
 ```
 ## License
 
@@ -28,7 +26,6 @@ Qwasi is available under the MIT license. See the LICENSE file for more info.
 
 ## Pod Dependencies
 ```
- 'CocoaLumberjack', '2.0.0'
  'AFJSONRPCClient'
  'GBDeviceInfo', '~> 3.1.0'
  'Emitter'
@@ -383,10 +380,54 @@ Example:
 ###### SDK Error - N/A
 ###### API Method - N/A
 
-## Device Data
-Qwasi supports a key value based cloud data storage system. This data stored device specific. The key can be a deep object path using dot-notication.
+## Cloud Data
+Qwasi supports a key value based cloud data storage system. This data stored member or device specific. The key can be a deep object path using dot-notication.
 
-### Set Device Data
+### Member Data
+Every device is backed by a member record. Member records are identified by a user_token and represent an aggregate record. Data is available accross devices using the same user_token.
+
+#### Set Member Data
+
+```objectivec
+- (void)setMemberValue:(id)value forKey:(NSString*)key
+               success:(void(^)(void))success
+               failure:(void(^)(NSError* err))failure;
+
+- (void)setMemberValue:(id)value forKey:(NSString*)key;
+```
+###### SDK Event - N/A
+###### SDK Error - `QwasiErrorSetMemberDataFailed`
+###### API Method - `member.set_data`
+
+#### Get Member Data
+
+```objectivec
+- (void)memberValueForKey:(NSString*)key
+                  success:(void(^)(id value))success
+                  failure:(void(^)(NSError* err))failure;
+```
+###### SDK Event - N/A
+###### SDK Error - `QwasiErrorGetMemberDataFailed`
+###### API Method - `member.get_data`
+
+Example:
+
+```objectivec
+[qwasi setMemberValue: @"35"
+			    forKey: @"age"];
+
+[qwasi memberValueForKey: @"age" 
+		              success:^(id value) {
+                
+				NSLog(@"%@", value);
+            } 
+			       failure:^(NSError *err) {
+            }];				
+```
+### Device Data
+Device data persists to the device, but is also member specific. Therefore if a user_token changes, so does the device specific data set. This allows for multiple users to share a device with their per-device data store.
+
+#### Set Device Data
 
 ```objectivec
 - (void)setDeviceValue:(id)value forKey:(NSString*)key
@@ -399,7 +440,7 @@ Qwasi supports a key value based cloud data storage system. This data stored dev
 ###### SDK Error - `QwasiErrorSetDeviceDataFailed`
 ###### API Method - `device.set_data`
 
-### Get Device Data
+#### Get Device Data
 
 ```objectivec
 - (void)deviceValueForKey:(NSString*)key
@@ -408,7 +449,7 @@ Qwasi supports a key value based cloud data storage system. This data stored dev
 ```
 ###### SDK Event - N/A
 ###### SDK Error - `QwasiErrorGetDeviceDataFailed`
-###### API Method - `device.set_data`
+###### API Method - `device.get_data`
 
 Example:
 

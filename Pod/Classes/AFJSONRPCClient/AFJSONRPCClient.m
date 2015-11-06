@@ -142,7 +142,14 @@ static NSString * AFJSONRPCLocalizedErrorMessageForCode(NSInteger code) {
         NSString *message = nil;
         id data = nil;
 
-        if ([responseObject isKindOfClass:[NSDictionary class]]) {
+        // Handle notifications which have no response object
+        if (operation.response.statusCode == 204) {
+            if (success) {
+                success(operation, nil);
+                return;
+            }
+        }
+        else if ([responseObject isKindOfClass:[NSDictionary class]]) {
             id result = responseObject[@"result"];
             id error = responseObject[@"error"];
 
@@ -248,8 +255,10 @@ typedef void (^AFJSONRPCProxyFailureBlock)(NSError *error);
     [invocation getArgument:&unsafeSuccess atIndex:3];
     [invocation getArgument:&unsafeFailure atIndex:4];
     
+#if 0
     [invocation invokeWithTarget:nil];
-
+#endif
+    
     __strong AFJSONRPCProxySuccessBlock strongSuccess = [unsafeSuccess copy];
     __strong AFJSONRPCProxyFailureBlock strongFailure = [unsafeFailure copy];
 

@@ -15,11 +15,14 @@
 @property (nonatomic,readonly) NSString* messageId;
 @property (nonatomic,readonly) NSString* application;
 @property (nonatomic,readonly) NSString* payloadType;
+@property (nonatomic,readonly) NSString* payloadSHA;
 @property (nonatomic,readonly) id payload;
+@property (nonatomic,readonly) NSData* rawPayload;
 @property (nonatomic,readonly) NSArray* tags;
 @property (nonatomic,readonly) BOOL silent;
 @property (nonatomic,readonly) BOOL selected;
 @property (nonatomic,readonly) BOOL fetched;
+@property (nonatomic,readonly) BOOL valid;
 
 + (instancetype)messageWithData:(NSDictionary*)data;
 

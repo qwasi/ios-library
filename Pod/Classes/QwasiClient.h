@@ -16,4 +16,9 @@
 
 + (instancetype)clientWithConfig:(QwasiConfig*)config;
 
+- (void)invokeMethod:(NSString *)method
+      withParameters:(id)parameters
+               retry:(BOOL)retry
+             success:(void (^)(AFHTTPRequestOperation *, id))success
+             failure:(void (^)(AFHTTPRequestOperation *, NSError *))failure;
 @end

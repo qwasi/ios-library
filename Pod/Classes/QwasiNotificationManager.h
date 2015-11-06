@@ -7,8 +7,9 @@
 //
 
 #import <Foundation/Foundation.h>
+#import "EventEmitter.h"
 
-@interface QwasiNotificationManager : NSObject
+@interface QwasiNotificationManager : EventEmitter
 @property (nonatomic,readonly)NSString* pushToken;
 
 + (instancetype)shared;

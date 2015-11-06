@@ -7,8 +7,6 @@
 //
 
 #import "QwasiAppManager.h"
-
-#import "Emitter.h"
 #import "NSObject+STSwizzle.h"
 
 typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
@@ -41,7 +39,6 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
 - (id)init {
     if (self = [super init]) {
         
-
     }
     return self;
 }

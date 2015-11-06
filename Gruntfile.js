@@ -72,7 +72,7 @@ module.exports = function(grunt) {
 		updateConfigs: [],
 		commit: true,
 		commitMessage: '#bump Release %VERSION%',
-		commitFiles: ['package.json'],
+		commitFiles: ['package.json', 'Qwasi.podspec', 'Pod/Classes/Version.h'],
 		createTag: true,
 		tagName: '%VERSION%',
 		tagMessage: 'Release %VERSION%',
@@ -89,7 +89,7 @@ module.exports = function(grunt) {
 		    var package = grunt.file.readJSON('package.json');
 		    var semver = semverUtils.parse(package.version);
 
-		    return 'podspec-bump -w ' + semver;
+		    return '/usr/local/bin/podspec-bump -w ' + semver;
 		}
 	    }
 	}
@@ -106,8 +106,8 @@ module.exports = function(grunt) {
 	var header = util.format('\/\/ Version Header\n' + 
 				 '#define SHORT_VERSION @"%s"\n' +
 				 '#define BUILD_VERSION %d\n' +
-				 '#define VERSION_STRING @"%s-%d" \n'
-				 , semver.version, getBuildVersion(), semver.version, getBuildVersion());
+				 '#define VERSION_STRING @"%s-%s" \n'
+				 , semver.version, getBuildVersion(), semver.version, semver.release);
 	
 	fs.writeFileSync('Pod/Classes/Version.h', header);
 	

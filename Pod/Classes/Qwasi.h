@@ -14,15 +14,14 @@
 #import "QwasiMessage.h"
 #import "QwasiNotificationManager.h"
 #import "QwasiLocationManager.h"
-#import <CocoaLumberjack/CocoaLumberjack.h>
-#import <Emitter/Emitter.h>
+#import "EventEmitter.h"
 
 extern NSString* const kEventApplicationState;
 extern NSString* const kEventLocationUpdate;
 extern NSString* const kEventLocationEnter;
 extern NSString* const kEventLocationExit;
 
-@interface Qwasi : NSObject
+@interface Qwasi : EventEmitter
 
 @property (nonatomic,readonly) BOOL registered;
 @property (nonatomic,readwrite) QwasiConfig* config;
@@ -98,12 +97,23 @@ extern NSString* const kEventLocationExit;
 - (void)fetchUnreadMessage:(void(^)(QwasiMessage* message))success
                    failure:(void(^)(NSError* err))failure;
 
+- (void)tryFetchUnreadMessages;
+
 - (void)postEvent:(NSString*)event
          withData:(id)data
           success:(void(^)(void))success
           failure:(void(^)(NSError* err))failure;
 
 - (void)postEvent:(NSString*)event
+         withData:(id)data
+            retry:(BOOL)retry
+          success:(void(^)(void))success
+          failure:(void(^)(NSError* err))failure;
+
+- (void)postEvent:(NSString*)event
+         withData:(id)data;
+
+- (void)tryPostEvent:(NSString*)event
          withData:(id)data;
 
 - (void)fetchLocationsNear:(CLLocation*)location
@@ -131,6 +141,27 @@ extern NSString* const kEventLocationExit;
 - (void)deviceValueForKey:(NSString*)key
                   success:(void(^)(id value))success
                   failure:(void(^)(NSError* err))failure;
+
+- (void)setMemberValue:(id)value forKey:(NSString*)key
+               success:(void(^)(void))success
+               failure:(void(^)(NSError* err))failure;
+
+- (void)setMemberValue:(id)value forKey:(NSString*)key;
+
+- (void)memberValueForKey:(NSString*)key
+                  success:(void(^)(id value))success
+                  failure:(void(^)(NSError* err))failure;
+
+- (void)memberSetUserName:(NSString*)username
+             withPassword:(NSString*)password
+      withCurrentPassword:(NSString*)currentPassword
+                  success:(void(^)(void))success
+                  failure:(void(^)(NSError* err))failure;
+
+- (void)memberAuthUser:(NSString*)username
+          withPassword:(NSString*)password
+               success:(void(^)(void))success
+               failure:(void(^)(NSError* err))failure;
 
 - (void)filterTag:(NSString*)tag;
 - (void)unfilterTag:(NSString*)tag;
