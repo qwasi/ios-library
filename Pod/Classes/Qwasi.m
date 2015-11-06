@@ -902,7 +902,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
     }
     else {
-        NSError* error = [QwasiError locationFetchFailed: [QwasiError deviceNotRegistered]];
+        NSError* error = [QwasiError channel: channel subscribeFailed: [QwasiError deviceNotRegistered]];
         
         if (failure) {
             failure(error);
@@ -938,7 +938,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                         
                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                           
-                          error = [QwasiError channel: channel subscribeFailed: error];
+                          error = [QwasiError channel: channel unsubscribeFailed: error];
                           
                           if (failure) failure(error);
                           
@@ -947,7 +947,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
     }
     else {
-        NSError* error = [QwasiError locationFetchFailed: [QwasiError deviceNotRegistered]];
+        NSError* error = [QwasiError channel: channel unsubscribeFailed: [QwasiError deviceNotRegistered]];
         
         if (failure) {
             failure(error);
@@ -983,7 +983,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
     }
     else {
-        NSError* error = [QwasiError locationFetchFailed: [QwasiError deviceNotRegistered]];
+        NSError* error = [QwasiError setDeviceDataForKey: key failed: [QwasiError deviceNotRegistered]];
         
         if (failure) {
             failure(error);
@@ -1022,7 +1022,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
     }
     else {
-        NSError* error = [QwasiError locationFetchFailed: [QwasiError deviceNotRegistered]];
+        NSError* error = [QwasiError getDeviceDataForKey: key failed: [QwasiError deviceNotRegistered]];
         
         if (failure) {
             failure(error);
@@ -1030,6 +1030,160 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
         [self emit: @"error", error];
     }
+}
+
+- (void)setMemberValue:(id)value forKey:(NSString*)key
+               success:(void(^)(void))success
+               failure:(void(^)(NSError* err))failure {
+    if (_registered) {
+        
+        [_client invokeMethod: @"member.set"
+               withParameters: @{ @"id": _userToken,
+                                  @"key": key,
+                                  @"value": value }
+                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                          
+                          if (success) {
+                              success();
+                          }
+                          
+                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          
+                          error = [QwasiError setMemberDataForKey: key failed: error];
+                          
+                          if (failure) failure(error);
+                          
+                          [self emit: @"error", error];
+                      }];
+        
+    }
+    else {
+        NSError* error = [QwasiError setMemberDataForKey: key failed: [QwasiError deviceNotRegistered]];
+        
+        if (failure) {
+            failure(error);
+        }
+        
+        [self emit: @"error", error];
+    }
+}
+
+- (void)setMemberValue:(id)value forKey:(NSString*)key {
+    [self setMemberValue: value forKey: key success: nil failure: nil];
+}
+
+- (void)memberValueForKey:(NSString*)key
+                  success:(void(^)(id value))success
+                  failure:(void(^)(NSError* err))failure {
+    if (_registered) {
+        
+        [_client invokeMethod: @"member.get"
+               withParameters: @{ @"id": _userToken,
+                                  @"key": key }
+                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                          
+                          if (success) {
+                              success(responseObject);
+                          }
+                          
+                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          
+                          error = [QwasiError getMemberDataForKey: key failed: error];
+                          
+                          if (failure) failure(error);
+                          
+                          [self emit: @"error", error];
+                      }];
+        
+    }
+    else {
+        NSError* error = [QwasiError getMemberDataForKey: key failed: [QwasiError deviceNotRegistered]];
+        
+        if (failure) {
+            failure(error);
+        }
+        
+        [self emit: @"error", error];
+    }
+}
+
+- (void)memberSetUserName:(NSString*)username
+             withPassword:(NSString*)password
+      withCurrentPassword:(NSString*)currentPassword
+                  success:(void(^)(void))success
+                  failure:(void(^)(NSError* err))failure
+{
+    if (_registered) {
+        
+        [_client invokeMethod: @"member.set_auth"
+               withParameters: @{ @"id": _userToken,
+                                  @"username": username,
+                                  @"password": password,
+                                  @"current": currentPassword }
+                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                          
+                          if (success) {
+                              success();
+                          }
+                          
+                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          
+                          error = [QwasiError setMemberAuthFailed: error];
+                          
+                          if (failure) failure(error);
+                          
+                          [self emit: @"error", error];
+                      }];
+        
+    }
+    else {
+        NSError* error = [QwasiError setMemberAuthFailed: [QwasiError deviceNotRegistered]];
+        
+        if (failure) {
+            failure(error);
+        }
+        
+        [self emit: @"error", error];
+    }
+}
+
+- (void)memberAuthUser:(NSString*)username
+          withPassword:(NSString*)password
+               success:(void(^)(void))success
+               failure:(void(^)(NSError* err))failure {
+    if (_registered) {
+        
+        [_client invokeMethod: @"member.auth"
+               withParameters: @{ @"id": _userToken,
+                                  @"username": username,
+                                  @"password": password
+                                  }
+                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                          
+                          if (success) {
+                              success();
+                          }
+                          
+                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          
+                          error = [QwasiError authMemberFailed: error];
+                          
+                          if (failure) failure(error);
+                          
+                          [self emit: @"error", error];
+                      }];
+        
+    }
+    else {
+        NSError* error = [QwasiError authMemberFailed: [QwasiError deviceNotRegistered]];
+        
+        if (failure) {
+            failure(error);
+        }
+        
+        [self emit: @"error", error];
+    }
+
 }
 
 - (void)sendMessage:(QwasiMessage*)message

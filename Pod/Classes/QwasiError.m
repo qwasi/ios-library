@@ -61,6 +61,14 @@ NSString* const kQwasiErrorDomain = @"com.qwasi.sdk";
     return [self errorWithCode: QwasiErrorLocationSyncFailed withMessage: @"Location sync failed." withInnerError: reason];
 }
 
++ (NSError*)setMemberAuthFailed:(NSError*)reason {
+    return [self errorWithCode: QwasiErrorSetMemberAuthFailed withMessage: @"Set member authentication failed." withInnerError: reason];
+}
+
++ (NSError*)authMemberFailed:(NSError*)reason {
+    return [self errorWithCode: QwasiErrorAuthMemeberFailed withMessage: @"Member authentication failed." withInnerError: reason];
+}
+
 + (NSError*)channel:(NSString*)channel subscribeFailed:(NSError*)reason {
     return [self errorWithCode: QwasiErrorChannelSubscribeFailed
                    withMessage: [NSString stringWithFormat: @"Channel %@ subscribe failed.", channel]
@@ -93,6 +101,18 @@ NSString* const kQwasiErrorDomain = @"com.qwasi.sdk";
 
 + (NSError*)getDeviceDataForKey:(NSString*)key failed:(NSError*)reason {
     return [self errorWithCode: QwasiErrorGetDeviceDataFailed
+                   withMessage: [NSString stringWithFormat: @"Failed to get data for key %@.", key]
+                withInnerError: reason];
+}
+
++ (NSError*)setMemberDataForKey:(NSString*)key failed:(NSError*)reason {
+    return [self errorWithCode: QwasiErrorSetMemberDataFailed
+                   withMessage: [NSString stringWithFormat: @"Failed to set data for key %@.", key]
+                withInnerError: reason];
+}
+
++ (NSError*)getMemberDataForKey:(NSString*)key failed:(NSError*)reason {
+    return [self errorWithCode: QwasiErrorGetMemberDataFailed
                    withMessage: [NSString stringWithFormat: @"Failed to get data for key %@.", key]
                 withInnerError: reason];
 }
