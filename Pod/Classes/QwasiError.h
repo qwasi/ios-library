@@ -28,11 +28,15 @@ typedef NS_ENUM(NSInteger, QwasiErrorCode) {
     QwasiErrorSetUserTokenFailed,
     QwasiErrorSetDeviceDataFailed,
     QwasiErrorGetDeviceDataFailed,
+    QwasiErrorSetMemberDataFailed,
+    QwasiErrorGetMemberDataFailed,
     QwasiErrorSendMessageFailed,
     QwasiErrorInvalidMessage,
     QwasiErrorLocationAccessDenied,
     QwasiErrorLocationAccessInsufficient,
-    QwasiErrorMessageNotFound = 404
+    QwasiErrorMessageNotFound = 404,
+    QwasiErrorSetMemberAuthFailed,
+    QwasiErrorAuthMemeberFailed = 401
 };
 
 @class QwasiLocation;
@@ -46,8 +50,12 @@ typedef NS_ENUM(NSInteger, QwasiErrorCode) {
 + (NSError*)locationFetchFailed:(NSError*)reason;
 + (NSError*)locationSyncFailed:(NSError*)reason;
 + (NSError*)setUserTokenFailed:(NSError*)reason;
++ (NSError*)setMemberAuthFailed:(NSError*)reason;
++ (NSError*)authMemberFailed:(NSError*)reason;
 + (NSError*)setDeviceDataForKey:(NSString*)key failed:(NSError*)reason;
 + (NSError*)getDeviceDataForKey:(NSString*)key failed:(NSError*)reason;
++ (NSError*)setMemberDataForKey:(NSString*)key failed:(NSError*)reason;
++ (NSError*)getMemberDataForKey:(NSString*)key failed:(NSError*)reason;
 + (NSError*)sendMessageToUserToken:(NSString*)userToken failed:(NSError*)reason;
 + (NSError*)channel:(NSString*)channel subscribeFailed:(NSError*)reason;
 + (NSError*)channel:(NSString*)channel unsubscribeFailed:(NSError*)reason;

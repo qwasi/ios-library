@@ -142,6 +142,27 @@ extern NSString* const kEventLocationExit;
                   success:(void(^)(id value))success
                   failure:(void(^)(NSError* err))failure;
 
+- (void)setMemberValue:(id)value forKey:(NSString*)key
+               success:(void(^)(void))success
+               failure:(void(^)(NSError* err))failure;
+
+- (void)setMemberValue:(id)value forKey:(NSString*)key;
+
+- (void)memberValueForKey:(NSString*)key
+                  success:(void(^)(id value))success
+                  failure:(void(^)(NSError* err))failure;
+
+- (void)memberSetUserName:(NSString*)username
+             withPassword:(NSString*)password
+      withCurrentPassword:(NSString*)currentPassword
+                  success:(void(^)(void))success
+                  failure:(void(^)(NSError* err))failure;
+
+- (void)memberAuthUser:(NSString*)username
+          withPassword:(NSString*)password
+               success:(void(^)(void))success
+               failure:(void(^)(NSError* err))failure;
+
 - (void)filterTag:(NSString*)tag;
 - (void)unfilterTag:(NSString*)tag;
 
