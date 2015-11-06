@@ -7,6 +7,7 @@
 //
 
 #import "QwasiMessage.h"
+#import <CommonCrypto/CommonDigest.h>
 
 #ifdef __IPHONE_8_0
 #define GregorianCalendar NSCalendarIdentifierGregorian
@@ -29,25 +30,13 @@
         _alert = [aDecoder decodeObjectForKey: @"text"];
         _timestamp = [[aDecoder decodeObjectForKey: @"timestamp"] doubleValue];
         _payloadType = [aDecoder decodeObjectForKey: @"payload_type"];
+        _payloadSHA =[aDecoder decodeObjectForKey: @"payload_sha"];
         _tags = [aDecoder decodeObjectForKey: @"tags"];
         _selected = [aDecoder decodeBoolForKey: @"selected"];
                      
         _encodedPayload = [aDecoder decodeObjectForKey: @"encodedPayload"];
         
-        _payload = [[NSData alloc] initWithBase64EncodedString: _encodedPayload options: 0];
-        
-        if ([_payloadType caseInsensitiveCompare: @"application/json"] == NSOrderedSame) {
-            NSError* jsonError;
-            
-            id payload = [NSJSONSerialization JSONObjectWithData: _payload options: 0 error: &jsonError];
-            
-            if (!jsonError) {
-                _payload = payload;
-            }
-        }
-        else if ([_payloadType rangeOfString: @"text"].location != NSNotFound) {
-            _payload = [[NSString alloc] initWithData: _payload encoding: NSUTF8StringEncoding];
-        }
+        _payload = [QwasiMessage decodePayload: _encodedPayload withSHA: _payloadSHA withType: _payloadType];
     }
     return self;
 }
@@ -56,7 +45,7 @@
     
     if (self = [super init]) {
         _messageId = [data objectForKey: @"id"];
-        _application = [data valueForKeyPath: @"application.id"];
+        _application = [data valueForKeyPath: @"application"];
         _alert = [data objectForKey: @"text"];
         
         if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
@@ -76,31 +65,14 @@
         _timestamp = [timestamp timeIntervalSince1970];
         
         _payloadType = [data objectForKey: @"payload_type"];
+        _payloadSHA = [data objectForKey: @"payload_sha"];
         _tags = [data valueForKeyPath: @"context.tags"];
         _fetched = [[data valueForKeyPath: @"flags.fetched"] boolValue];
         
         // decode the payload
         _encodedPayload = [data objectForKey: @"payload"];
         
-        if (_encodedPayload) {
-            _payload = [[NSData alloc] initWithBase64EncodedString: _encodedPayload options: 0];
-            
-            if ([_payloadType caseInsensitiveCompare: @"application/json"] == NSOrderedSame) {
-                NSError* jsonError;
-                
-                id payload = [NSJSONSerialization JSONObjectWithData: _payload options: 0 error: &jsonError];
-                
-                if (!jsonError) {
-                    _payload = payload;
-                }
-            }
-            else if ([_payloadType rangeOfString: @"text"].location != NSNotFound) {
-                _payload = [[NSString alloc] initWithData: _payload encoding: NSUTF8StringEncoding];
-            }
-        }
-        else {
-            _payload = [[NSDictionary alloc] init];
-        }
+        _payload = [QwasiMessage decodePayload: _encodedPayload withSHA: _payloadSHA withType: _payloadType];
     }
     
     return self;
@@ -137,6 +109,7 @@
     [aCoder encodeObject: _alert forKey: @"text"];
     [aCoder encodeObject: [NSNumber numberWithDouble: _timestamp] forKey: @"timestamp"];
     [aCoder encodeObject: _payloadType forKey: @"payload_type"];
+    [aCoder encodeObject: _payloadSHA forKey: @"payload_sha"];
     [aCoder encodeObject: _tags forKey: @"tags"];
     [aCoder encodeObject: _encodedPayload forKey: @"encodedPayload"];
     [aCoder encodeBool: YES forKey: @"selected"];
@@ -145,6 +118,7 @@
 - (BOOL)silent {
     return (_alert == nil);
 }
+
 - (NSString*)description {
     
     if ([_payloadType caseInsensitiveCompare: @"application/json"] == NSOrderedSame) {
@@ -158,5 +132,90 @@
     }
 
     return [_payload description];
+}
+
++ (NSString*)hashPayload:(NSData*)payload {
+    
+    unsigned int outputLength = CC_SHA1_DIGEST_LENGTH;
+    unsigned char output[outputLength];
+    
+    CC_SHA1(payload.bytes, (unsigned int) payload.length, output);
+
+    NSMutableString* hash = [NSMutableString stringWithCapacity:outputLength * 2];
+    
+    for (unsigned int i = 0; i < outputLength; i++) {
+        [hash appendFormat:@"%02x", output[i]];
+        output[i] = 0;
+    }
+    
+    return hash;
+}
+
++ (id)decodePayload:(NSString*)encodedPayload withSHA:(NSString*)sha withType:(NSString*)type {
+    
+    NSData* payloadData = [[NSData alloc] initWithBase64EncodedString: encodedPayload options: 0];
+    
+    id rval = nil;
+    
+    if (!payloadData) {
+        return nil;
+    }
+    
+    if (sha && ![sha isEqualToString: [self hashPayload: payloadData]]) {
+        return nil;
+    }
+    
+    if ([type caseInsensitiveCompare: @"application/vnd.qwasi.aim+json"] == NSOrderedSame) {
+        NSError* jsonError;
+        
+        id _payload = [NSJSONSerialization JSONObjectWithData: payloadData options: 0 error: &jsonError];
+        
+        if (!jsonError) {
+            if ([_payload isKindOfClass:[NSDictionary class]]) {
+                rval = [[NSMutableDictionary alloc] init];
+                
+                for (NSString* key in _payload) {
+                    id sub = [_payload objectForKey: key];
+                    
+                    rval[key] = [self decodePayload: sub[@"payload"] withSHA: nil withType: sub[@"payload_type"]];
+                }
+            }
+            else if ([_payload isKindOfClass: [NSArray class]]) {
+                rval = [[NSMutableArray alloc] init];
+                
+                for (NSDictionary* sub in _payload) {
+                    [rval addObject: [self decodePayload: sub[@"payload"] withSHA: nil withType: sub[@"payload_type"]]];
+                }
+            }
+            else {
+                rval = _payload;
+            }
+        }
+
+    }
+    else if ([type caseInsensitiveCompare: @"application/json"] == NSOrderedSame) {
+        NSError* jsonError;
+        
+        id _payload = [NSJSONSerialization JSONObjectWithData: payloadData options: 0 error: &jsonError];
+        
+        if (!jsonError) {
+            rval = _payload;
+        }
+    }
+    else if ([type rangeOfString: @"image/"].location != NSNotFound) {
+        rval = [[UIImage alloc] initWithData: payloadData];
+        
+        if (!rval) {
+            rval = payloadData;
+        }
+    }
+    else if ([type rangeOfString: @"text/"].location != NSNotFound) {
+        rval = [[NSString alloc] initWithData: payloadData encoding: NSUTF8StringEncoding];
+    }
+    else {
+        rval = payloadData;
+    }
+    
+    return rval;
 }
 @end

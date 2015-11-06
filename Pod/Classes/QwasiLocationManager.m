@@ -7,7 +7,6 @@
 //
 
 #import "QwasiLocationManager.h"
-#import "CocoaLumberjack.h"
 
 QwasiLocationManager* _activeManager = nil;
 
@@ -90,6 +89,8 @@ QwasiLocationManager* _activeManager = nil;
 
 - (void)startLocationUpdates {
     
+     _authStatus = [CLLocationManager authorizationStatus];
+    
     switch (_authStatus) {
         case kCLAuthorizationStatusNotDetermined:
             if (![_manager respondsToSelector:@selector(requestAlwaysAuthorization)]) {
@@ -141,7 +142,7 @@ QwasiLocationManager* _activeManager = nil;
             
             // Beacons require always authorization status to monitor
             if (location.type == QwasiLocationTypeBeacon && _authStatus != kCLAuthorizationStatusAuthorizedAlways) {
-                DDLogDebug(@"Background auth required to monitor beacons, beacon %@ will not be monitored", location.name);
+                NSLog(@"Background auth required to monitor beacons, beacon %@ will not be monitored", location.name);
             }
             else {
                 _regionMap[location.id] = location;
@@ -230,7 +231,7 @@ QwasiLocationManager* _activeManager = nil;
     QwasiLocation* location = [_regionMap objectForKey: region.identifier];
     
     if (location) {
-        DDLogVerbose(@"Did start monitoring for %@ %@", (location.type == QwasiLocationTypeGeofence ? @"geofence" : @"beacon"), location);
+        NSLog(@"Did start monitoring %@", location);
         
         [_manager requestStateForRegion: location.region];
     }
@@ -240,9 +241,14 @@ QwasiLocationManager* _activeManager = nil;
     QwasiLocation* location = [_regionMap objectForKey: region.identifier];
     
     if (location) {
-        
         if (error.domain == kCLErrorDomain) {
             switch (error.code) {
+                case kCLErrorDenied:
+                case kCLErrorRegionMonitoringDenied:
+                    
+                    NSLog(@"Failed to start monitoring %@, access denied by user.", location);
+                    break;
+                    
                 case kCLErrorRegionMonitoringFailure:
                 {
                     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(5 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
@@ -259,10 +265,11 @@ QwasiLocationManager* _activeManager = nil;
                     break;
             }
         }
-        
-        DDLogVerbose(@"Failed to start monitoring for %@ %@, %@", (location.type == QwasiLocationTypeGeofence ? @"geofence" : @"beacon"), location, error);
-        
-        [self emit: @"error", [QwasiError location: location monitoringFailed: error]];
+        else {
+            NSLog(@"Failed to start monitoring %@, %@", location, error);
+            
+            [self emit: @"error", [QwasiError location: location monitoringFailed: error]];
+        }
     }
 }
 
@@ -333,7 +340,7 @@ QwasiLocationManager* _activeManager = nil;
     QwasiLocation* location = [_regionMap objectForKey: region.identifier];
     
     if (location) {
-        DDLogVerbose(@"Failed to range for beacon for location %@, %@", location.name, error);
+        NSLog(@"Failed to range %@, %@", location, error);
         
         [self emit: @"error", [QwasiError location: location beaconRangingFailed: error]];
     }

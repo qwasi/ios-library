@@ -1,1 +1,0 @@
-QWASI_OTHER_LDFLAGS = -framework "CoreLocation"

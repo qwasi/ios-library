@@ -8,7 +8,6 @@
 
 #import "Qwasi.h"
 #import "QwasiClient.h"
-#import "CocoaLumberjack.h"
 #import "GBDeviceInfo.h"
 #import "NSObject+STSwizzle.h"
 #import "QwasiAppManager.h"
@@ -83,11 +82,11 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         _filteredTags = [[NSMutableArray alloc] init];
         
         [[QwasiAppManager shared] on: @"willEnterForeground" listener: ^() {
-            [self postEvent: kEventApplicationState withData: @{ @"state": @"foreground" } success: nil failure: nil];
+            [self tryPostEvent: kEventApplicationState withData: @{ @"state": @"foreground" }];
         }];
         
         [[QwasiAppManager shared] on: @"didEnterBackground" listener: ^() {
-            [self postEvent: kEventApplicationState withData: @{ @"state": @"background" } success: nil failure: nil];
+            [self tryPostEvent: kEventApplicationState withData: @{ @"state": @"background" }];
         }];
     }
     return self;
@@ -128,7 +127,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                     
                     if (!_lastLocationEvent || [location distanceFromLocation: _lastLocationEvent] > MAX(LOCATION_EVENT_FILTER, UPDATE_FILTER(speed, _locationEventFilter))) {
                         
-                        [self postEvent: kEventLocationUpdate withData:@{ @"lat": [NSNumber numberWithFloat: location.coordinate.latitude],
+                        [self tryPostEvent: kEventLocationUpdate withData:@{ @"lat": [NSNumber numberWithFloat: location.coordinate.latitude],
                                                                           @"lng": [NSNumber numberWithFloat: location.coordinate.longitude] }];
                         
                         _lastLocationEvent = location;
@@ -185,7 +184,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                     data[@"distance"] = [NSNumber numberWithDouble: [_lastLocation distanceFromLocation: location]];
                 }
                 
-                [self postEvent: kEventLocationEnter withData: data];
+                [self tryPostEvent: kEventLocationEnter withData: data];
                 
                 [self emit:@"location", location, QwasiLocationStateInside];
             }];
@@ -209,9 +208,9 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                     data[@"distance"] = [NSNumber numberWithDouble: [_lastLocation distanceFromLocation: location]];
                 }
                 
-                [self postEvent: kEventLocationDwell withData: data];
+                [self tryPostEvent: kEventLocationDwell withData: data];
                 
-                [self emit:@"location", location, QwasiLocationStateDwell];
+                [self emit: @"location", location, QwasiLocationStateDwell];
             }];
             
             [_locationManager on: @"exit" listener: ^(QwasiLocation* location) {
@@ -233,7 +232,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                     data[@"distance"] = [NSNumber numberWithDouble: [_lastLocation distanceFromLocation: location]];
                 }
                 
-                [self postEvent: kEventLocationExit withData: data];
+                [self tryPostEvent: kEventLocationExit withData: data];
                 
                 [self emit:@"location", location, QwasiLocationStateOutside];
             }];
@@ -241,12 +240,18 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
             [_locationManager on: @"error" listener: ^(NSError* error) {
                 [self emit: @"error", error];
             }];
-            
-            [_locationManager startLocationUpdates];
         });
+        
+        [_locationManager startLocationUpdates];
     }
     else if (_locationManager) {
+        
         [_locationManager stopLocationUpdates];
+        
+        _lastLocation = nil;
+        _lastLocationSync = nil;
+        _lastLocationEvent = nil;
+        _lastLocationUpdate = nil;
     }
 }
 
@@ -353,7 +358,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           success(_deviceToken);
                       }
                       
-                      DDLogInfo(@"Device %@ registered successfully for application %@.", _deviceToken, _applicationName);
+                      NSLog(@"Device %@ registered successfully for application %@.", _deviceToken, _applicationName);
                       
                       [self emit: @"registered", _deviceToken];
                       
@@ -369,7 +374,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                       
                       [self emit: @"error", error];
                       
-                      DDLogError(@"Device registration failed %@.", error);
+                      NSLog(@"Device registration failed %@.", error);
                 }];
 }
 
@@ -377,19 +382,19 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     _userToken = userToken;
     
     if (_registered) {
-        [_client invokeMethod: @"device.set_user_token" withParameters: @{@"id": _deviceToken,
-                                                                          @"user_token": _userToken }
-                                                                          success:^(AFHTTPRequestOperation *operation, id responseObject)
+        [_client invokeMethod: @"device.register" withParameters: @{@"id": _deviceToken,
+                                                            @"user_token": _userToken }
+                                                                  success: ^(AFHTTPRequestOperation *operation, id responseObject)
         {
             
-            DDLogVerbose(@"Set usertoken for application %@ succeed.", _applicationName);
+            NSLog(@"Set usertoken for application %@ succeed.", _applicationName);
             
         } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
             error = [QwasiError setUserTokenFailed: error];
             
             [self emit: @"error", error];
             
-            DDLogError(@"Set usertoken failed %@.", error);
+            NSLog(@"Set usertoken failed %@.", error);
         }];
     }
 }
@@ -399,7 +404,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
         [_client invokeMethod: @"device.unregister"
                withParameters: @{ @"id": _deviceToken }
-                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                      success: ^(AFHTTPRequestOperation *operation, id responseObject) {
                           
                           _registered = NO;
                           _deviceToken = nil;
@@ -431,17 +436,17 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
         dispatch_once(&_pushOnce, ^{
             [[QwasiNotificationManager shared] once: @"pushToken" listener: ^(NSString* pushToken) {
-                [_client invokeMethod: @"device.set_push_token"
+                [_client invokeMethod: @"device.register"
                        withParameters: @{ @"id": _deviceToken,
-                                          @"proto": @"push.apns",
-                                          @"token": pushToken }
+                                          @"push": @{ @"proto": @"push.apns",
+                                                      @"addr": pushToken } }
                               success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                   
                                   _pushEnabled = YES;
                                   
                                   if (success) success(pushToken);
                                   
-                                  DDLogInfo(@"Device %@ push token %@ set successfully.", _deviceToken, pushToken);
+                                  NSLog(@"Device %@ push token %@ set successfully.", _deviceToken, pushToken);
                                   
                               } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                   
@@ -451,7 +456,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                   
                                   if (failure) failure(error);
                                   
-                                  DDLogError(@"Push registration failed: %@.", error);
+                                  NSLog(@"Push registration failed: %@.", error);
                               }];
             }];
             
@@ -460,7 +465,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                 if (error.code == QwasiErrorPushNotEnabled) {
                     _pushEnabled = NO;
                     
-                    DDLogWarn(@"Remote notifications disabled for device, poll will still work.");
+                    NSLog(@"Remote notifications disabled for device, poll will still work.");
                 }
                 else {
                     [self emit: @"error", error];
@@ -469,35 +474,39 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
             }];
             
             [[QwasiNotificationManager shared] on: @"notification" listener: ^(NSDictionary* userInfo) {
-                [self fetchMessageForNotification: userInfo success:^(QwasiMessage *message) {
-                    
-                    [[QwasiNotificationManager shared] emit: @"message", message, self];
-                    
-                } failure:^(NSError *err) {
-                    
-                    err = [QwasiError messageFetchFailed: err];
-                    
-                    [self emit: @"error", err];
-                }];
-            }];
-            
-            [[QwasiNotificationManager shared] on: @"message" listener: ^(QwasiMessage* message, BOOL _self) {
                 
-                if ([message.application isEqualToString: _config.application]) {
-                    BOOL filter = NO;
+                NSArray* qwasi = userInfo[@"qwasi"];
+                
+                if (qwasi && qwasi.count == 3) {
+                    NSString* appId = qwasi[2];
                     
-                    for (NSString* tag in message.tags) {
-                        
-                        if ([_filteredTags indexOfObject: tag] != NSNotFound) {
+                    if (appId && [appId isEqualToString: _config.application]) {
+                        [self fetchMessageForNotification: userInfo success:^(QwasiMessage *message) {
                             
-                            [self emit: [NSString stringWithFormat: @"tag#%@", tag], message];
-                        
-                            filter = YES;
-                        }
-                    }
-                    
-                    if (!filter) {
-                        [self emit: @"message", message];
+                            BOOL filtered = NO;
+                            
+                            for (NSString* tag in message.tags) {
+                                
+                                if ([_filteredTags indexOfObject: tag] != NSNotFound) {
+                                    
+                                    [self emit: [NSString stringWithFormat: @"tag#%@", tag], message];
+                                    
+                                    filtered = YES;
+                                }
+                            }
+                            
+                            if (!filtered) {
+                                [self emit: @"message", message];
+                                
+                                [[QwasiNotificationManager shared] emit: @"message", message, self];
+                            }
+
+                        } failure:^(NSError *err) {
+                            
+                            err = [QwasiError messageFetchFailed: err];
+                            
+                            [self emit: @"error", err];
+                        }];
                     }
                 }
             }];
@@ -518,10 +527,12 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                     
                     [self emit: @"message", message];
                     
+                    [[QwasiNotificationManager shared] emit: @"message", message, self];
+                    
                 } failure:^(NSError *err) {
                     if (err.code != QwasiErrorMessageNotFound) {
                         
-                        DDLogError(@"Unexpected server error: %@", err);
+                        NSLog(@"Unexpected server error: %@", err);
                         
                         [self emit: @"error", err];
                     }
@@ -529,6 +540,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
             }];
             
             [[QwasiNotificationManager shared] registerForRemoteNotification];
+            
         });
     }
     else {
@@ -546,10 +558,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                            failure:(void(^)(NSError* err))failure {
     if (_registered) {
         
-        [_client invokeMethod: @"device.set_push_token"
+        [_client invokeMethod: @"device.register"
                withParameters: @{ @"id": _deviceToken,
-                                  @"proto": @"push.poll",
-                                  @"token": @"" }
+                                  @"push": @{ @"proto": @"push.poll",
+                                              @"addr": @"" } }
                       success:^(AFHTTPRequestOperation *operation, id responseObject)
         {
                           
@@ -557,7 +569,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
           
           if (success) success();
           
-          DDLogInfo(@"Device unregistered for remote notifications.");
+          NSLog(@"Device unregistered for remote notifications.");
           
       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
           
@@ -565,7 +577,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
           
           if (failure) failure(error);
           
-          DDLogError(@"Push registration failed: %@.", error);
+          NSLog(@"Push registration failed: %@.", error);
       }];
     }
     else {
@@ -586,9 +598,11 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     if (_registered) {
         
         NSDictionary* flags = @{ @"opened": [NSNumber numberWithBool: [UIApplication sharedApplication].applicationState == UIApplicationStateInactive] };
-        NSDictionary* qwasi = userInfo[@"qwasi"];
-        NSString* msgId = qwasi[@"m"];
-        NSString* appId = qwasi[@"a"];
+        
+        NSArray* qwasi = userInfo[@"qwasi"];
+        NSString* appId = qwasi[2];
+        NSString* msgId = qwasi[0];
+
         
         if (msgId && appId) {
             if ([appId isEqualToString: _config.application]) {
@@ -616,7 +630,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                           NSDictionary* jsonError = [NSJSONSerialization JSONObjectWithData: errData options: kNilOptions error: &parseError];
                                           
                                           if (parseError) {
-                                              DDLogError(@"Failed to parse server error response: %@", parseError);
+                                              NSLog(@"Failed to parse server error response: %@", parseError);
                                               
                                               [self emit: @"error", parseError];
                                           }
@@ -660,6 +674,23 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     }
 }
 
+- (void)tryFetchUnreadMessages {
+
+    if (_registered) {
+        [self fetchUnreadMessage:^(QwasiMessage *message) {
+            
+            [self emit: @"message", message];
+            
+            [[QwasiNotificationManager shared] emit: @"message", message, self];
+            
+            [self tryFetchUnreadMessages];
+            
+        } failure:^(NSError *err) {
+            
+        }];
+    }
+}
+
 - (void)fetchUnreadMessage:(void(^)(QwasiMessage* message))success
                    failure:(void(^)(NSError* err))failure {
     if (_registered) {
@@ -684,7 +715,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                               NSDictionary* jsonError = [NSJSONSerialization JSONObjectWithData: errData options: kNilOptions error: &parseError];
                               
                               if (parseError) {
-                                  DDLogError(@"Failed to parse server error response: %@", parseError);
+                                  NSLog(@"Failed to parse server error response: %@", parseError);
                                   
                                   [self emit: @"error", parseError];
                               }
@@ -713,7 +744,11 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
 
 - (void)postEvent:(NSString*)event
          withData:(id)data {
-    [self postEvent: event withData: data success: nil failure: nil];
+    [self postEvent: event withData: data retry: YES success: nil failure: nil];
+}
+
+- (void)tryPostEvent:(NSString *)event withData:(id)data {
+    [self postEvent: event withData: data retry: NO success: nil failure: nil];
 }
 
 - (void)filterTag:(NSString *)tag {
@@ -728,6 +763,14 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
          withData:(id)data
           success:(void(^)(void))success
           failure:(void(^)(NSError* err))failure {
+    [self postEvent: event withData: data retry: YES success: success failure: failure];
+}
+
+- (void)postEvent:(NSString*)event
+         withData:(id)data
+            retry:(BOOL)retry
+          success:(void(^)(void))success
+          failure:(void(^)(NSError* err))failure {
     
     if (data == nil) {
         data = @{};
@@ -739,6 +782,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                withParameters: @{ @"device": _deviceToken,
                                   @"type": event,
                                   @"data": data }
+                        retry: retry
                       success:^(AFHTTPRequestOperation *operation, id responseObject) {
                           
                           if (success) success();
@@ -773,14 +817,29 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                withParameters: @{ @"near": @{ @"lng": [NSNumber numberWithDouble: location.coordinate.longitude],
                                               @"lat": [NSNumber numberWithDouble: location.coordinate.latitude],
                                               @"radius": [NSNumber numberWithDouble: _locationSyncFilter * 10] },
-                                  @"options": @{ @"schema": @"2.0" } }
+                                  @"options": @{ @"schema": @"2.0" },
+                                  @"limit": [NSNumber numberWithInt: 20] }
                       success:^(AFHTTPRequestOperation *operation, id responseObject) {
                           
                           if (success) {
+                              NSArray* response = (NSArray*)responseObject;
+                              NSInteger count = [[response valueForKey: @"length"] integerValue];
+                              NSDictionary* values = [response valueForKey: @"value"];
                               NSMutableArray* locations = [[NSMutableArray alloc] init];
                               
-                              for (NSDictionary* data in responseObject) {
-                                  [locations addObject: [[QwasiLocation alloc] initWithLocationData: data]];
+                              NSLog(@"Fetched %lu locations from server.", (unsigned long)count);
+                              
+                              for (NSDictionary* data in values) {
+                                  QwasiLocation* _loc = [[QwasiLocation alloc] initWithLocationData: data];
+                                  
+                                  if ((_loc.type != QwasiLocationTypeBeacon) ||
+                                      [_loc.vendor isEqualToString: @"ibeacon"]) {
+                                      
+                                      [locations addObject: _loc];
+                                  }
+                                  else {
+                                      NSLog(@"Ignoring unsupported location %@", _loc);
+                                  }
                               }
                           
                               success(locations);
@@ -822,7 +881,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                   @"channel": channel }
                       success:^(AFHTTPRequestOperation *operation, id responseObject) {
                           
-                          DDLogVerbose(@"Subscribed to channel %@ for application %@.", channel, _applicationName);
+                          NSLog(@"Subscribed to channel %@ for application %@.", channel, _applicationName);
                           
                           if (![_channels containsObject: channel]) {
                               [_channels addObject: channel];
@@ -843,7 +902,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
     }
     else {
-        NSError* error = [QwasiError locationFetchFailed: [QwasiError deviceNotRegistered]];
+        NSError* error = [QwasiError channel: channel subscribeFailed: [QwasiError deviceNotRegistered]];
         
         if (failure) {
             failure(error);
@@ -867,7 +926,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                   @"channel": channel }
                       success:^(AFHTTPRequestOperation *operation, id responseObject) {
                           
-                          DDLogVerbose(@"Unsubscribed to channel %@ for application %@.", channel, _applicationName);
+                          NSLog(@"Unsubscribed to channel %@ for application %@.", channel, _applicationName);
                           
                           if ([_channels containsObject: channel]) {
                               [_channels removeObject: channel];
@@ -879,7 +938,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                         
                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                           
-                          error = [QwasiError channel: channel subscribeFailed: error];
+                          error = [QwasiError channel: channel unsubscribeFailed: error];
                           
                           if (failure) failure(error);
                           
@@ -888,7 +947,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
     }
     else {
-        NSError* error = [QwasiError locationFetchFailed: [QwasiError deviceNotRegistered]];
+        NSError* error = [QwasiError channel: channel unsubscribeFailed: [QwasiError deviceNotRegistered]];
         
         if (failure) {
             failure(error);
@@ -924,7 +983,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
     }
     else {
-        NSError* error = [QwasiError locationFetchFailed: [QwasiError deviceNotRegistered]];
+        NSError* error = [QwasiError setDeviceDataForKey: key failed: [QwasiError deviceNotRegistered]];
         
         if (failure) {
             failure(error);
@@ -963,7 +1022,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
     }
     else {
-        NSError* error = [QwasiError locationFetchFailed: [QwasiError deviceNotRegistered]];
+        NSError* error = [QwasiError getDeviceDataForKey: key failed: [QwasiError deviceNotRegistered]];
         
         if (failure) {
             failure(error);
@@ -971,6 +1030,160 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
         [self emit: @"error", error];
     }
+}
+
+- (void)setMemberValue:(id)value forKey:(NSString*)key
+               success:(void(^)(void))success
+               failure:(void(^)(NSError* err))failure {
+    if (_registered) {
+        
+        [_client invokeMethod: @"member.set"
+               withParameters: @{ @"id": _userToken,
+                                  @"key": key,
+                                  @"value": value }
+                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                          
+                          if (success) {
+                              success();
+                          }
+                          
+                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          
+                          error = [QwasiError setMemberDataForKey: key failed: error];
+                          
+                          if (failure) failure(error);
+                          
+                          [self emit: @"error", error];
+                      }];
+        
+    }
+    else {
+        NSError* error = [QwasiError setMemberDataForKey: key failed: [QwasiError deviceNotRegistered]];
+        
+        if (failure) {
+            failure(error);
+        }
+        
+        [self emit: @"error", error];
+    }
+}
+
+- (void)setMemberValue:(id)value forKey:(NSString*)key {
+    [self setMemberValue: value forKey: key success: nil failure: nil];
+}
+
+- (void)memberValueForKey:(NSString*)key
+                  success:(void(^)(id value))success
+                  failure:(void(^)(NSError* err))failure {
+    if (_registered) {
+        
+        [_client invokeMethod: @"member.get"
+               withParameters: @{ @"id": _userToken,
+                                  @"key": key }
+                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                          
+                          if (success) {
+                              success(responseObject);
+                          }
+                          
+                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          
+                          error = [QwasiError getMemberDataForKey: key failed: error];
+                          
+                          if (failure) failure(error);
+                          
+                          [self emit: @"error", error];
+                      }];
+        
+    }
+    else {
+        NSError* error = [QwasiError getMemberDataForKey: key failed: [QwasiError deviceNotRegistered]];
+        
+        if (failure) {
+            failure(error);
+        }
+        
+        [self emit: @"error", error];
+    }
+}
+
+- (void)memberSetUserName:(NSString*)username
+             withPassword:(NSString*)password
+      withCurrentPassword:(NSString*)currentPassword
+                  success:(void(^)(void))success
+                  failure:(void(^)(NSError* err))failure
+{
+    if (_registered) {
+        
+        [_client invokeMethod: @"member.set_auth"
+               withParameters: @{ @"id": _userToken,
+                                  @"username": username,
+                                  @"password": password,
+                                  @"current": currentPassword }
+                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                          
+                          if (success) {
+                              success();
+                          }
+                          
+                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          
+                          error = [QwasiError setMemberAuthFailed: error];
+                          
+                          if (failure) failure(error);
+                          
+                          [self emit: @"error", error];
+                      }];
+        
+    }
+    else {
+        NSError* error = [QwasiError setMemberAuthFailed: [QwasiError deviceNotRegistered]];
+        
+        if (failure) {
+            failure(error);
+        }
+        
+        [self emit: @"error", error];
+    }
+}
+
+- (void)memberAuthUser:(NSString*)username
+          withPassword:(NSString*)password
+               success:(void(^)(void))success
+               failure:(void(^)(NSError* err))failure {
+    if (_registered) {
+        
+        [_client invokeMethod: @"member.auth"
+               withParameters: @{ @"id": _userToken,
+                                  @"username": username,
+                                  @"password": password
+                                  }
+                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                          
+                          if (success) {
+                              success();
+                          }
+                          
+                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          
+                          error = [QwasiError authMemberFailed: error];
+                          
+                          if (failure) failure(error);
+                          
+                          [self emit: @"error", error];
+                      }];
+        
+    }
+    else {
+        NSError* error = [QwasiError authMemberFailed: [QwasiError deviceNotRegistered]];
+        
+        if (failure) {
+            failure(error);
+        }
+        
+        [self emit: @"error", error];
+    }
+
 }
 
 - (void)sendMessage:(QwasiMessage*)message

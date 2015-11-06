@@ -17,6 +17,8 @@
     NSTimeInterval _dwellExit;
     dispatch_source_t _dwellTimer;
     
+    double _dwellTic;
+    
     BOOL _dwell;
     BOOL _inside;
     BOOL _exit;
@@ -33,6 +35,8 @@
                                    speed: location.speed
                                timestamp: location.timestamp]) {
         
+        _id = [NSString stringWithFormat: @"%lu", (unsigned long)self.hash];
+        _name = [NSString stringWithFormat: @"CLLocation_%lu", (unsigned long)self.hash];
         _type = QwasiLocationTypeCoordinate;
         _region = [[CLCircularRegion alloc] initWithCenter: self.coordinate radius: 0 identifier: _id];
         _state = QwasiLocationStateUnknown;
@@ -44,27 +48,48 @@
 
 - (id)initWithLocationData:(NSDictionary*)data {
     
-    NSArray* coord = [data valueForKeyPath: @"geofence.geometry.coordinates"];
+    NSDictionary* geofence = data[@"geofence"];
+    NSDictionary* beacon = data[@"beacon"];
+    NSDictionary* properties = data[@"properties"];
+    
+    NSArray* coord;
+  
+    if (geofence) {
+            coord = [data valueForKeyPath: @"geofence.geometry.coordinates"];
+    }
+    else{
+        // This is not a geofence so use dummy coordinates
+        coord = @[[NSNumber numberWithDouble: 0], [NSNumber numberWithDouble: 0]];
+    }
     
     if (self = [super initWithLatitude: [coord[1] doubleValue] longitude: [coord[0] doubleValue]]) {
-        
-        NSDictionary* geofence = data[@"geofence"];
-        NSDictionary* beacon = data[@"beacon"];
-        NSDictionary* properties = data[@"properties"];
-        
         _id = data[@"id"];
+        
         _name = data[@"name"];
         
         _dwellInterval = [[properties valueForKey: @"dwell_interval"] doubleValue];
         
+        _dwellInterval = MAX(_dwellInterval, 60.0f);
+        
+        _dwellTic = 1.0;
+        
         _geofenceRadius = [[geofence valueForKeyPath: @"properties.radius"] doubleValue];
         
-        if (beacon) {
-            
+        _geofenceRadius = MAX(3.0f, _geofenceRadius);
+        
+        if (beacon && ![beacon isKindOfClass: [NSNull class]]) {
             _type = QwasiLocationTypeBeacon;
-            _beaconUUID = [[NSUUID alloc] initWithUUIDString: [beacon valueForKey: @"id"]];
-            _beaconMajorVersion = [[beacon valueForKey: @"maj_ver"] unsignedShortValue];
-            _beaconMinorVersion = [[beacon valueForKey: @"min_ver"] unsignedShortValue];
+            
+            NSArray* _ids = [beacon valueForKey: @"id"];
+            
+            _vendor = [beacon valueForKey: @"type"];
+            
+            if ([_ids isKindOfClass:[NSArray class]] &&
+                 [_vendor isEqualToString:@"ibeacon"]) {
+                _beaconUUID = (_ids.count > 0) ? [[NSUUID alloc] initWithUUIDString: _ids[0]] : nil;
+                _beaconMajorVersion = (_ids.count > 1) ? [_ids[1] unsignedShortValue] : -1;
+                _beaconMinorVersion = (_ids.count > 2) ? [_ids[2] unsignedShortValue] : -1;
+            }
             
             if (_beaconMajorVersion == UINT16_MAX) {
                 _region = [[CLBeaconRegion alloc] initWithProximityUUID: _beaconUUID identifier: _id];
@@ -113,17 +138,38 @@
 }
 
 - (NSString*)description {
+    NSMutableDictionary* desc = [[NSMutableDictionary alloc] init];
+    
+    desc[@"id"] = _id;
+    desc[@"name"] = _name;
+    desc[@"region"] = [super description];
+    
     switch (_type) {
-        case QwasiLocationTypeGeofence:
-            return [NSString stringWithFormat: @"%@ %@ %@", _name, _id, [super description]];
-            
         case QwasiLocationTypeBeacon:
-            return [NSString stringWithFormat: @"%@ %@ %@ (%u,%u) %ldm %@", _name, _id, _beaconUUID.UUIDString, _beaconMajorVersion, _beaconMinorVersion, (long)_beaconProximity, [super description]];
+        {
+            NSDictionary* beac = @{ @"vendor": _vendor,
+                                    @"uuid": _beaconUUID ? _beaconUUID.UUIDString : @"unknown",
+                                    @"maj_ver": [NSNumber numberWithDouble: _beaconMajorVersion],
+                                    @"min_ver": [NSNumber numberWithDouble: _beaconMinorVersion],
+                                    @"proximity": [NSNumber numberWithDouble: _beaconProximity] };
+            desc[@"beacon"] = beac;
+        }
+            break;
+            
+        case QwasiLocationTypeGeofence:
+            desc[@"type"] = @"geofence";
+            break;
             
         case QwasiLocationTypeCoordinate:
+            desc[@"type"] = @"coordinate";
+            break;
+            
         default:
-            return [super description];
+            desc[@"type"] = @"unknown";
+            break;
     }
+    
+    return [NSString stringWithFormat: @"%@", desc];
 }
 
 - (void)enterWithBeacon:(CLBeacon*)beacon {
@@ -159,13 +205,16 @@
     
     @synchronized(self) {
         if (_inside && !_dwellTimer) {
+            // How often the event will be fired, up to _dwellInterval
+            __block NSTimeInterval _timerInterval = MAX(_dwellInterval / 10, 10);
+            
             dispatch_queue_t queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
             
             _dwellExit = 0;
             
             _dwellTimer = dispatch_source_create(DISPATCH_SOURCE_TYPE_TIMER, 0, 0, queue);
             
-            dispatch_source_set_timer(_dwellTimer, dispatch_time(DISPATCH_TIME_NOW, _dwellInterval * NSEC_PER_SEC), _dwellInterval * NSEC_PER_SEC, (1ull * NSEC_PER_SEC) / 10);
+            dispatch_source_set_timer(_dwellTimer, dispatch_time(DISPATCH_TIME_NOW, _timerInterval * NSEC_PER_SEC), _timerInterval * NSEC_PER_SEC, (1ull * NSEC_PER_SEC) / 10);
             
             dispatch_source_set_event_handler(_dwellTimer, ^{
                 @synchronized(self) {
@@ -179,6 +228,14 @@
                             _dwellExit = 0;
                             
                             [[QwasiLocationManager currentManager] emit: @"dwell", self];
+                            
+                            // Back off the dwell timers
+                            if (self.dwellTime > _dwellInterval * _dwellTic) {
+                                
+                                _timerInterval = _dwellInterval * _dwellTic++;
+                                
+                                dispatch_source_set_timer(_dwellTimer, dispatch_time(DISPATCH_TIME_NOW, _timerInterval * NSEC_PER_SEC), _timerInterval * NSEC_PER_SEC, (1ull * NSEC_PER_SEC) / 10);
+                            }
                         }
                     }
                     else {
