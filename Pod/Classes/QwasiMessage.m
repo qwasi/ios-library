@@ -66,7 +66,7 @@
         
         _payloadType = [data objectForKey: @"payload_type"];
         _payloadSHA = [data objectForKey: @"payload_sha"];
-        _tags = [data valueForKeyPath: @"context.tags"];
+        _tags = [data valueForKeyPath: @"tags"];
         _fetched = [[data valueForKeyPath: @"flags.fetched"] boolValue];
         
         // decode the payload
