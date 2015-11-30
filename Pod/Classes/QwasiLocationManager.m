@@ -203,7 +203,7 @@ QwasiLocationManager* _activeManager = nil;
     
     [self emit: @"location", _lastLocation];
     
-    if (!_deferred) {
+    if (!_deferred && (_authStatus == kCLAuthorizationStatusAuthorizedAlways) ) {
         
         [_manager allowDeferredLocationUpdatesUntilTraveled: _updateDistance timeout: _updateInterval];
         
