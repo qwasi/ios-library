@@ -50,6 +50,7 @@ QwasiLocationManager* _activeManager = nil;
     dispatch_once(&once, ^{
         sharedInstance = [[QwasiLocationManager alloc] initWithRequiredAuthorization: kCLAuthorizationStatusAuthorizedAlways];
         _activeManager = sharedInstance;
+        
     });
     
     return sharedInstance;
@@ -203,8 +204,8 @@ QwasiLocationManager* _activeManager = nil;
     
     [self emit: @"location", _lastLocation];
     
-    if (!_deferred) {
-        
+    if (!_deferred && (_authStatus == kCLAuthorizationStatusAuthorizedAlways) ){
+
         [_manager allowDeferredLocationUpdatesUntilTraveled: _updateDistance timeout: _updateInterval];
         
         _deferred = YES;
