@@ -16,49 +16,6 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
-
-    //Example for overriding debug sandbox
-    //[QwasiNotificationManager shared].sandbox = YES;
-    
-    // Get our device token from the defaults
-    NSString* deviceToken = [[NSUserDefaults standardUserDefaults] valueForKey: DEVICE_TOKEN_KEY];
-    
-    // Register the device with Qwasi
-    [[Qwasi shared] registerDevice: deviceToken withUserToken: USER_TOKEN success: ^(NSString *deviceToken) {
-        
-        // We need to store this for later as this is our unique device identifier
-        [[NSUserDefaults standardUserDefaults] setValue: deviceToken forKey: DEVICE_TOKEN_KEY];
-        
-        // Enable push services
-        [Qwasi shared].pushEnabled = YES;
-        
-        // The default is for foreground location only, set the location manager to get background updates
-        // [Qwasi shared].locationManager = [QwasiLocationManager backgroundManager];
-        [Qwasi shared].locationEnabled = YES;
-        
-        /*QwasiMessage* welcome = [[QwasiMessage alloc] initWithAlert: @"You have a new message" withPayload: @"Test Message" withPayloadType: @"text/plain" withTags: nil];
-        
-        // Send ourselves a test message
-        [[Qwasi shared] sendMessage: welcome toUserToken: USER_TOKEN];
-        
-        [[Qwasi shared] setDeviceValue: @"rodriguise" forKey: @"user.displayname" success:^{
-            [[Qwasi shared] deviceValueForKey: @"user.displayname" success:^(id value) {
-                NSLog(@"%@", value);
-            } failure:^(NSError *err) {
-                
-            }];
-        } failure:^(NSError *err) {
-            
-        }];
-        
-        [[Qwasi shared] subscribeToChannel: @"SomeChannel" success:^{
-            NSLog(@"Did it: %@", [Qwasi shared].channels);
-            [[Qwasi shared] unsubscribeFromChannel: @"SomeChannel"];
-        } failure:^(NSError *err) {
-            
-        }];*/
-    }];
-    
     [[Qwasi shared] on: @"error" listener: ^(NSError* error) {
         // Handle Errors here (see QwasiError.h)
         if (error.domain == kQwasiErrorDomain) {
@@ -118,6 +75,48 @@
                 break;
         }
 
+    }];
+    
+    //Example for overriding debug sandbox
+    //[QwasiNotificationManager shared].sandbox = YES;
+    
+    // Get our device token from the defaults
+    NSString* deviceToken = [[NSUserDefaults standardUserDefaults] valueForKey: DEVICE_TOKEN_KEY];
+    
+    // Register the device with Qwasi
+    [[Qwasi shared] registerDevice: deviceToken withUserToken: USER_TOKEN success: ^(NSString *deviceToken) {
+        
+        // We need to store this for later as this is our unique device identifier
+        [[NSUserDefaults standardUserDefaults] setValue: deviceToken forKey: DEVICE_TOKEN_KEY];
+        
+        // Enable push services
+        [Qwasi shared].pushEnabled = YES;
+        
+        // The default is for foreground location only, set the location manager to get background updates
+        // [Qwasi shared].locationManager = [QwasiLocationManager backgroundManager];
+        [Qwasi shared].locationEnabled = YES;
+        
+        /*QwasiMessage* welcome = [[QwasiMessage alloc] initWithAlert: @"You have a new message" withPayload: @"Test Message" withPayloadType: @"text/plain" withTags: nil];
+         
+         // Send ourselves a test message
+         [[Qwasi shared] sendMessage: welcome toUserToken: USER_TOKEN];
+         
+         [[Qwasi shared] setDeviceValue: @"rodriguise" forKey: @"user.displayname" success:^{
+         [[Qwasi shared] deviceValueForKey: @"user.displayname" success:^(id value) {
+         NSLog(@"%@", value);
+         } failure:^(NSError *err) {
+         
+         }];
+         } failure:^(NSError *err) {
+         
+         }];
+         
+         [[Qwasi shared] subscribeToChannel: @"SomeChannel" success:^{
+         NSLog(@"Did it: %@", [Qwasi shared].channels);
+         [[Qwasi shared] unsubscribeFromChannel: @"SomeChannel"];
+         } failure:^(NSError *err) {
+         
+         }];*/
     }];
 
     return YES;
