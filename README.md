@@ -16,7 +16,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 Qwasi is available from [CocoaPods](http://cocoapods.org/). To install
 it, simply add the following lines to your Podfile:
 
-```ruby
+```
 
 pod 'Qwasi', '~>2.1.17'
 ```
@@ -205,6 +205,21 @@ Example:
 ###### SDK Event - "pushToken"
 ###### SDK Error - `QwasiErrorPushRegistrationFailed`
 ###### API Method - `device.set_push_token`
+
+### APS Server Override
+Development (Debug) build applications will acquire aps sandbox push tokens than only be used with Apple's sandbox push gateway. Likewise production (Release) builds will by default acquire a production push token. This behavior can be overridden the application provisioning profile with something like this in the profile:
+
+```
+<key>aps-environment</key>
+<string>development</string>
+```
+Editing this profile is not supported and outside the scope of this document.
+
+The Qwasi Notification Manager will attempt to detect the mode of operation based on the DEBUG preprocessor header. To override this you need to manually set this flag before the initial device register, which will force the servers used by the Qwasi platform to deliver the notifications.
+
+```objectivec
+[QwasNotificationManager shared].sandbox = YES; // or NO to force production
+```
 
 ### Background Fetch
 If the user does not permit push notifications, or if the device does not have network access some notification could be missed. If your app has the backgroud fetch permission, you will still continue to get notification periodically, even if push is disabled. The library will simluate a push by fetching an unread message and creating a UILocalNotification.

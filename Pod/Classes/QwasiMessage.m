@@ -218,4 +218,8 @@
     
     return rval;
 }
+
+- (BOOL)valid {
+    return YES;
+}
 @end
