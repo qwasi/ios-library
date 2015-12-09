@@ -218,7 +218,7 @@ Editing this profile is not supported and outside the scope of this document.
 The Qwasi Notification Manager will attempt to detect the mode of operation based on the DEBUG preprocessor header. To override this you need to manually set this flag before the initial device register, which will force the servers used by the Qwasi platform to deliver the notifications.
 
 ```objectivec
-[QwasNotificationManager shared].sandbox = YES; // or NO to force production
+[QwasiNotificationManager shared].sandbox = YES; // or NO to force production
 ```
 
 ### Background Fetch
