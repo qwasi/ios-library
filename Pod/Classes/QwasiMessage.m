@@ -33,7 +33,8 @@
         _payloadSHA =[aDecoder decodeObjectForKey: @"payload_sha"];
         _tags = [aDecoder decodeObjectForKey: @"tags"];
         _selected = [aDecoder decodeBoolForKey: @"selected"];
-                     
+        _fetched = [aDecoder decodeBoolForKey: @"fetched"];
+        
         _encodedPayload = [aDecoder decodeObjectForKey: @"encodedPayload"];
         
         _payload = [QwasiMessage decodePayload: _encodedPayload withSHA: _payloadSHA withType: _payloadType];
@@ -112,7 +113,8 @@
     [aCoder encodeObject: _payloadSHA forKey: @"payload_sha"];
     [aCoder encodeObject: _tags forKey: @"tags"];
     [aCoder encodeObject: _encodedPayload forKey: @"encodedPayload"];
-    [aCoder encodeBool: YES forKey: @"selected"];
+    [aCoder encodeBool: _fetched forKey: @"fetched"];
+    [aCoder encodeBool: _selected forKey: @"selected"];
 }
 
 - (BOOL)silent {
