@@ -23,6 +23,7 @@
 @property (nonatomic,readonly) BOOL selected;
 @property (nonatomic,readonly) BOOL fetched;
 @property (nonatomic,readonly) BOOL valid;
+@property (nonatomic,readonly) BOOL cached;
 
 + (instancetype)messageWithData:(NSDictionary*)data;
 
