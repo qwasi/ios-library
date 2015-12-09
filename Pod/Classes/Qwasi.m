@@ -321,11 +321,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     NSMutableDictionary* info = [[NSMutableDictionary alloc] init];
     
     NSDictionary* deviceInfo = @{
-#if DEBUG
-                           @"debug": [NSNumber numberWithBool: YES],
-#else   
-                           @"debug": [NSNumber numberWithBool: NO],
-#endif
+                           @"debug": [NSNumber numberWithBool: [QwasiNotificationManager shared].sandbox],
                            @"version": [UIDevice currentDevice].systemVersion,
                            @"system": [UIDevice currentDevice].systemName,
                            @"model": [GBDeviceInfo deviceInfo].modelString,

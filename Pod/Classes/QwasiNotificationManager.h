@@ -11,6 +11,7 @@
 
 @interface QwasiNotificationManager : EventEmitter
 @property (nonatomic,readonly)NSString* pushToken;
+@property (nonatomic, readwrite)BOOL sandbox;
 
 + (instancetype)shared;
 

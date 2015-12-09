@@ -38,7 +38,11 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
 
 - (id)init {
     if (self = [super init]) {
-        
+#if DEBUG
+        _sandbox = YES;
+#else
+        _sandbox = NO;
+#endif
     }
     return self;
 }
