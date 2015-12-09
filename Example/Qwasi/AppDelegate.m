@@ -16,6 +16,9 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+
+    //Example for overriding debug sandbox
+    //[QwasiNotificationManager shared].sandbox = YES;
     
     // Get our device token from the defaults
     NSString* deviceToken = [[NSUserDefaults standardUserDefaults] valueForKey: DEVICE_TOKEN_KEY];
