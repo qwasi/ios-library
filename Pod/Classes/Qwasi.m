@@ -477,6 +477,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                     NSString* appId = qwasi[2];
                     
                     if (appId && [appId isEqualToString: _config.application]) {
+                        
                         [self fetchMessageForNotification: userInfo success:^(QwasiMessage *message) {
                             
                             BOOL filtered = NO;
@@ -502,6 +503,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                             err = [QwasiError messageFetchFailed: err];
                             
                             [self emit: @"error", err];
+                            
                         }];
                     }
                 }
@@ -606,6 +608,9 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                 NSData* cachedMessage = [_messageCache objectForKey: msgId];
                 
                 if (!cachedMessage) {
+                    
+                    UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler: nil];
+                    
                     [_client invokeMethod: @"message.fetch"
                            withParameters: @{ @"device": _deviceToken,
                                               @"id": msgId,
@@ -616,6 +621,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                       [_messageCache setObject: [NSKeyedArchiver archivedDataWithRootObject: message] forKey: message.messageId];
                                     
                                       if (success) success(message);
+                                      
+                                      if (bgTask != UIBackgroundTaskInvalid) {
+                                          [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                                      }
                                                            
                                   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                       
@@ -639,6 +648,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                       }
                                       
                                       if (failure) failure(error);
+                                      
+                                      if (bgTask != UIBackgroundTaskInvalid) {
+                                          [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                                      }
 
                                   }];
                 }
@@ -691,6 +704,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                    failure:(void(^)(NSError* err))failure {
     if (_registered) {
         
+        UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler: nil];
+        
         [_client invokeMethod: @"message.poll"
                withParameters: @{ @"device": _deviceToken,
                                   @"options": @{ @"fetch": [NSNumber numberWithBool: YES] } }
@@ -701,6 +716,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           [_messageCache setObject: [NSKeyedArchiver archivedDataWithRootObject: message] forKey: message.messageId];
                           
                           if (success) success(message);
+                          
+                          if (bgTask != UIBackgroundTaskInvalid) {
+                              [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                          }
                           
                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                           
@@ -724,6 +743,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           }
                           
                           if (failure) failure(error);
+                          
+                          if (bgTask != UIBackgroundTaskInvalid) {
+                              [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                          }
                       }];
 
     }
@@ -774,6 +797,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     
     if (_registered) {
         
+        UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler: nil];
+        
         [_client invokeMethod: @"event.post"
                withParameters: @{ @"device": _deviceToken,
                                   @"type": event,
@@ -783,6 +808,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           
                           if (success) success();
                           
+                          if (bgTask != UIBackgroundTaskInvalid) {
+                              [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                          }
+                          
                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                           
                           error = [QwasiError postEvent: event failedWithReason: error];
@@ -790,6 +819,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           if (failure) failure(error);
                           
                           [self emit: @"error", error];
+                          
+                          if (bgTask != UIBackgroundTaskInvalid) {
+                              [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                          }
                       }];
         
     }
@@ -808,6 +841,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                    success:(void(^)(NSArray* locations))success
                    failure:(void(^)(NSError* err))failure {
     if (_registered) {
+        
+        UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler: nil];
         
         [_client invokeMethod: @"location.fetch"
                withParameters: @{ @"near": @{ @"lng": [NSNumber numberWithDouble: location.coordinate.longitude],
@@ -841,6 +876,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                               success(locations);
                           }
                           
+                          if (bgTask != UIBackgroundTaskInvalid) {
+                              [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                          }
+                          
                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                           
                           error = [QwasiError locationFetchFailed: error];
@@ -849,6 +888,9 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           
                           [self emit: @"error", error];
                           
+                          if (bgTask != UIBackgroundTaskInvalid) {
+                              [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                          }
                       }];
         
     }

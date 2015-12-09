@@ -25,6 +25,7 @@
 
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super init]) {
+        _cached = YES;
         _messageId = [aDecoder decodeObjectForKey: @"id"];
         _application = [aDecoder decodeObjectForKey: @"application"];
         _alert = [aDecoder decodeObjectForKey: @"text"];
@@ -45,6 +46,7 @@
 - (id)initWithData:(NSDictionary*)data {
     
     if (self = [super init]) {
+        _cached = NO;
         _messageId = [data objectForKey: @"id"];
         _application = [data valueForKeyPath: @"application"];
         _alert = [data objectForKey: @"text"];
