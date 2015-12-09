@@ -103,7 +103,9 @@ Example:
 	qwasi.config = config;
 ```
 ## Event Emitters
-The Qwasi libary uses nodejs like emitters to emit events. You can listen for these events by registering a listener using one of the registation methods.
+The Qwasi libary uses nodejs like emitters to emit events. You can listen for these events by registering a listener using one of the registation methods. 
+
+**Note: It is important that event handlers are registered before the device registration or there maybe a race condition (i.e. events are emitted before the handlers are created***
 
 ```objectivec
 - (void)on:(id)event listener:(id)listener;
@@ -111,8 +113,21 @@ The Qwasi libary uses nodejs like emitters to emit events. You can listen for th
 - (void)on:(id)event selector:(SEL)selector target:(__weak id)target;
 - (void)once:(id)event selector:(SEL)selector target:(__weak id)target;
 ```
+### Handling Incoming Messages
+You receive message via the `message` event for your qwasi instance.
 
-## Error Handling `QwasiError`
+Example:
+
+```objectivec
+	[qwasi on: @"message" listener: ^(QwasiMessage* message) {
+			// Do as you will with the message
+	}];	
+```
+###### SDK Event - "message"
+###### SDK Error - `QwasiErrorMessageFetchFailed`
+###### API Method - N/A
+
+### Error Handling `QwasiError`
 Some methods will have a failure callback parameter, but all methods will emit errors via the `Qwasi` instance. You can register a default error handler on your instance and process errors as needed.
 
 Example:
@@ -252,20 +267,6 @@ This method will not generate a notification.
 ###### SDK Event - "message" (optional)
 ###### SDK Error - `QwasiErrorMessageFetchFailed`
 ###### API Method - `message.poll`
-
-### Handling Incoming Messages
-You receive message via the `message` event for your qwasi instance.
-
-Example:
-
-```objectivec
-	[qwasi on: @"message" listener: ^(QwasiMessage* message) {
-			// Do as you will with the message
-	}];	
-```
-###### SDK Event - "message"
-###### SDK Error - `QwasiErrorMessageFetchFailed`
-###### API Method - N/A
 
 ### Tag based callbacks
 The `qwasi` instance will emit special events for tags contained in a message, these can be used to filter callbacks based on special tags.
