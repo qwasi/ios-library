@@ -14,10 +14,6 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
 @implementation UIApplication (QwasiAppManager)
 + (void)load {
     [self swizzleSelector: @selector(setDelegate:) toSelector: @selector(_setDelegate:) forClass: [self class]];
-    
-    [[NSNotificationCenter defaultCenter] addObserver: [QwasiAppManager shared]
-                                             selector: @selector(didFinishLaunching:)
-                                                 name: UIApplicationDidFinishLaunchingNotification object:nil];
 }
 
 - (void)_setDelegate:(id)delegate {
@@ -35,6 +31,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     
     dispatch_once(&once, ^{
         sharedInstance = [[QwasiAppManager alloc] init];
+        
+        [[NSNotificationCenter defaultCenter] addObserver: sharedInstance
+                                                 selector: @selector(didFinishLaunching:)
+                                                     name: UIApplicationDidFinishLaunchingNotification object:nil];
     });
     
     return sharedInstance;

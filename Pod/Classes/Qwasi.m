@@ -89,7 +89,6 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
             [self tryPostEvent: kEventApplicationState withData: @{ @"state": @"open" }];
         }];
         
-        
         [[QwasiAppManager shared] on: @"willTerminate" listener: ^() {
             
             [self tryPostEvent: kEventApplicationState withData: @{ @"state": @"exit" }];
