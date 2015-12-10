@@ -38,7 +38,9 @@
         
         _encodedPayload = [aDecoder decodeObjectForKey: @"encodedPayload"];
         
-        _payload = [QwasiMessage decodePayload: _encodedPayload withSHA: _payloadSHA withType: _payloadType];
+        if (_encodedPayload) {
+            _payload = [QwasiMessage decodePayload: _encodedPayload withSHA: _payloadSHA withType: _payloadType];
+        }
     }
     return self;
 }
@@ -75,7 +77,9 @@
         // decode the payload
         _encodedPayload = [data objectForKey: @"payload"];
         
-        _payload = [QwasiMessage decodePayload: _encodedPayload withSHA: _payloadSHA withType: _payloadType];
+        if (_encodedPayload) {
+            _payload = [QwasiMessage decodePayload: _encodedPayload withSHA: _payloadSHA withType: _payloadType];
+        }
     }
     
     return self;
