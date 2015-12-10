@@ -14,6 +14,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
 @implementation UIApplication (QwasiAppManager)
 + (void)load {
     [self swizzleSelector: @selector(setDelegate:) toSelector: @selector(_setDelegate:) forClass: [self class]];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: [QwasiAppManager shared]
+                                             selector: @selector(didFinishLaunching:)
+                                                 name: UIApplicationDidFinishLaunchingNotification object:nil];
 }
 
 - (void)_setDelegate:(id)delegate {
@@ -48,6 +52,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     UIApplication* application = [UIApplication sharedApplication];
     NSObject* appDelegate = application.delegate;
     
+    [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willTerminate:) name:UIApplicationWillTerminateNotification object:nil];
+    
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(willEnterForegroundNotification:) name:UIApplicationWillEnterForegroundNotification object:nil];
     
     [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(didEnterBackgroundNotification:) name:UIApplicationDidEnterBackgroundNotification object:nil];
@@ -67,6 +73,14 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
              }
          }];
      }];
+}
+
+- (void)didFinishLaunching:(NSNotification*)note {
+    [self emit: @"didFinishLaunching"];
+}
+
+- (void)willTerminate:(NSNotification*)note {
+    [self emit: @"willTerminate"];
 }
 
 - (void)willEnterForegroundNotification:(NSNotification*)note {

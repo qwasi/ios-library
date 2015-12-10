@@ -22,7 +22,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     
     [[NSNotificationCenter defaultCenter] addObserver: [QwasiNotificationManager shared]
                                              selector :@selector(processLaunchNotification:)
-                                                 name: @"UIApplicationDidFinishLaunchingNotification" object:nil];
+                                                 name: UIApplicationDidFinishLaunchingNotification object:nil];
 }
 
 + (instancetype)shared {
