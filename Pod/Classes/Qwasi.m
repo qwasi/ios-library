@@ -41,6 +41,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     dispatch_once_t _pushOnce;
     
     NSMutableArray* _channels;
+    
+    BOOL _terminated;
 }
     
 + (instancetype)shared {
@@ -79,7 +81,21 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
         _userToken = @"";
         
+        _terminated = NO;
+        
         _filteredTags = [[NSMutableArray alloc] init];
+        
+        [[QwasiAppManager shared] on: @"didFinishLaunching" listener: ^() {
+            [self tryPostEvent: kEventApplicationState withData: @{ @"state": @"open" }];
+        }];
+        
+        
+        [[QwasiAppManager shared] on: @"willTerminate" listener: ^() {
+            
+            [self tryPostEvent: kEventApplicationState withData: @{ @"state": @"exit" }];
+            
+            [NSThread sleepForTimeInterval:.5];
+        }];
         
         [[QwasiAppManager shared] on: @"willEnterForeground" listener: ^() {
             [self tryPostEvent: kEventApplicationState withData: @{ @"state": @"foreground" }];
@@ -791,6 +807,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
           success:(void(^)(void))success
           failure:(void(^)(NSError* err))failure {
     
+    static int backlog = 0;
+    
     if (data == nil) {
         data = @{};
     }
@@ -827,13 +845,25 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
     }
     else {
-        NSError* error = [QwasiError postEvent: event failedWithReason: [QwasiError deviceNotRegistered]];
+        backlog++;
         
-        if (failure) {
-            failure(error);
+        if (backlog > 10) {
+            NSError* error = [QwasiError postEvent: event failedWithReason: [QwasiError deviceNotRegistered]];
+            
+            if (failure) {
+                failure(error);
+            }
+            
+            [self emit: @"error", error];
         }
-        
-        [self emit: @"error", error];
+        else {
+            [self once: @"registered" listener: ^(NSString *deviceToken) {
+                
+                backlog--;
+                
+                [self postEvent: event withData: data retry: retry success: success failure: failure];
+            }];
+        }
     }
 }
 
