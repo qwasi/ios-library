@@ -170,13 +170,14 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
         if ([application respondsToSelector: @selector(registerUserNotificationSettings:)]) {
             // ios 8+
+            UIUserNotificationType types = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
             
-            [application registerUserNotificationSettings: [UIUserNotificationSettings settingsForTypes: UIUserNotificationTypeAlert categories: nil]];
+            [application registerUserNotificationSettings: [UIUserNotificationSettings settingsForTypes: types categories: nil]];
         }
 #if __IPHONE_OS_VERSION_MAX_ALLOWED < 80000
         else {
             // ios 7.1+
-            [application registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert];
+            [application registerForRemoteNotificationTypes: UIRemoteNotificationTypeAlert | UIRemoteNotificationTypeBadge | UIRemoteNotificationTypeSound];
         }
 #endif
     }
