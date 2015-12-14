@@ -25,7 +25,7 @@ Pod::Spec.new do |s|
 
   s.source_files = 'Pod/**/*'
 
-  s.dependency 'AFNetworking'
+  s.dependency 'AFNetworking', '~>2.6.3'
   s.dependency 'GBDeviceInfo', '~> 3.5.1'
   s.dependency 'QSwizzle', '~> 0.2.0'
   s.dependency 'BlocksKit'
