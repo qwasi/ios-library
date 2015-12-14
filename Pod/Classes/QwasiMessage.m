@@ -33,7 +33,11 @@
         _payloadType = [aDecoder decodeObjectForKey: @"payload_type"];
         _payloadSHA =[aDecoder decodeObjectForKey: @"payload_sha"];
         _tags = [aDecoder decodeObjectForKey: @"tags"];
-        _selected = [aDecoder decodeBoolForKey: @"selected"];
+        
+        if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
+            _selected = YES;
+        }
+        
         _fetched = [aDecoder decodeBoolForKey: @"fetched"];
         
         _encodedPayload = [aDecoder decodeObjectForKey: @"encodedPayload"];
