@@ -58,7 +58,7 @@ module.exports = function(grunt) {
 		options: {
 		    patterns: [ {
 			match: /(IOSSDK-\d+)/g,
-			replacement: '[$1](https://jira.qwasi.com/browse/$1)'
+			replacement: '[$1](https://jira.qwasi.net/browse/$1)'
 		    }]
 		},
 		files: [
