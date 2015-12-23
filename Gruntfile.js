@@ -58,7 +58,7 @@ module.exports = function(grunt) {
 		options: {
 		    patterns: [ {
 			match: /(IOSSDK-\d+)/g,
-			replacement: '[$1](https://jira.qwasi.com/browse/$1)'
+			replacement: '[$1](https://jira.qwasi.net/browse/$1)'
 		    }]
 		},
 		files: [
@@ -106,8 +106,8 @@ module.exports = function(grunt) {
 	var header = util.format('\/\/ Version Header\n' + 
 				 '#define SHORT_VERSION @"%s"\n' +
 				 '#define BUILD_VERSION %d\n' +
-				 '#define VERSION_STRING @"%s-%s" \n'
-				 , semver.version, getBuildVersion(), semver.version, semver.release);
+				 '#define VERSION_STRING @"%s%s" \n'
+				 , semver.version, getBuildVersion(), semver.version, semver.release ? '-' + semver.release : '');
 	
 	fs.writeFileSync('Pod/Classes/Version.h', header);
 	
