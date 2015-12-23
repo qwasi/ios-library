@@ -1,10 +1,30 @@
 //
 //  QwasiMessage.m
-//  Pods
 //
-//  Created by Robert Rodriguez on 6/3/15.
+// Copyright (c) 2015-2016, Qwasi Inc (http://www.qwasi.com/)
+// All rights reserved.
 //
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+//    * Redistributions of source code must retain the above copyright
+//      notice, this list of conditions and the following disclaimer.
+//    * Redistributions in binary form must reproduce the above copyright
+//      notice, this list of conditions and the following disclaimer in the
+//      documentation and/or other materials provided with the distribution.
+//    * Neither the name of Qwasi nor the
+//      names of its contributors may be used to endorse or promote products
+//      derived from this software without specific prior written permission.
 //
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL QWASI BE LIABLE FOR ANY
+// DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "QwasiMessage.h"
 #import <CommonCrypto/CommonDigest.h>
@@ -15,6 +35,11 @@
 #define GregorianCalendar NSGregorianCalendar
 #endif
 
+@interface QwasiMessage (Private)
+@property (nonatomic,readwrite) BOOL selected;
+@property (nonatomic,readwrite) BOOL background;
+@end
+
 @implementation QwasiMessage {
     NSString* _encodedPayload;
 }
@@ -23,8 +48,25 @@
     return [[QwasiMessage alloc] initWithData: data];
 }
 
++ (instancetype)messageWithArchive:(NSData*)archive updateFlags:(BOOL)update {
+    QwasiMessage* msg = [NSKeyedUnarchiver unarchiveObjectWithData: archive];
+    
+    if (msg && update) {
+        if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
+            msg.selected = YES;
+        }
+        
+        if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
+            msg.background = YES;
+        }
+    }
+    
+    return msg;
+}
+
 - (id)initWithCoder:(NSCoder *)aDecoder {
     if (self = [super init]) {
+        _cached = YES;
         _messageId = [aDecoder decodeObjectForKey: @"id"];
         _application = [aDecoder decodeObjectForKey: @"application"];
         _alert = [aDecoder decodeObjectForKey: @"text"];
@@ -33,10 +75,14 @@
         _payloadSHA =[aDecoder decodeObjectForKey: @"payload_sha"];
         _tags = [aDecoder decodeObjectForKey: @"tags"];
         _selected = [aDecoder decodeBoolForKey: @"selected"];
-                     
+        _background = [aDecoder decodeBoolForKey: @"background"];
+        _fetched = [aDecoder decodeBoolForKey: @"fetched"];
+        
         _encodedPayload = [aDecoder decodeObjectForKey: @"encodedPayload"];
         
-        _payload = [QwasiMessage decodePayload: _encodedPayload withSHA: _payloadSHA withType: _payloadType];
+        if (_encodedPayload) {
+            _payload = [QwasiMessage decodePayload: _encodedPayload withSHA: _payloadSHA withType: _payloadType];
+        }
     }
     return self;
 }
@@ -44,12 +90,17 @@
 - (id)initWithData:(NSDictionary*)data {
     
     if (self = [super init]) {
+        _cached = NO;
         _messageId = [data objectForKey: @"id"];
         _application = [data valueForKeyPath: @"application"];
         _alert = [data objectForKey: @"text"];
         
         if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
             _selected = YES;
+        }
+        
+        if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
+            _background = YES;
         }
         
         NSDateFormatter* dateFormatter = [[NSDateFormatter alloc] init];
@@ -72,7 +123,9 @@
         // decode the payload
         _encodedPayload = [data objectForKey: @"payload"];
         
-        _payload = [QwasiMessage decodePayload: _encodedPayload withSHA: _payloadSHA withType: _payloadType];
+        if (_encodedPayload) {
+            _payload = [QwasiMessage decodePayload: _encodedPayload withSHA: _payloadSHA withType: _payloadType];
+        }
     }
     
     return self;
@@ -90,6 +143,14 @@
         _tags = [[NSArray alloc] initWithArray: tags];
         _timestamp = [[NSDate dateWithTimeIntervalSince1970:0] timeIntervalSince1970];
         
+        if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
+            _selected = YES;
+        }
+        
+        if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
+            _background = YES;
+        }
+
         if (_payloadType == nil) {
             if ([NSJSONSerialization isValidJSONObject: _payload]) {
                 _payloadType = @"application/json";
@@ -112,7 +173,9 @@
     [aCoder encodeObject: _payloadSHA forKey: @"payload_sha"];
     [aCoder encodeObject: _tags forKey: @"tags"];
     [aCoder encodeObject: _encodedPayload forKey: @"encodedPayload"];
-    [aCoder encodeBool: YES forKey: @"selected"];
+    [aCoder encodeBool: _fetched forKey: @"fetched"];
+    [aCoder encodeBool: _selected forKey: @"selected"];
+    [aCoder encodeBool: _background forKey: @"background"];
 }
 
 - (BOOL)silent {
@@ -217,5 +280,9 @@
     }
     
     return rval;
+}
+
+- (BOOL)valid {
+    return YES;
 }
 @end

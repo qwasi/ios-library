@@ -16,9 +16,9 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 Qwasi is available from [CocoaPods](http://cocoapods.org/). To install
 it, simply add the following lines to your Podfile:
 
-```ruby
+```
 
-pod 'Qwasi', '~>2.1.17'
+pod 'Qwasi', '~>2.1.18'
 ```
 ## License
 
@@ -103,7 +103,9 @@ Example:
 	qwasi.config = config;
 ```
 ## Event Emitters
-The Qwasi libary uses nodejs like emitters to emit events. You can listen for these events by registering a listener using one of the registation methods.
+The Qwasi libary uses nodejs like emitters to emit events. You can listen for these events by registering a listener using one of the registation methods. 
+
+**Note: It is important that event handlers are registered before the device registration or there maybe a race condition (i.e. events are emitted before the handlers are created***
 
 ```objectivec
 - (void)on:(id)event listener:(id)listener;
@@ -111,8 +113,21 @@ The Qwasi libary uses nodejs like emitters to emit events. You can listen for th
 - (void)on:(id)event selector:(SEL)selector target:(__weak id)target;
 - (void)once:(id)event selector:(SEL)selector target:(__weak id)target;
 ```
+### Handling Incoming Messages
+You receive message via the `message` event for your qwasi instance.
 
-## Error Handling `QwasiError`
+Example:
+
+```objectivec
+	[qwasi on: @"message" listener: ^(QwasiMessage* message) {
+			// Do as you will with the message
+	}];	
+```
+###### SDK Event - "message"
+###### SDK Error - `QwasiErrorMessageFetchFailed`
+###### API Method - N/A
+
+### Error Handling `QwasiError`
 Some methods will have a failure callback parameter, but all methods will emit errors via the `Qwasi` instance. You can register a default error handler on your instance and process errors as needed.
 
 Example:
@@ -206,6 +221,21 @@ Example:
 ###### SDK Error - `QwasiErrorPushRegistrationFailed`
 ###### API Method - `device.set_push_token`
 
+### APS Server Override
+Development (Debug) build applications will acquire aps sandbox push tokens than only be used with Apple's sandbox push gateway. Likewise production (Release) builds will by default acquire a production push token. This behavior can be overridden the application provisioning profile with something like this in the profile:
+
+```
+<key>aps-environment</key>
+<string>development</string>
+```
+Editing this profile is not supported and outside the scope of this document.
+
+The Qwasi Notification Manager will attempt to detect the mode of operation based on the DEBUG preprocessor header. To override this you need to manually set this flag before the initial device register, which will force the servers used by the Qwasi platform to deliver the notifications.
+
+```objectivec
+[QwasiNotificationManager shared].sandbox = YES; // or NO to force production
+```
+
 ### Background Fetch
 If the user does not permit push notifications, or if the device does not have network access some notification could be missed. If your app has the backgroud fetch permission, you will still continue to get notification periodically, even if push is disabled. The library will simluate a push by fetching an unread message and creating a UILocalNotification.
 
@@ -237,20 +267,6 @@ This method will not generate a notification.
 ###### SDK Event - "message" (optional)
 ###### SDK Error - `QwasiErrorMessageFetchFailed`
 ###### API Method - `message.poll`
-
-### Handling Incoming Messages
-You receive message via the `message` event for your qwasi instance.
-
-Example:
-
-```objectivec
-	[qwasi on: @"message" listener: ^(QwasiMessage* message) {
-			// Do as you will with the message
-	}];	
-```
-###### SDK Event - "message"
-###### SDK Error - `QwasiErrorMessageFetchFailed`
-###### API Method - N/A
 
 ### Tag based callbacks
 The `qwasi` instance will emit special events for tags contained in a message, these can be used to filter callbacks based on special tags.

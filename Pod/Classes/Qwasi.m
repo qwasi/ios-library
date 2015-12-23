@@ -1,10 +1,30 @@
 //
-//  Qwasi.m
-//  Pods
+// Qwasi.m
 //
-//  Created by Robert Rodriguez on 6/2/15.
+// Copyright (c) 2015-2016, Qwasi Inc (http://www.qwasi.com/)
+// All rights reserved.
 //
+// Redistribution and use in source and binary forms, with or without
+// modification, are permitted provided that the following conditions are met:
+//    * Redistributions of source code must retain the above copyright
+//      notice, this list of conditions and the following disclaimer.
+//    * Redistributions in binary form must reproduce the above copyright
+//      notice, this list of conditions and the following disclaimer in the
+//      documentation and/or other materials provided with the distribution.
+//    * Neither the name of Qwasi nor the
+//      names of its contributors may be used to endorse or promote products
+//      derived from this software without specific prior written permission.
 //
+// THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
+// ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+// WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+// DISCLAIMED. IN NO EVENT SHALL QWASI BE LIABLE FOR ANY
+// DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+// (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+// LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+// ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+// (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+// SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "Qwasi.h"
 #import "QwasiClient.h"
@@ -41,6 +61,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     dispatch_once_t _pushOnce;
     
     NSMutableArray* _channels;
+    
+    BOOL _terminated;
 }
     
 + (instancetype)shared {
@@ -79,7 +101,20 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
         _userToken = @"";
         
+        _terminated = NO;
+        
         _filteredTags = [[NSMutableArray alloc] init];
+        
+        [[QwasiAppManager shared] on: @"didFinishLaunching" listener: ^() {
+            [self tryPostEvent: kEventApplicationState withData: @{ @"state": @"open" }];
+        }];
+        
+        [[QwasiAppManager shared] on: @"willTerminate" listener: ^() {
+            
+            [self tryPostEvent: kEventApplicationState withData: @{ @"state": @"exit" }];
+            
+            [NSThread sleepForTimeInterval:.5];
+        }];
         
         [[QwasiAppManager shared] on: @"willEnterForeground" listener: ^() {
             [self tryPostEvent: kEventApplicationState withData: @{ @"state": @"foreground" }];
@@ -321,11 +356,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     NSMutableDictionary* info = [[NSMutableDictionary alloc] init];
     
     NSDictionary* deviceInfo = @{
-#if DEBUG
-                           @"debug": [NSNumber numberWithBool: YES],
-#else   
-                           @"debug": [NSNumber numberWithBool: NO],
-#endif
+                           @"debug": [NSNumber numberWithBool: [QwasiNotificationManager shared].sandbox],
                            @"version": [UIDevice currentDevice].systemVersion,
                            @"system": [UIDevice currentDevice].systemName,
                            @"model": [GBDeviceInfo deviceInfo].modelString,
@@ -481,6 +512,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                     NSString* appId = qwasi[2];
                     
                     if (appId && [appId isEqualToString: _config.application]) {
+                        
                         [self fetchMessageForNotification: userInfo success:^(QwasiMessage *message) {
                             
                             BOOL filtered = NO;
@@ -506,6 +538,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                             err = [QwasiError messageFetchFailed: err];
                             
                             [self emit: @"error", err];
+                            
                         }];
                     }
                 }
@@ -610,6 +643,9 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                 NSData* cachedMessage = [_messageCache objectForKey: msgId];
                 
                 if (!cachedMessage) {
+                    
+                    UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler: nil];
+                    
                     [_client invokeMethod: @"message.fetch"
                            withParameters: @{ @"device": _deviceToken,
                                               @"id": msgId,
@@ -620,6 +656,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                       [_messageCache setObject: [NSKeyedArchiver archivedDataWithRootObject: message] forKey: message.messageId];
                                     
                                       if (success) success(message);
+                                      
+                                      if (bgTask != UIBackgroundTaskInvalid) {
+                                          [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                                      }
                                                            
                                   } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                       
@@ -643,11 +683,15 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                       }
                                       
                                       if (failure) failure(error);
+                                      
+                                      if (bgTask != UIBackgroundTaskInvalid) {
+                                          [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                                      }
 
                                   }];
                 }
                 else {
-                    QwasiMessage* message = [NSKeyedUnarchiver unarchiveObjectWithData: cachedMessage];
+                    QwasiMessage* message = [QwasiMessage messageWithArchive: cachedMessage updateFlags: YES];
                     
                     if (success && message) success(message);
                 }
@@ -695,6 +739,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                    failure:(void(^)(NSError* err))failure {
     if (_registered) {
         
+        UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler: nil];
+        
         [_client invokeMethod: @"message.poll"
                withParameters: @{ @"device": _deviceToken,
                                   @"options": @{ @"fetch": [NSNumber numberWithBool: YES] } }
@@ -705,6 +751,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           [_messageCache setObject: [NSKeyedArchiver archivedDataWithRootObject: message] forKey: message.messageId];
                           
                           if (success) success(message);
+                          
+                          if (bgTask != UIBackgroundTaskInvalid) {
+                              [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                          }
                           
                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                           
@@ -728,6 +778,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           }
                           
                           if (failure) failure(error);
+                          
+                          if (bgTask != UIBackgroundTaskInvalid) {
+                              [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                          }
                       }];
 
     }
@@ -772,11 +826,15 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
           success:(void(^)(void))success
           failure:(void(^)(NSError* err))failure {
     
+    static int backlog = 0;
+    
     if (data == nil) {
         data = @{};
     }
     
     if (_registered) {
+        
+        UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler: nil];
         
         [_client invokeMethod: @"event.post"
                withParameters: @{ @"device": _deviceToken,
@@ -787,6 +845,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           
                           if (success) success();
                           
+                          if (bgTask != UIBackgroundTaskInvalid) {
+                              [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                          }
+                          
                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                           
                           error = [QwasiError postEvent: event failedWithReason: error];
@@ -794,17 +856,33 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           if (failure) failure(error);
                           
                           [self emit: @"error", error];
+                          
+                          if (bgTask != UIBackgroundTaskInvalid) {
+                              [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                          }
                       }];
         
     }
     else {
-        NSError* error = [QwasiError postEvent: event failedWithReason: [QwasiError deviceNotRegistered]];
+        backlog++;
         
-        if (failure) {
-            failure(error);
+        if (backlog > 10) {
+            NSError* error = [QwasiError postEvent: event failedWithReason: [QwasiError deviceNotRegistered]];
+            
+            if (failure) {
+                failure(error);
+            }
+            
+            [self emit: @"error", error];
         }
-        
-        [self emit: @"error", error];
+        else {
+            [self once: @"registered" listener: ^(NSString *deviceToken) {
+                
+                backlog--;
+                
+                [self postEvent: event withData: data retry: retry success: success failure: failure];
+            }];
+        }
     }
 }
 
@@ -812,6 +890,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                    success:(void(^)(NSArray* locations))success
                    failure:(void(^)(NSError* err))failure {
     if (_registered) {
+        
+        UIBackgroundTaskIdentifier bgTask = [[UIApplication sharedApplication] beginBackgroundTaskWithExpirationHandler: nil];
         
         [_client invokeMethod: @"location.fetch"
                withParameters: @{ @"near": @{ @"lng": [NSNumber numberWithDouble: location.coordinate.longitude],
@@ -845,6 +925,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                               success(locations);
                           }
                           
+                          if (bgTask != UIBackgroundTaskInvalid) {
+                              [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                          }
+                          
                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                           
                           error = [QwasiError locationFetchFailed: error];
@@ -853,6 +937,9 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           
                           [self emit: @"error", error];
                           
+                          if (bgTask != UIBackgroundTaskInvalid) {
+                              [[UIApplication sharedApplication] endBackgroundTask:bgTask];
+                          }
                       }];
         
     }
