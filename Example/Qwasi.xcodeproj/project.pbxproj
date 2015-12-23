@@ -24,6 +24,7 @@
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
 		D44005681B1E2367008B80B1 /* Qwasi.plist in Resources */ = {isa = PBXBuildFile; fileRef = D44005671B1E2367008B80B1 /* Qwasi.plist */; };
+		D493B9481C1F8EA8003A4E11 /* AppledocSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = D493B9471C1F8EA8003A4E11 /* AppledocSettings.plist */; };
 		D4B163711B2A15B300AE4EB0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B163701B2A15B300AE4EB0 /* AppDelegate.m */; };
 /* End PBXBuildFile section */
 
@@ -70,6 +71,7 @@
 		D440056A1B1F6B03008B80B1 /* Pods-AcmePush.debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-AcmePush.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AcmePush/Pods-AcmePush.debug.xcconfig"; sourceTree = "<group>"; };
 		D440056B1B1F6B03008B80B1 /* Pods-AcmePush.release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-AcmePush.release.xcconfig"; path = "Pods/Target Support Files/Pods-AcmePush/Pods-AcmePush.release.xcconfig"; sourceTree = "<group>"; };
 		D440058D1B2104A9008B80B1 /* AcmePush.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AcmePush.entitlements; sourceTree = "<group>"; };
+		D493B9471C1F8EA8003A4E11 /* AppledocSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AppledocSettings.plist; sourceTree = "<group>"; };
 		D4B163701B2A15B300AE4EB0 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		F720FC39F2B85B089FF4B6A5 /* Qwasi.podspec */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = Qwasi.podspec; path = ../Qwasi.podspec; sourceTree = "<group>"; };
 		FCA453E192B2E31FB97CAFDB /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
@@ -157,6 +159,7 @@
 		6003F594195388D20070C39A /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				D493B9471C1F8EA8003A4E11 /* AppledocSettings.plist */,
 				6003F59F195388D20070C39A /* Main_iPhone.storyboard */,
 				6003F5A2195388D20070C39A /* Main_iPad.storyboard */,
 				6003F595195388D20070C39A /* Qwasi-Info.plist */,
@@ -301,6 +304,7 @@
 				6003F5A4195388D20070C39A /* Main_iPad.storyboard in Resources */,
 				6003F5A9195388D20070C39A /* Images.xcassets in Resources */,
 				D44005681B1E2367008B80B1 /* Qwasi.plist in Resources */,
+				D493B9481C1F8EA8003A4E11 /* AppledocSettings.plist in Resources */,
 				6003F5A1195388D20070C39A /* Main_iPhone.storyboard in Resources */,
 				6003F598195388D20070C39A /* InfoPlist.strings in Resources */,
 			);

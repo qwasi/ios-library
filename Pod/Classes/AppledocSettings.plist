@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" 
+    "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>--project-name</key>
+    <string>Qwasi iOS Library</string>
+    <key>--project-company</key>
+    <string>Qwasi</string>
+    <key>--company-id</key>
+    <string>com.qwasi</string>
+
+    <key>--output</key>
+    <string>docs</string>
+
+    <key>--create-docset</key>
+    <false/>
+
+    <key>--ignore</key>
+    <array>
+	<string>*.m</string>
+        <string>AFJSONRPCClient</string>
+	<string>Emitter</string>
+    </array>
+
+    <key>--include</key>
+    <array>
+        <string>Pod/Classes/</string>
+    </array>
+
+</dict>
+</plist>
