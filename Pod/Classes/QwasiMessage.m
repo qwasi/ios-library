@@ -51,14 +51,8 @@
 + (instancetype)messageWithArchive:(NSData*)archive updateFlags:(BOOL)update {
     QwasiMessage* msg = [NSKeyedUnarchiver unarchiveObjectWithData: archive];
     
-    if (msg && update) {
-        if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
-            msg.selected = YES;
-        }
-        
-        if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
-            msg.background = YES;
-        }
+    if (update) {
+        [msg updateStateFlags];
     }
     
     return msg;
@@ -180,6 +174,17 @@
 
 - (BOOL)silent {
     return (_alert == nil);
+}
+
+- (void)updateStateFlags {
+
+    if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
+        _selected = YES;
+    }
+    
+    if ([UIApplication sharedApplication].applicationState != UIApplicationStateActive) {
+        _background = YES;
+    }
 }
 
 - (NSString*)description {
