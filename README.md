@@ -1,5 +1,7 @@
 # Qwasi
 
+[![Build Status](https://travis-ci.org/qwasi/ios-library.svg?branch=develop)](https://travis-ci.org/qwasi/ios-library)
+
 The Qwasi `ios-library` provides a convenient method for accessing the Qwasi JSON-RPC API.
 
 ## Usage
