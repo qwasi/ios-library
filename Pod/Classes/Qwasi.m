@@ -479,6 +479,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                   
                                   NSLog(@"Device %@ push token %@ set successfully.", _deviceToken, pushToken);
                                   
+                                  [self emit:@"pushRegistered", pushToken];
+                                  
                               } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                   
                                   _pushEnabled = NO;
