@@ -479,6 +479,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                   
                                   NSLog(@"Device %@ push token %@ set successfully.", _deviceToken, pushToken);
                                   
+                                  [self emit:@"pushRegistered", pushToken];
+                                  
                               } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                   
                                   _pushEnabled = NO;
@@ -517,15 +519,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                             
                             BOOL filtered = NO;
                             
-                            for (NSString* tag in message.tags) {
-                                
-                                if ([_filteredTags indexOfObject: tag] != NSNotFound) {
-                                    
-                                    [self emit: [NSString stringWithFormat: @"tag#%@", tag], message];
-                                    
-                                    filtered = YES;
-                                }
-                            }
+                            filtered = [self checkMessageTags: message];
                             
                             if (!filtered) {
                                 [self emit: @"message", message];
@@ -723,9 +717,16 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     if (_registered) {
         [self fetchUnreadMessage:^(QwasiMessage *message) {
             
-            [self emit: @"message", message];
+            BOOL filtered = NO;
             
-            [[QwasiNotificationManager shared] emit: @"message", message, self];
+            filtered = [self checkMessageTags: message];
+            
+            if( !filtered){
+                
+                [self emit: @"message", message];
+            
+                [[QwasiNotificationManager shared] emit: @"message", message, self];
+            }
             
             [self tryFetchUnreadMessages];
             
@@ -811,6 +812,23 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
 
 - (void)unfilterTag:(NSString*)tag {
     [_filteredTags removeObject: tag];
+}
+
+- (BOOL)checkMessageTags:(QwasiMessage*)message{
+    
+    BOOL filtered = NO;
+    
+    for (NSString* tag in message.tags) {
+        
+        if ([_filteredTags indexOfObject: tag] != NSNotFound) {
+            
+            [self emit: [NSString stringWithFormat: @"tag#%@", tag], message];
+            
+            filtered = YES;
+        }
+    }
+    
+    return filtered;
 }
 
 - (void)postEvent:(NSString*)event

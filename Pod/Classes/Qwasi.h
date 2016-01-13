@@ -191,6 +191,8 @@ extern NSString* const kEventLocationExit;
 - (void)filterTag:(NSString*)tag;
 - (void)unfilterTag:(NSString*)tag;
 
+- (BOOL)checkMessageTags:(QwasiMessage*)message;
+
 - (void)sendMessage:(QwasiMessage*)message
         toUserToken:(NSString*)userToken
             success:(void(^)())success
