@@ -9,7 +9,7 @@
 
 Pod::Spec.new do |s|
   s.name             = "Qwasi"
-  s.version          = "2.1.20-dev.184"
+  s.version          = "2.1.20-dev.185"
   s.summary          = "Qwasi iOS Library"
   s.homepage         = "https://github.com/qwasi/ios-library"
   s.license          = 'MIT'
