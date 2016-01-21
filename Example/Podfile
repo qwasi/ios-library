@@ -1,10 +1,10 @@
 source 'https://github.com/CocoaPods/Specs.git'
 
-target 'AcmePush', :exclusive => true do
+target 'AcmePush' do
   pod "Qwasi", :path => "../"
 end
 
-target 'Qwasi_Tests', :exclusive => true do
+target 'Qwasi_Tests' do
   pod "Qwasi", :path => "../"
 
   pod 'Specta'

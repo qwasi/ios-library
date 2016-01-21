@@ -35,5 +35,5 @@
 
 + (instancetype)shared;
 
-- (void)registerForRemoteNotification;
+- (void)registerForRemoteNotifications;
 @end
