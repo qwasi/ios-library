@@ -63,6 +63,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
 #else
         _sandbox = NO;
 #endif
+        _pushToken = nil;
     }
     return self;
 }
@@ -74,7 +75,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     _launchNotification = userInfo[UIApplicationLaunchOptionsRemoteNotificationKey];
 }
 
-- (void)registerForRemoteNotification {
+- (void)registerForRemoteNotifications {
     
     // Emit the launch notification if we have one
     if (_launchNotification) {

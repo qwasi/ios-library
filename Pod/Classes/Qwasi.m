@@ -461,36 +461,75 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     }
 }
 
+- (void)setPushToken:(NSString*)pushToken
+             success:(void(^)(void))success
+             failure:(void(^)(NSError* err))failure {
+    
+    NSString* proto = @"push.apns";
+    
+    if (pushToken == nil || [pushToken isEqualToString:@""]) {
+        proto = @"push.poll";
+        pushToken = @"";
+    }
+    
+    if (_registered) {
+        [_client invokeMethod: @"device.register"
+               withParameters: @{ @"id": _deviceToken,
+                                  @"push": @{ @"proto": proto,
+                                              @"addr": pushToken } }
+                      success:^(AFHTTPRequestOperation *operation, id responseObject) {
+                          
+                          _pushEnabled = YES;
+                          
+                          if (success) success();
+                          
+                          NSLog(@"Device %@ push token %@ set successfully.", _deviceToken, pushToken);
+                          
+                          [self emit:@"pushRegistered", pushToken];
+                          
+                      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+                          
+                          _pushEnabled = NO;
+                          
+                          error = [QwasiError pushRegistrationFailed: error];
+                          
+                          if (failure) failure(error);
+                          
+                          NSLog(@"Push registration failed: %@.", error);
+                      }];
+
+    }
+    else {
+        NSError* error = [QwasiError pushRegistrationFailed: [QwasiError deviceNotRegistered]];
+        
+        if (failure) {
+            failure(error);
+        }
+        
+        [self emit: @"error", error];
+    }
+}
+
 - (void)registerForNotifications:(void(^)(NSString* pushToken))success
                          failure:(void(^)(NSError* err))failure {
     if (_registered) {
-        
+        // Handle the case where notification manager has already registered for a push token
+        if ([QwasiNotificationManager shared].pushToken != nil) {
+            NSString* pushToken = [QwasiNotificationManager shared].pushToken;
+            
+            [self setPushToken: pushToken success:^{
+                if (success) success(pushToken);
+            } failure:^(NSError *err) {
+                if (failure) failure(err);
+            }];
+        }
         dispatch_once(&_pushOnce, ^{
             [[QwasiNotificationManager shared] once: @"pushToken" listener: ^(NSString* pushToken) {
-                [_client invokeMethod: @"device.register"
-                       withParameters: @{ @"id": _deviceToken,
-                                          @"push": @{ @"proto": @"push.apns",
-                                                      @"addr": pushToken } }
-                              success:^(AFHTTPRequestOperation *operation, id responseObject) {
-                                  
-                                  _pushEnabled = YES;
-                                  
-                                  if (success) success(pushToken);
-                                  
-                                  NSLog(@"Device %@ push token %@ set successfully.", _deviceToken, pushToken);
-                                  
-                                  [self emit:@"pushRegistered", pushToken];
-                                  
-                              } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
-                                  
-                                  _pushEnabled = NO;
-                                  
-                                  error = [QwasiError pushRegistrationFailed: error];
-                                  
-                                  if (failure) failure(error);
-                                  
-                                  NSLog(@"Push registration failed: %@.", error);
-                              }];
+                [self setPushToken: pushToken success:^{
+                    if (success) success(pushToken);
+                } failure:^(NSError *err) {
+                    if (failure) failure(err);
+                }];
             }];
             
             [[QwasiNotificationManager shared] once: @"error" listener: ^(NSError* error) {
@@ -566,7 +605,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                 }];
             }];
             
-            [[QwasiNotificationManager shared] registerForRemoteNotification];
+            [[QwasiNotificationManager shared] registerForRemoteNotifications];
             
         });
     }
@@ -585,20 +624,15 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                            failure:(void(^)(NSError* err))failure {
     if (_registered) {
         
-        [_client invokeMethod: @"device.register"
-               withParameters: @{ @"id": _deviceToken,
-                                  @"push": @{ @"proto": @"push.poll",
-                                              @"addr": @"" } }
-                      success:^(AFHTTPRequestOperation *operation, id responseObject)
-        {
-                          
+        [self setPushToken: nil success:^{
+            
           _pushEnabled = NO;
           
           if (success) success();
           
           NSLog(@"Device unregistered for remote notifications.");
           
-      } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+      } failure:^(NSError *error) {
           
           error = [QwasiError pushRegistrationFailed: error];
           

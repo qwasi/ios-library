@@ -3,10 +3,10 @@
 <plist version="1.0">
 <dict>
 	<key>apiUrl</key>
-	<string>https://beta.qwasi.com/rpc</string>
+	<string></string>
 	<key>apiKey</key>
-	<string>7e459638914ae77e9ee2b0037e1f73f1</string>
+	<string></string>
 	<key>appId</key>
-	<string>552f5e6e3e73ca104b46191d</string>
+	<string></string>
 </dict>
 </plist>

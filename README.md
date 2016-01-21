@@ -20,7 +20,7 @@ it, simply add the following lines to your Podfile:
 
 ```
 
-pod 'Qwasi', '~>2.1.18'
+pod 'Qwasi', '~>2.1.20'
 ```
 ## License
 
@@ -192,6 +192,8 @@ If the device has not been registered the user token will be updated when regist
 ###### API Method - `device.set_user_token`
 
 ### Unregistration
+Unregistering a device results in the record being fully removed from the Qwasi databases. This is for privacy compliance, etc if the application requires it. Devices should be unregistered execept under these circumstances.
+
 If necessary a device can be unregistered using:
 
 ```objectivec
@@ -213,11 +215,20 @@ Example:
 ```objectivec
 	qwasi.pushEnabled = YES;
 
-	// if you want notification and the pushToken for youself
+	// if you want notification for when the push registration completed
+	// this event can occur more than once in an app life-cycle
+	[qwasi once: @"pushRegistered" listener: ^(NSString* pushToken) {
+		// do with the token as you will...	
+	}];
+
+	// if you just want notification and the pushToken for youself
+	// this even will only occur once per app life-cycle
 	[qwasi once: @"pushToken" listener: ^(NSString* pushToken) {
 		// do with the token as you will...	
 	}];
 ```
+
+**Note**: The `pushEnabled` flag is asynchrously set, so if you need to use the value, you must do so after you receive one of the completion events in the example, as there is race between when it is actually set internally.
 
 ###### SDK Event - "pushToken"
 ###### SDK Error - `QwasiErrorPushRegistrationFailed`
