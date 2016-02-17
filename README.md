@@ -8,7 +8,7 @@ To run the example project, clone the repo, and run `pod install` from the Examp
 
 ## Requirements
 
-1. XCode 6.1+
+1. Xcode 6.1+
 2. Cocoapods
 
 ## Installation
