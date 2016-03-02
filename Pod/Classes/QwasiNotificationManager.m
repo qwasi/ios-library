@@ -36,12 +36,13 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
 @implementation QwasiNotificationManager {
     BOOL _registering;
     NSDictionary* _launchNotification;
+    
 }
 + (void)load {
     [QwasiNotificationManager shared];
     
     [[NSNotificationCenter defaultCenter] addObserver: [QwasiNotificationManager shared]
-                                             selector :@selector(processLaunchNotification:)
+                                            selector :@selector(processLaunchNotification:)
                                                  name: UIApplicationDidFinishLaunchingNotification object:nil];
 }
 
@@ -75,13 +76,13 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     _launchNotification = userInfo[UIApplicationLaunchOptionsRemoteNotificationKey];
 }
 
+- (NSDictionary*)launchNotification {
+    NSDictionary* note = _launchNotification;
+    _launchNotification = nil;
+    return note;
+}
+
 - (void)registerForRemoteNotifications {
-    
-    // Emit the launch notification if we have one
-    if (_launchNotification) {
-        [self emit: @"notification", _launchNotification];
-        _launchNotification = nil;
-    }
     
     if (_pushToken) {
         [self emit: @"pushToken", _pushToken];
