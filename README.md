@@ -226,7 +226,7 @@ If the device has not been registered the user token will be updated when regist
 ###### API Method - `device.set_user_token`
 
 ### Unregistration
-Unregistering a device results in the record being fully removed from the Qwasi databases. This is for privacy compliance, etc if the application requires it. Devices should be unregistered execept under these circumstances.
+Unregistering a device results in the record being fully removed from the Qwasi databases. This is for privacy compliance, etc if the application requires it. Devices should *not* be unregistered execept under these circumstances.
 
 If necessary a device can be unregistered using:
 
