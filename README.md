@@ -20,7 +20,7 @@ it, simply add the following lines to your Podfile:
 
 ```
 
-pod 'Qwasi', '~>2.1.20'
+pod 'Qwasi', '~>2.1.20-dev.186'
 ```
 ## License
 
@@ -107,14 +107,48 @@ Example:
 ## Event Emitters
 The Qwasi libary uses nodejs like emitters to emit events. You can listen for these events by registering a listener using one of the registation methods. 
 
-**Note: It is important that event handlers are registered before the device registration or there maybe a race condition (i.e. events are emitted before the handlers are created***
-
 ```objectivec
 - (void)on:(id)event listener:(id)listener;
 - (void)once:(id)event listener:(id)listener;
 - (void)on:(id)event selector:(SEL)selector target:(__weak id)target;
 - (void)once:(id)event selector:(SEL)selector target:(__weak id)target;
 ```
+
+
+**Register Early**
+
+It is important that event handlers are registered before the device registration or there maybe a race condition (i.e. events are emitted before the handlers are created.
+
+**Multiple Registations**
+
+Calling a register method more than once with the same block of code results in multiple registrations.  For example, registering in method like `viewDidLoad` will result in duplicate events to the same block, possible causing a message to be handled twice by your code. This is by design, as you may want to processes messages in multiple code paths. But, could have unintented side-effects.
+
+```objectivec
+- (void) viewDidLoad {
+	// This will cause this block to be registered EVERY time viewDidLoad is called
+	[qwasi on: @"message" listener: ^(QwasiMessage* message) {
+			// This will get called once for everytime viewDidLoad is called, per message
+	}];	
+}
+```
+**Remove Listeners**
+
+It is possible to handle this issue by declaring your bock and removing it later.
+
+```objectivec
+// Some where else in code
+void (^myOnMessage)(QwasiMessage* message) = ^(QwasiMessage* message) {
+	// handle the message
+};
+
+- (void) viewDidLoad {
+	// Remove any existing blocks	
+	[qwasi removeListener: @"message" listener: myOnMessage];
+	[qwasi on: @"message" listener: myOnMessage];	
+}
+```
+
+## Common Events
 ### Handling Incoming Messages
 You receive message via the `message` event for your qwasi instance.
 
