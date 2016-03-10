@@ -256,9 +256,14 @@ Example:
 	}];
 
 	// if you just want notification and the pushToken for youself
-	// this even will only occur once per app life-cycle
-	[qwasi once: @"pushToken" listener: ^(NSString* pushToken) {
-		// do with the token as you will...	
+	[qwasi on: @"pushToken" listener: ^(NSString* pushToken, NSError* err) {
+		if (err.domain == kQwasiErrorDomain) {
+			if (err.code == QwasiErrorPushNotEnabled) {
+				// token may still be valid but the user disabled push
+			}	
+		} else {
+			// do with the token as you will...	
+		}	
 	}];
 ```
 

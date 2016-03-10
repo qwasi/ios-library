@@ -63,6 +63,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     NSMutableArray* _channels;
     
     BOOL _terminated;
+    BOOL _pushRegistered;
 }
 
 + (instancetype)shared {
@@ -88,6 +89,8 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     if (self = [super init]) {
         
         _registered = NO;
+        
+        _pushRegistered = NO;
         
         self.config = config;
         
@@ -131,6 +134,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     _config = config;
     _client = [QwasiClient clientWithConfig: config];
     _registered = NO;
+}
+
+- (BOOL) pushEnabled {
+    return _pushRegistered && [QwasiNotificationManager shared].pushEnabled;
 }
 
 - (void)setPushEnabled:(BOOL)pushEnabled {
@@ -473,9 +480,13 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     
     NSString* proto = @"push.apns";
     
-    if (pushToken == nil || [pushToken isEqualToString:@""]) {
-        proto = @"push.poll";
+    if (pushToken == nil) {
         pushToken = @"";
+    }
+    
+    if ([pushToken isEqualToString:@""] ||
+        ![QwasiNotificationManager shared].pushEnabled) {
+        proto = @"push.poll";
     }
     
     if (_registered) {
@@ -485,7 +496,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                               @"addr": pushToken } }
                       success:^(AFHTTPRequestOperation *operation, id responseObject) {
                           
-                          _pushEnabled = YES;
+                          _pushRegistered = YES;
                           
                           if (success) success();
                           
@@ -495,7 +506,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                           
                       } failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                           
-                          _pushEnabled = NO;
+                          _pushRegistered = NO;
                           
                           error = [QwasiError pushRegistrationFailed: error];
                           
@@ -530,26 +541,25 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
             }];
         }
         dispatch_once(&_pushOnce, ^{
-            [[QwasiNotificationManager shared] once: @"pushToken" listener: ^(NSString* pushToken) {
+            static bool done = false;
+            
+            [[QwasiNotificationManager shared] on: @"pushToken" listener: ^(NSString* pushToken, NSError* err) {
+                if (err != nil) {
+                    if (err.code == QwasiErrorPushNotEnabled) {
+                        NSLog(@"Remote notifications disabled for device, poll will still work.");
+                    } else {
+                        if (!done && failure) failure(err);
+                    }   
+                }
                 [self setPushToken: pushToken success:^{
-                    if (success) success(pushToken);
+                    if (!done && success) success(pushToken);
                 } failure:^(NSError *err) {
-                    if (failure) failure(err);
+                    if (!done && failure) failure(err);
                 }];
+                
+                done = true;
             }];
             
-            [[QwasiNotificationManager shared] once: @"error" listener: ^(NSError* error) {
-                
-                if (error.code == QwasiErrorPushNotEnabled) {
-                    _pushEnabled = NO;
-                    
-                    NSLog(@"Remote notifications disabled for device, poll will still work.");
-                }
-                else {
-                    [self emit: @"error", error];
-                }
-                
-            }];
             
             [[QwasiNotificationManager shared] on: @"notification" listener: ^(NSDictionary* userInfo) {
                 
@@ -632,7 +642,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         
         [self setPushToken: nil success:^{
             
-            _pushEnabled = NO;
+            _pushRegistered = NO;
             
             if (success) success();
             

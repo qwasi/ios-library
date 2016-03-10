@@ -48,8 +48,7 @@
         NSLog(@"%@", error);
     }];
     
-    // Add a message handler anywhere in code
-    [[Qwasi shared] on: @"message" listener: ^(QwasiMessage* message) {
+    void (^myOnMessage)(QwasiMessage* message) = ^(QwasiMessage* message) {
         
         if (message.selected) {
             NSLog(@"Opened application %@ message: %@", message.application, message);
@@ -57,8 +56,13 @@
         else {
             NSLog(@"Got application %@ message: %@", message.application, message);
         }
-    }];
+    };
     
+    // Add a message handler anywhere in code
+    [[Qwasi shared] on: @"message" listener: myOnMessage];
+    
+    [[Qwasi shared] removeListener: @"message" listener: myOnMessage];
+
     // Location updates
     [[Qwasi shared] on: @"location" listener: ^(QwasiLocation* location, QwasiLocationState state) {
     
