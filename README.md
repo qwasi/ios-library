@@ -20,7 +20,7 @@ it, simply add the following lines to your Podfile:
 
 ```
 
-pod 'Qwasi', '~>2.1.20-dev.186'
+pod 'Qwasi', '~>2.1.20-dev.187'
 ```
 ## License
 
