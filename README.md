@@ -1,6 +1,7 @@
 # Qwasi
 
 [![Build Status](https://travis-ci.org/qwasi/ios-library.svg?branch=develop)](https://travis-ci.org/qwasi/ios-library)
+[![MIT License](http://img.shields.io/badge/License-MIT-blue.svg)](https://github.com/peter-edge/dlog-go/blob/master/LICENSE)
 
 The Qwasi `ios-library` provides a convenient method for accessing the Qwasi JSON-RPC API.
 
@@ -343,7 +344,7 @@ If the device has not been registered the user token will be updated when regist
 ###### API Method - `device.set_user_token`
 
 ### Unregistration
-Unregistering a device results in the record being fully removed from the Qwasi databases. This is for privacy compliance, etc if the application requires it. Devices should be unregistered execept under these circumstances.
+Unregistering a device results in the record being fully removed from the Qwasi databases. This is for privacy compliance, etc if the application requires it. Devices should *not* be unregistered except under these circumstances as it can cause issues with consistent reporting of events since the device id will change.
 
 If necessary a device can be unregistered using:
 
@@ -373,9 +374,14 @@ Example:
 	}];
 
 	// if you just want notification and the pushToken for youself
-	// this even will only occur once per app life-cycle
-	[qwasi once: @"pushToken" listener: ^(NSString* pushToken) {
-		// do with the token as you will...	
+	[qwasi on: @"pushToken" listener: ^(NSString* pushToken, NSError* err) {
+		if (err.domain == kQwasiErrorDomain) {
+			if (err.code == QwasiErrorPushNotEnabled) {
+				// token may still be valid but the user disabled push
+			}	
+		} else {
+			// do with the token as you will...	
+		}	
 	}];
 ```
 
