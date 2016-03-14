@@ -111,7 +111,10 @@ The default configuration file is `Qwasi.plist`. You create and add the property
 ### Custom Configuration File
 You can load a configuration from another property list by using: 
 
-```+ (instancetype)configWithFile:(NSString*)path```
+```objectivec
+
++ (instancetype)configWithFile:(NSString*)path
+```
 
 Example:
 
