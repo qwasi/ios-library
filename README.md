@@ -41,12 +41,16 @@ Qwasi is available under the MIT license. See the LICENSE file for more info.
 There is a default singleton Qwasi object that is best for most use cases.
 
 *Objective-C:*	
+
 ```objectivec
+
 	Qwasi* qwasi = [Qwasi shared];
 ```
 
 *swift:*
+
 ```swift
+
 	let qwasi:Qwasi = Qwasi.shared()
 ```
 
@@ -55,12 +59,16 @@ There is a default singleton Qwasi object that is best for most use cases.
 It would typically be unecessary to create your own `Qwasi` object, but if you need to it is simple.
 
 *Objective-C:*
+
 ```objectivec
+
 	Qwasi* qwasi = [[Qwasi alloc] init];
 ```
 
 *swift:*
+
 ```swift
+
 	var qwasi:Qwasi = Qwasi()
 ```
 
@@ -68,12 +76,16 @@ It would typically be unecessary to create your own `Qwasi` object, but if you n
 By default any `Qwasi` instance will attempt to use the default configuration described below. You can explicitly set or change the configuration by setting the config object. Any time you change the configuration you will need to re-register the device.
 
 *Objective-C:*
+
 ```objectivec
+
 	qwasi.config = [QwasiConfig default];
 ```
 
 *swift:*
+
 ```swift
+
 	qwasi.config = QwasiConfig()
 ```
 
@@ -104,13 +116,17 @@ You can load a configuration from another property list by using:
 Example:
 
 *Objective-C:*
+
 ```objectivec
+
 	QwasiConfig* config = [QwasiConfig configWithFile: @"myconfig"];
 	qwasi.config = config;
 ```
 
 *swift:*
+
 ```swift
+
 	var config:QwasiConfig? = QwasiConfig( file: "filename" )
 ```
 
@@ -120,19 +136,24 @@ Example:
 You can create a runtime configuration object on the fly using:
 
 ```objectivec
+
 + (instancetype)configWithURL:(NSURL*)url withApplication:(NSString*)app withKey:(NSString*)key;
 ```
 Example:
 
 *Objective-C:*
+
 ```objectivec
+
 	NSURL* url = [NSURL urlWithString: @"https://sandbox.qwasi.com/v1"];
 	QwasiConfig* config = [QwasiConfig configWithURL: url withApplication: @"Your app" withKey: @"Your key"];
 	qwasi.config = config;
 ```
 
 *swift:*
+
 ```swift
+
     var url:NSURL = NSURL( string: "https://sandbox.qwasi.com/v1" )!
     var config:QwasiConfig? = QwasiConfig( URL: url, withApplication: "Your app", withKey: "Your key")
     qwasi.config = config
@@ -141,6 +162,7 @@ Example:
 The Qwasi libary uses nodejs like emitters to emit events. You can listen for these events by registering a listener using one of the registation methods. 
 
 ```objectivec
+
 - (void)on:(id)event listener:(id)listener;
 - (void)once:(id)event listener:(id)listener;
 - (void)on:(id)event selector:(SEL)selector target:(__weak id)target;
@@ -157,7 +179,9 @@ Calling a register method more than once with the same block of code results in 
 
 *Objective-C:*
 ```objectivec
+
 - (void) viewDidLoad {
+
 	// This will cause this block to be registered EVERY time viewDidLoad is called
 	[qwasi on: @"message" listener: ^(QwasiMessage* message) {
 			// This will get called once for everytime viewDidLoad is called, per message
@@ -166,7 +190,9 @@ Calling a register method more than once with the same block of code results in 
 ```
 
 *swift:*
+
 ```swift
+
 override func viewDidLoad() {
 	super.viewDidLoad()
 
@@ -181,7 +207,9 @@ override func viewDidLoad() {
 It is possible to handle this issue by declaring your bock and removing it later.
 
 *Objective-C:*
+
 ```objectivec
+
 // Some where else in code
 void (^myOnMessage)(QwasiMessage* message) = ^(QwasiMessage* message) {
 	// handle the message
@@ -195,7 +223,9 @@ void (^myOnMessage)(QwasiMessage* message) = ^(QwasiMessage* message) {
 ```
 
 *swift:*
+
 ```swift
+
 //somewhere else
 func messageHandler( message: QwasiMessage ){
 	// do what you will with the message
@@ -217,13 +247,16 @@ You receive message via the `message` event for your qwasi instance.
 Example:
 
 *Objective-C*
+
 ```objectivec
+
 	[qwasi on: @"message" listener: ^(QwasiMessage* message) {
 			// Do as you will with the message
 	}];	
 ```
 
 *swift:*
+
 ```swift
 
 	//declared handler
@@ -245,7 +278,9 @@ Some methods will have a failure callback parameter, but all methods will emit e
 Example:
 
 *Objective-C:*
+
 ```objectivec
+
 [qwasi on: @"error" listener: ^(NSError* error) {
         // Handle Errors here (see QwasiError.h)
         if (error.domain == kQwasiErrorDomain) {
@@ -258,8 +293,11 @@ Example:
         DDLogError(@"%@", error);
     }];
 ```
+
 *swift:*
+
 ```swift
+
 	//setup handler
     qwasi.on("error", selector: Selector( "errorHandler:"), target: self)
 
@@ -289,8 +327,11 @@ There are many `registerDevice` overloads defined in `Qwasi.h`, the simplest and
 ```
 
 Example:
+
 *Objective-C:*
+
 ```objectivec
+
     // Get our device token from the defaults
     NSString* deviceToken = [[NSUserDefaults standardUserDefaults] valueForKey: DEVICE_TOKEN_KEY];
 
@@ -300,7 +341,9 @@ Example:
     }];
 ```
 *swift:*
+
 ```swift
+
 	//Get our device token from the defaults
 	let deviceToken: String? = defaults.stringForKey("deviceToken")
 
@@ -327,12 +370,16 @@ You can set the user token either via the `deviceRegister` call, or later via th
 Example:
 
 *Objective-C:*
+
 ```objectivec
+
 	qwasi.userToken = @"My User Token";
 ```
 
 *swift:*
+
 ```swift
+
 	qwasi.userToken = "My User Token"
 ```
 
@@ -348,6 +395,7 @@ Unregistering a device results in the record being fully removed from the Qwasi 
 If necessary a device can be unregistered using:
 
 ```objectivec
+
 - (void)unregisterDevice:(NSString*)deviceToke success:(void(^)())success failure:(void(^)(NSError* err))failure;
 ```
 ###### SDK Event - N/A
@@ -358,12 +406,16 @@ If necessary a device can be unregistered using:
 Qwasi supports a simplified registration for push notifications. Once the device is registered you can either set `pushEnabled` on the instance or call the method:
 
 ```objectivec
+
 - (void)registerForNotifications:(void(^)())success failure:(void(^)(NSError* err))failure;
 ```
 
 Example:
+
 *Objective-C:*
+
 ```objectivec
+
 	qwasi.pushEnabled = YES;
 
 	// if you want notification for when the push registration completed
@@ -380,7 +432,9 @@ Example:
 ```
 
 *swift:*
+
 ```swift
+
 	qwasi.pushEnabled = true
 
 	// If you want notification for when the push registration has completed
@@ -416,12 +470,16 @@ Editing this profile is not supported and outside the scope of this document.
 The Qwasi Notification Manager will attempt to detect the mode of operation based on the DEBUG preprocessor header. To override this you need to manually set this flag before the initial device register, which will force the servers used by the Qwasi platform to deliver the notifications.
 
 *Objective-C:*
+
 ```objectivec
+
 [QwasiNotificationManager shared].sandbox = YES; // or NO to force production
 ```
 
 *swift:*
+
 ```swift
+
 QwasiNotificationManager.shared().sandbox = true // or false to force production
 ```
 
@@ -432,6 +490,7 @@ If the user does not permit push notifications, or if the device does not have n
 If your app does not support background fetch, you can periodically call:
 
 ```objectivec
+
 - (void)tryFetchUnreadMessages
 ```
 A good place to put this method is in your UIApplicationDelegate.
@@ -439,7 +498,9 @@ A good place to put this method is in your UIApplicationDelegate.
 Example:
 
 *Objective-C*
+
 ```objectivec
+
 - (void)applicationDidBecomeActive:(UIApplication *)application {
 	...
     [qwasi tryFetchUnreadMessages];
@@ -447,7 +508,9 @@ Example:
 ```
 
 *swift:*
+
 ```swift
+
 func applicationDidBecomeActive(application: UIApplication) {
      ...
      qwasi.tryFetchUnreadMessages()
@@ -466,7 +529,9 @@ The `qwasi` instance will emit special events for tags contained in a message, t
 Example:
 
 *Objective-C:*
+
 ```objectivec
+
 	// call this so messages with this tag won't get emitter to the default message
     // hander as well
 	[qwasi filterTag: @"myCustomTag"];
@@ -477,7 +542,9 @@ Example:
 ```
 
 *swift:*
+
 ```swift
+
 	// call this so messages with this tag won't get emitter to the default message
     // hander as well
     qwasi.filterTag( "myCustomTag")
@@ -492,18 +559,23 @@ Example:
 ### Subscribe to a Channel
 
 ```objectivec
+
 - (void)subscribeToChannel:(NSString*)channel;
 ```
 
 Example:
 
 *Objective-C:*
+
 ```objectivec
+
 	[qwasi subscribeToChannel:@"baseball"];
 ```
 
 *swift:*
+
 ```swift
+
 	qwasi.subscribeToChannel( "baseball")
 ```
 
@@ -514,18 +586,23 @@ Example:
 ### Unsubscribe from Channel
 
 ```objectivec
+
 - (void)unsubscribeFromChannel:(NSString*)channel;
 ```
 
 Example:
 
 *Objective-C:*
+
 ```objectivec
+
 	[qwasi unsubscribeFromChannel:@"baseball"];
 ```
 
 *swift:*
+
 ```swift
+
 	qwasi.unsubscribeFromChannel("baseball")
 ```
 
@@ -538,17 +615,22 @@ Example:
 The `Qwasi` platform supports triggers on application events, but the events have to be provided. By default the library will send application state events (open, foreground, background). You can send custom events and configure your AIM to act on those as you see fit
 
 ```objectivec
+
 - (void)postEvent:(NSString*)event withData:(id)data;
 ```
 
 Example:
 *Objective-C:*
+
 ```objectivec
+
 	[qwasi postEvent: @"login" withData: @{ @"username": "bobvila" }];
 ```
 
 *swift*
+
 ```swift
+
 	qwasi.postEvent( "login", withData: [ "username" : "bobvila"] )
 ```
 
@@ -559,12 +641,16 @@ The `Qwasi` SDK can provide device location and track geofence and iBeacon event
 Location is enabled or disabled via the qwasi instance, once the device has been registered:
 
 *Objective-C:*
+
 ```objectivec
+
 	qwasi.locationEnabled = YES;
 ```
 
 *swift:*
+
 ```swift
+
 	qwasi.locationEnabled = true
 ```
 
@@ -572,7 +658,9 @@ Location is enabled or disabled via the qwasi instance, once the device has been
 There can only be one active `QwasiLocationManager`, you must set this before you enable location, the default is the foregroundManager.
 
 *Objective-C:*
+
 ```objectivec
+
 	// Default foreground manager
 	qwasi.locationManager = [QwasiLocationManager foreground];
 
@@ -581,7 +669,9 @@ There can only be one active `QwasiLocationManager`, you must set this before yo
 ```
 
 *swift:*
+
 ```swift
+
 	qwasi.locationManager = QwasiLocationManager.foregroundManager()
 
 	qwasi.locationManager = QwasiLocationManager.backgroundManager()
@@ -599,7 +689,9 @@ Like messages, locations events are delivered via an emitter on your instance.
 Example:
 
 *Objective-C*
+
 ```objectivec
+
 	[qwasi on: @"location" listener: ^(QwasiLocation* location, QwasiLocationState state) {
 		switch (location.type) {
             case QwasiLocationTypeCoordinate:
@@ -631,6 +723,7 @@ Example:
 ```
 
 *swift:*
+
 ```swift
 
 	//earlier in code
@@ -683,6 +776,7 @@ Every device is backed by a member record. Member records are identified by a us
 #### Set Member Data
 
 ```objectivec
+
 - (void)setMemberValue:(id)value forKey:(NSString*)key
                success:(void(^)(void))success
                failure:(void(^)(NSError* err))failure;
@@ -696,6 +790,7 @@ Every device is backed by a member record. Member records are identified by a us
 #### Get Member Data
 
 ```objectivec
+
 - (void)memberValueForKey:(NSString*)key
                   success:(void(^)(id value))success
                   failure:(void(^)(NSError* err))failure;
@@ -707,7 +802,9 @@ Every device is backed by a member record. Member records are identified by a us
 Example:
 
 *Objective-C:*
+
 ```objectivec
+
 [qwasi setMemberValue: @"35"
 			    forKey: @"age"];
 
@@ -721,7 +818,9 @@ Example:
 ```
 
 *swift:*
+
 ```swift
+
 qwasi.setMemberValue("35", forKey: "age")
 
 qwasi.setMemberValue("35", forKey: "age", success: { () -> Void in
@@ -741,6 +840,7 @@ Device data persists to the device, but is also member specific. Therefore if a 
 #### Set Device Data
 
 ```objectivec
+
 - (void)setDeviceValue:(id)value forKey:(NSString*)key
                success:(void(^)(void))success
                failure:(void(^)(NSError* err))failure;
@@ -754,6 +854,7 @@ Device data persists to the device, but is also member specific. Therefore if a 
 #### Get Device Data
 
 ```objectivec
+
 - (void)deviceValueForKey:(NSString*)key
                   success:(void(^)(id value))success
                   failure:(void(^)(NSError* err))failure;
@@ -765,7 +866,9 @@ Device data persists to the device, but is also member specific. Therefore if a 
 Example:
 
 *Objective-C:*
+
 ```objectivec
+
 [qwasi setDeviceValue: @"hotrod99"
 			    forKey: @"user.displayname"];
 
@@ -779,7 +882,9 @@ Example:
 ```
 
 *swift:*
+
 ```swift
+
 qwasi.setDeviceValue("hotrod99", forKey: "user.displayname")
 
 qwasi.setDeviceValue("hotrod99", forKey: "user.displayname", success: { () -> Void in
@@ -796,6 +901,7 @@ qwasi.setDeviceValue("hotrod99", forKey: "user.displayname", success: { () -> Vo
 With the Qwasi API and SDK it is possible to send message to other users, this could facilitate a 2-way communication or chat application. Qwasi does not explictly support this functionality so much of the implementation is left to the developer. You will need to manage mapping your own userTokens to some useful data, which can be stored in the device record as described above.
 
 ```objectivec
+
 - (void)sendMessage:(QwasiMessage*)message
         toUserToken:(NSString*)userToken
             success:(void(^)())success
@@ -811,7 +917,9 @@ With the Qwasi API and SDK it is possible to send message to other users, this c
 Example Receiver:
 
 *Objective-C:*
+
 ```objectivec
+
 	// filter out our chat tags
 	[qwasi filterTag: @"chatMessage"];
 
@@ -823,7 +931,9 @@ Example Receiver:
 ```
 
 *swift:*
+
 ```swift
+
 	//filter out our chat tages
 
 	qwasi.filterTag( "chatMessage")
@@ -840,7 +950,10 @@ Example Receiver:
 
 Example Sender:
 
+*Objective-C:*
+
 ```objectivec
+
 	QwasiMessage* welcome = [[QwasiMessage alloc] initWithAlert: @"You have a new message" 
 												   withPayload: @{ @"from": @"myusername" }
 											   withPayloadType: nil 
@@ -849,7 +962,10 @@ Example Sender:
 	[qwasi sendMessage: message toUserToken: @"anotheruser"];
 ```
 
+*swift:*
+
 ```swift
+
 	var welcome:QwasiMessage = QwasiMessage(  alert: "You have a new message", 
 											  withPayload: [ "from": "myUserName"], 
 											  withPayloadType: nil, 
