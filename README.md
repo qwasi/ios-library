@@ -181,6 +181,7 @@ It is important that event handlers are registered before the device registratio
 Calling a register method more than once with the same block of code results in multiple registrations.  For example, registering in method like `viewDidLoad` will result in duplicate events to the same block, possible causing a message to be handled twice by your code. This is by design, as you may want to processes messages in multiple code paths. But, could have unintented side-effects.
 
 *Objective-C:*
+
 ```objectivec
 
 - (void) viewDidLoad {
