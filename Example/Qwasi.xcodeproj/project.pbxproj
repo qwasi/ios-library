@@ -7,8 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		2DF4D478260CF55629CF72D7 /* libPods-Qwasi_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 9204A1716464239EC03783B9 /* libPods-Qwasi_Tests.a */; };
-		4FE46F3EBAC8202E14F9E762 /* libPods-AcmePush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 8C3193B4C97F30A2EB1AAE57 /* libPods-AcmePush.a */; };
+		5DF9537E552DB70D3F56C5C4 /* libPods-AcmePush.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A38BCCAE3364C50F4D72B13 /* libPods-AcmePush.a */; };
 		6003F58E195388D20070C39A /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58D195388D20070C39A /* Foundation.framework */; };
 		6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F58F195388D20070C39A /* CoreGraphics.framework */; };
 		6003F592195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
@@ -23,6 +22,7 @@
 		6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6003F591195388D20070C39A /* UIKit.framework */; };
 		6003F5BA195388D20070C39A /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 6003F5B8195388D20070C39A /* InfoPlist.strings */; };
 		6003F5BC195388D20070C39A /* Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 6003F5BB195388D20070C39A /* Tests.m */; };
+		8F48F7178C6F7498BCF2B9FA /* libPods-Qwasi_Tests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 210D06EC735D19CDE20EAF49 /* libPods-Qwasi_Tests.a */; };
 		D44005681B1E2367008B80B1 /* Qwasi.plist in Resources */ = {isa = PBXBuildFile; fileRef = D44005671B1E2367008B80B1 /* Qwasi.plist */; };
 		D493B9481C1F8EA8003A4E11 /* AppledocSettings.plist in Resources */ = {isa = PBXBuildFile; fileRef = D493B9471C1F8EA8003A4E11 /* AppledocSettings.plist */; };
 		D4B163711B2A15B300AE4EB0 /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = D4B163701B2A15B300AE4EB0 /* AppDelegate.m */; };
@@ -39,7 +39,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		416D945E793C9F6ACE4F6C09 /* Pods_Qwasi_Example.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Qwasi_Example.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		210D06EC735D19CDE20EAF49 /* libPods-Qwasi_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Qwasi_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
+		32C789B417E5AB64269D9621 /* Pods-AcmePush.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AcmePush.release.xcconfig"; path = "Pods/Target Support Files/Pods-AcmePush/Pods-AcmePush.release.xcconfig"; sourceTree = "<group>"; };
+		3AE6EC175F299D80592AE0E6 /* Pods-AcmePush.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-AcmePush.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AcmePush/Pods-AcmePush.debug.xcconfig"; sourceTree = "<group>"; };
+		4A38BCCAE3364C50F4D72B13 /* libPods-AcmePush.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AcmePush.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58A195388D20070C39A /* AcmePush.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AcmePush.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6003F58D195388D20070C39A /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		6003F58F195388D20070C39A /* CoreGraphics.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = CoreGraphics.framework; path = System/Library/Frameworks/CoreGraphics.framework; sourceTree = SDKROOT; };
@@ -60,16 +63,12 @@
 		6003F5B9195388D20070C39A /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		6003F5BB195388D20070C39A /* Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = Tests.m; sourceTree = "<group>"; };
 		606FC2411953D9B200FFA9A0 /* Tests-Prefix.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Tests-Prefix.pch"; sourceTree = "<group>"; };
-		8C3193B4C97F30A2EB1AAE57 /* libPods-AcmePush.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-AcmePush.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		9204A1716464239EC03783B9 /* libPods-Qwasi_Tests.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-Qwasi_Tests.a"; sourceTree = BUILT_PRODUCTS_DIR; };
-		AE719FB6C0C2C63D194AA37E /* Pods-Qwasi_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Qwasi_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Qwasi_Tests/Pods-Qwasi_Tests.debug.xcconfig"; sourceTree = "<group>"; };
+		A382689E92B1D0BEA220B879 /* Pods-Qwasi_Tests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Qwasi_Tests.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Qwasi_Tests/Pods-Qwasi_Tests.debug.xcconfig"; sourceTree = "<group>"; };
 		B04A6F727881ABA0750F25F3 /* README.md */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = net.daringfireball.markdown; name = README.md; path = ../README.md; sourceTree = "<group>"; };
-		BA00615680AA0D9A6A7484F9 /* Pods-Qwasi_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Qwasi_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Qwasi_Tests/Pods-Qwasi_Tests.release.xcconfig"; sourceTree = "<group>"; };
+		B9C9BFEEF61DE4DF0376A7A6 /* Pods-Qwasi_Tests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Qwasi_Tests.release.xcconfig"; path = "Pods/Target Support Files/Pods-Qwasi_Tests/Pods-Qwasi_Tests.release.xcconfig"; sourceTree = "<group>"; };
 		D426F12C1B242B9100EDD4F7 /* libPods-Qwasi_Tests-Expecta.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Qwasi_Tests-Expecta.a"; path = "Pods/../build/Debug-iphoneos/libPods-Qwasi_Tests-Expecta.a"; sourceTree = "<group>"; };
 		D426F12D1B242B9100EDD4F7 /* libPods-Qwasi_Tests-Specta.a */ = {isa = PBXFileReference; lastKnownFileType = archive.ar; name = "libPods-Qwasi_Tests-Specta.a"; path = "Pods/../build/Debug-iphoneos/libPods-Qwasi_Tests-Specta.a"; sourceTree = "<group>"; };
 		D44005671B1E2367008B80B1 /* Qwasi.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Qwasi.plist; sourceTree = "<group>"; };
-		D440056A1B1F6B03008B80B1 /* Pods-AcmePush.debug.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-AcmePush.debug.xcconfig"; path = "Pods/Target Support Files/Pods-AcmePush/Pods-AcmePush.debug.xcconfig"; sourceTree = "<group>"; };
-		D440056B1B1F6B03008B80B1 /* Pods-AcmePush.release.xcconfig */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xcconfig; name = "Pods-AcmePush.release.xcconfig"; path = "Pods/Target Support Files/Pods-AcmePush/Pods-AcmePush.release.xcconfig"; sourceTree = "<group>"; };
 		D440058D1B2104A9008B80B1 /* AcmePush.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = AcmePush.entitlements; sourceTree = "<group>"; };
 		D493B9471C1F8EA8003A4E11 /* AppledocSettings.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = AppledocSettings.plist; sourceTree = "<group>"; };
 		D4B163701B2A15B300AE4EB0 /* AppDelegate.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -85,7 +84,7 @@
 				6003F590195388D20070C39A /* CoreGraphics.framework in Frameworks */,
 				6003F592195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F58E195388D20070C39A /* Foundation.framework in Frameworks */,
-				4FE46F3EBAC8202E14F9E762 /* libPods-AcmePush.a in Frameworks */,
+				5DF9537E552DB70D3F56C5C4 /* libPods-AcmePush.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -96,7 +95,7 @@
 				6003F5B0195388D20070C39A /* XCTest.framework in Frameworks */,
 				6003F5B2195388D20070C39A /* UIKit.framework in Frameworks */,
 				6003F5B1195388D20070C39A /* Foundation.framework in Frameworks */,
-				2DF4D478260CF55629CF72D7 /* libPods-Qwasi_Tests.a in Frameworks */,
+				8F48F7178C6F7498BCF2B9FA /* libPods-Qwasi_Tests.a in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,7 +111,7 @@
 				6003F5B5195388D20070C39A /* Tests */,
 				6003F58C195388D20070C39A /* Frameworks */,
 				6003F58B195388D20070C39A /* Products */,
-				6A580EF9DBE91D27C3218695 /* Pods */,
+				79D98172F0AA9407D1F85A2A /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -134,9 +133,8 @@
 				6003F58F195388D20070C39A /* CoreGraphics.framework */,
 				6003F591195388D20070C39A /* UIKit.framework */,
 				6003F5AF195388D20070C39A /* XCTest.framework */,
-				416D945E793C9F6ACE4F6C09 /* Pods_Qwasi_Example.framework */,
-				8C3193B4C97F30A2EB1AAE57 /* libPods-AcmePush.a */,
-				9204A1716464239EC03783B9 /* libPods-Qwasi_Tests.a */,
+				4A38BCCAE3364C50F4D72B13 /* libPods-AcmePush.a */,
+				210D06EC735D19CDE20EAF49 /* libPods-Qwasi_Tests.a */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -199,13 +197,13 @@
 			name = "Podspec Metadata";
 			sourceTree = "<group>";
 		};
-		6A580EF9DBE91D27C3218695 /* Pods */ = {
+		79D98172F0AA9407D1F85A2A /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				D440056A1B1F6B03008B80B1 /* Pods-AcmePush.debug.xcconfig */,
-				D440056B1B1F6B03008B80B1 /* Pods-AcmePush.release.xcconfig */,
-				AE719FB6C0C2C63D194AA37E /* Pods-Qwasi_Tests.debug.xcconfig */,
-				BA00615680AA0D9A6A7484F9 /* Pods-Qwasi_Tests.release.xcconfig */,
+				3AE6EC175F299D80592AE0E6 /* Pods-AcmePush.debug.xcconfig */,
+				32C789B417E5AB64269D9621 /* Pods-AcmePush.release.xcconfig */,
+				A382689E92B1D0BEA220B879 /* Pods-Qwasi_Tests.debug.xcconfig */,
+				B9C9BFEEF61DE4DF0376A7A6 /* Pods-Qwasi_Tests.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -217,12 +215,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6003F5BF195388D20070C39A /* Build configuration list for PBXNativeTarget "AcmePush" */;
 			buildPhases = (
-				D757D52DE9418972E3C8BEF5 /* Check Pods Manifest.lock */,
+				AFCE48A333F612163BD69120 /* Check Pods Manifest.lock */,
 				6003F586195388D20070C39A /* Sources */,
 				6003F587195388D20070C39A /* Frameworks */,
 				6003F588195388D20070C39A /* Resources */,
-				2E0831F34D45EA947A1AB298 /* Copy Pods Resources */,
-				A09A630E26D7B6C10D78E948 /* Embed Pods Frameworks */,
+				60745B27B711640658B7360A /* Embed Pods Frameworks */,
+				83C6A64AB00D76AFE690997C /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -237,12 +235,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 6003F5C2195388D20070C39A /* Build configuration list for PBXNativeTarget "Qwasi_Tests" */;
 			buildPhases = (
-				90D99CAE07A8887CF3D56997 /* Check Pods Manifest.lock */,
+				81AC22E08B651DA4B9E55D98 /* Check Pods Manifest.lock */,
 				6003F5AA195388D20070C39A /* Sources */,
 				6003F5AB195388D20070C39A /* Frameworks */,
 				6003F5AC195388D20070C39A /* Resources */,
-				34234A02CAB7BB691A2B32D7 /* Copy Pods Resources */,
-				75545628A9BFB5320B1719F0 /* Embed Pods Frameworks */,
+				4A35FFF8035216991E64842A /* Embed Pods Frameworks */,
+				D2ADB63E36664CE8DAE4E9AD /* Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -321,37 +319,7 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		2E0831F34D45EA947A1AB298 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AcmePush/Pods-AcmePush-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		34234A02CAB7BB691A2B32D7 /* Copy Pods Resources */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Copy Pods Resources";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Qwasi_Tests/Pods-Qwasi_Tests-resources.sh\"\n";
-			showEnvVarsInLog = 0;
-		};
-		75545628A9BFB5320B1719F0 /* Embed Pods Frameworks */ = {
+		4A35FFF8035216991E64842A /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -366,22 +334,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Qwasi_Tests/Pods-Qwasi_Tests-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		90D99CAE07A8887CF3D56997 /* Check Pods Manifest.lock */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Check Pods Manifest.lock";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		A09A630E26D7B6C10D78E948 /* Embed Pods Frameworks */ = {
+		60745B27B711640658B7360A /* Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -396,7 +349,7 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AcmePush/Pods-AcmePush-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D757D52DE9418972E3C8BEF5 /* Check Pods Manifest.lock */ = {
+		81AC22E08B651DA4B9E55D98 /* Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -409,6 +362,51 @@
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		83C6A64AB00D76AFE690997C /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-AcmePush/Pods-AcmePush-resources.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		AFCE48A333F612163BD69120 /* Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Check Pods Manifest.lock";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			showEnvVarsInLog = 0;
+		};
+		D2ADB63E36664CE8DAE4E9AD /* Copy Pods Resources */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Copy Pods Resources";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Qwasi_Tests/Pods-Qwasi_Tests-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -553,7 +551,7 @@
 		};
 		6003F5C0195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D440056A1B1F6B03008B80B1 /* Pods-AcmePush.debug.xcconfig */;
+			baseConfigurationReference = 3AE6EC175F299D80592AE0E6 /* Pods-AcmePush.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -565,7 +563,7 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.qwasi.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "994d5ff7-acc4-42db-8f71-012f2ed10c57";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -573,7 +571,7 @@
 		};
 		6003F5C1195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = D440056B1B1F6B03008B80B1 /* Pods-AcmePush.release.xcconfig */;
+			baseConfigurationReference = 32C789B417E5AB64269D9621 /* Pods-AcmePush.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				ASSETCATALOG_COMPILER_LAUNCHIMAGE_NAME = LaunchImage;
@@ -585,7 +583,7 @@
 				MODULE_NAME = ExampleApp;
 				PRODUCT_BUNDLE_IDENTIFIER = "com.qwasi.$(PRODUCT_NAME:rfc1034identifier)";
 				PRODUCT_NAME = "$(TARGET_NAME)";
-				PROVISIONING_PROFILE = "994d5ff7-acc4-42db-8f71-012f2ed10c57";
+				PROVISIONING_PROFILE = "";
 				TARGETED_DEVICE_FAMILY = 1;
 				WRAPPER_EXTENSION = app;
 			};
@@ -593,13 +591,9 @@
 		};
 		6003F5C3195388D20070C39A /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = AE719FB6C0C2C63D194AA37E /* Pods-Qwasi_Tests.debug.xcconfig */;
+			baseConfigurationReference = A382689E92B1D0BEA220B879 /* Pods-Qwasi_Tests.debug.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
 				GCC_PREPROCESSOR_DEFINITIONS = (
@@ -615,13 +609,9 @@
 		};
 		6003F5C4195388D20070C39A /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = BA00615680AA0D9A6A7484F9 /* Pods-Qwasi_Tests.release.xcconfig */;
+			baseConfigurationReference = B9C9BFEEF61DE4DF0376A7A6 /* Pods-Qwasi_Tests.release.xcconfig */;
 			buildSettings = {
-				FRAMEWORK_SEARCH_PATHS = (
-					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					"$(DEVELOPER_FRAMEWORKS_DIR)",
-				);
+				FRAMEWORK_SEARCH_PATHS = "$(inherited)";
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "Tests/Tests-Prefix.pch";
 				INFOPLIST_FILE = "Tests/Tests-Info.plist";

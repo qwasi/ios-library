@@ -31,9 +31,11 @@
 
 @interface QwasiNotificationManager : EventEmitter
 @property (nonatomic,readonly)NSString* pushToken;
-@property (nonatomic, readwrite)BOOL sandbox;
+@property (nonatomic,readonly)BOOL pushEnabled;
+@property (nonatomic,readwrite)BOOL sandbox;
+@property (nonatomic,readonly) NSDictionary* launchNotification;
 
 + (instancetype)shared;
 
-- (void)registerForRemoteNotification;
+- (void)registerForRemoteNotifications;
 @end

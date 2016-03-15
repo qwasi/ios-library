@@ -36,13 +36,18 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
 @implementation QwasiNotificationManager {
     BOOL _registering;
     NSDictionary* _launchNotification;
+    
 }
 + (void)load {
     [QwasiNotificationManager shared];
     
     [[NSNotificationCenter defaultCenter] addObserver: [QwasiNotificationManager shared]
-                                             selector :@selector(processLaunchNotification:)
+                                            selector :@selector(processLaunchNotification:)
                                                  name: UIApplicationDidFinishLaunchingNotification object:nil];
+    
+    [[NSNotificationCenter defaultCenter] addObserver: [QwasiNotificationManager shared]
+                                            selector :@selector(checkNotificationStatus:)
+                                                 name: UIApplicationWillEnterForegroundNotification object:nil];
 }
 
 + (instancetype)shared {
@@ -63,6 +68,9 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
 #else
         _sandbox = NO;
 #endif
+        _pushToken = nil;
+        
+        _pushEnabled = NO;
     }
     return self;
 }
@@ -74,16 +82,34 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     _launchNotification = userInfo[UIApplicationLaunchOptionsRemoteNotificationKey];
 }
 
-- (void)registerForRemoteNotification {
+- (void)checkNotificationStatus:(NSNotification*)note {
+    UIApplication* application = [UIApplication sharedApplication];
     
-    // Emit the launch notification if we have one
-    if (_launchNotification) {
-        [self emit: @"notification", _launchNotification];
-        _launchNotification = nil;
+    UIUserNotificationSettings* settings = application.currentUserNotificationSettings;
+    
+    if (settings.types & UIUserNotificationTypeAlert) {
+        if (!_pushEnabled && _pushToken == nil) {
+            [application registerForRemoteNotifications];
+        } else {
+            _pushEnabled = YES;
+            [self emit: @"pushToken", _pushToken, nil];
+        }
+    } else if (_pushEnabled) {
+        _pushEnabled = NO;
+        [self emit: @"pushToken", _pushToken, [QwasiError pushNotEnabled]];
     }
+}
+
+- (NSDictionary*)launchNotification {
+    NSDictionary* note = _launchNotification;
+    _launchNotification = nil;
+    return note;
+}
+
+- (void)registerForRemoteNotifications {
     
     if (_pushToken) {
-        [self emit: @"pushToken", _pushToken];
+        [self emit: @"pushToken", _pushToken, nil];
     }
     else {
         
@@ -111,7 +137,11 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                ntohl(tokenBytes[3]), ntohl(tokenBytes[4]), ntohl(tokenBytes[5]),
                                ntohl(tokenBytes[6]), ntohl(tokenBytes[7])];
                  
-                 [self emit: @"pushToken", _pushToken];
+                 if (!_pushEnabled) {
+                     _pushEnabled = YES;
+                 
+                     [self emit: @"pushToken", _pushToken, nil];
+                 }
                  
                  [_self callOnSuper:^{
                      if ([_self respondsToSelector:@selector(application:didRegisterForRemoteNotificationsWithDeviceToken:)]) {
@@ -129,7 +159,9 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                      [application registerForRemoteNotifications];
                  }
                  else {
-                     [self emit: @"error", [QwasiError pushNotEnabled]];
+                     _pushEnabled = NO;
+                     
+                     [self emit: @"pushToken", _pushToken, [QwasiError pushNotEnabled]];
                  }
                  
                  [_self callOnSuper:^{
@@ -144,6 +176,10 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                    implementation:^(id _self, UIApplication* _unused, NSError* error)
              {
                  NSLog(@"Push registration failed: %@.", error);
+                 
+                 _pushEnabled = NO;
+                 
+                 [self emit: @"pushToken", _pushToken, error];
                  
                  [self emit: @"error", [QwasiError pushRegistrationFailed: error]];
                  
