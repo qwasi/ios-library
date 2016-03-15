@@ -1,6 +1,6 @@
 {
   "name": "ios-library",
-  "version": "2.1.20-dev.189",
+  "version": "2.1.21-dev.189",
   "description": "Qwasi iOS Library",
   "main": "index.js",
   "scripts": {
