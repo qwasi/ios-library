@@ -27,17 +27,11 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Foundation/Foundation.h>
-#import "QwasiConfig.h"
-#import "QwasiRPCClient.h"
-#import "QwasiRESTClient.h"
-#import "Version.h"
+#import "AFJSONRPCClient.h"
+#import "QwasiClient.h"
+#import "QwasiConfig.h" 
 
-@interface QwasiClient : NSObject
-
-@property (assign, getter=isRestful) BOOL restful;
-@property (nonatomic, strong) QwasiRPCClient rpcClient;
-@property (nonatomic, strong) QwasiRESTClient restClient;
-
+@interface QwasiRPCClient : AFJSONRPCClient
 
 + (instancetype)default;
 
