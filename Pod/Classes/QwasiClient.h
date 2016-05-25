@@ -1,5 +1,5 @@
 //
-// QwasiRPCClient.h
+// QwasiClient.h
 //
 // Copyright (c) 2015-2016, Qwasi Inc (http://www.qwasi.com/)
 // All rights reserved.
@@ -27,17 +27,10 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Foundation/Foundation.h>
+#import "AFJSONRPCClient.h"
 #import "QwasiConfig.h"
-#import "QwasiRPCClient.h"
-#import "QwasiRESTClient.h"
-#import "Version.h"
 
-@interface QwasiClient : NSObject
-
-@property (assign, getter=isRestful) BOOL restful;
-@property (nonatomic, strong) QwasiRPCClient rpcClient;
-@property (nonatomic, strong) QwasiRESTClient restClient;
-
+@interface QwasiClient : AFJSONRPCClient
 
 + (instancetype)default;
 

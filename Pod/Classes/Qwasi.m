@@ -954,6 +954,27 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     }
 }
 
+- (void)postDLR:(NSString*)msgId
+       withType:(NSString*)dlrType
+    withContext:(id)context {
+    
+    [self postEvent: @"com.qwasi.message.dlr"
+           withData: @{ @"type" : dlrType,
+                        @"to" : [self deviceToken],
+                        @"user_token" : [self userToken],
+                        @"context" : context,
+                        @"proto" : @"push.apns",
+                        @"addr" : [[QwasiNotificationManager shared] pushToken],
+                        @"message" : msgId}
+     ];
+    
+}
+
+- (void)acknowledge:(NSString*)msgId
+        withContext:(id)context{
+    [self postDLR: msgId withType: @"ack" withContext: context];
+}
+
 - (void)fetchLocationsNear:(CLLocation*)location
                    success:(void(^)(NSArray* locations))success
                    failure:(void(^)(NSError* err))failure {

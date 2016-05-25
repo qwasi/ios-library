@@ -138,6 +138,13 @@ extern NSString* const kEventLocationExit;
 - (void)postEvent:(NSString*)event
          withData:(id)data;
 
+- (void)postDLR:(NSString*)msgId
+       withType:(NSString*)dlrType
+    withContext:(id)context;
+
+- (void)acknowledge:(NSString*)msgId
+        withContext:(id)context;
+
 - (void)tryPostEvent:(NSString*)event
          withData:(id)data;
 
