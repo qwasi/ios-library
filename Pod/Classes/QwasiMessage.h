@@ -37,6 +37,7 @@
 @property (nonatomic,readonly) NSString* payloadType;
 @property (nonatomic,readonly) NSString* payloadSHA;
 @property (nonatomic,readonly) id payload;
+@property (nonatomic,readonly) id context;
 @property (nonatomic,readonly) NSData* rawPayload;
 @property (nonatomic,readonly) NSArray* tags;
 @property (nonatomic,readonly) BOOL silent;

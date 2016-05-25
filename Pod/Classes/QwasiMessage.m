@@ -71,6 +71,7 @@
         _selected = [aDecoder decodeBoolForKey: @"selected"];
         _background = [aDecoder decodeBoolForKey: @"background"];
         _fetched = [aDecoder decodeBoolForKey: @"fetched"];
+        _context = [aDecoder decodeObjectForKey: @"context"];
         
         _encodedPayload = [aDecoder decodeObjectForKey: @"encodedPayload"];
         
@@ -113,6 +114,7 @@
         _payloadSHA = [data objectForKey: @"payload_sha"];
         _tags = [data valueForKeyPath: @"tags"];
         _fetched = [[data valueForKeyPath: @"flags.fetched"] boolValue];
+        _context = [aDecoder decodeObjectForKey: @"context"];
         
         // decode the payload
         _encodedPayload = [data objectForKey: @"payload"];
@@ -136,6 +138,7 @@
         _payloadType = payloadType;
         _tags = [[NSArray alloc] initWithArray: tags];
         _timestamp = [[NSDate dateWithTimeIntervalSince1970:0] timeIntervalSince1970];
+        _context = @{};
         
         if ([UIApplication sharedApplication].applicationState == UIApplicationStateInactive) {
             _selected = YES;
@@ -166,10 +169,12 @@
     [aCoder encodeObject: _payloadType forKey: @"payload_type"];
     [aCoder encodeObject: _payloadSHA forKey: @"payload_sha"];
     [aCoder encodeObject: _tags forKey: @"tags"];
+    [aCoder encodeObject: _context forKey: @"context"];
     [aCoder encodeObject: _encodedPayload forKey: @"encodedPayload"];
     [aCoder encodeBool: _fetched forKey: @"fetched"];
     [aCoder encodeBool: _selected forKey: @"selected"];
     [aCoder encodeBool: _background forKey: @"background"];
+    
 }
 
 - (BOOL)silent {

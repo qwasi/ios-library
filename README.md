@@ -639,6 +639,68 @@ Example:
 	qwasi.postEvent( "login", withData: [ "username" : "bobvila"] )
 ```
 
+## Custom DLRs
+
+The 'Qwasi' platform supports posting custom DLR events to the server the application is posted to. Typically tied to a specific message id or type of event. As this is the iOS platform, the protocol will be 'push.apns' no matter the DLR. 
+
+'''objectivec
+
+- (void)postDLR:(NSString*)msgId
+       withType:(NSString*)dlrType
+    withContext:(id)context {
+    
+    [self postEvent: @"com.qwasi.message.dlr"
+           withData: @{ @"type" : dlrType,
+                        @"to" : [self deviceToken],
+                        @"user_token" : [self userToken],
+                        @"context" : context,
+                        @"proto" : @"push.apns",
+                        @"addr" : [[QwasiNotificationManager shared] pushToken],
+                        @"message" : msgId}
+     ];
+    
+}
+'''
+
+Example:
+*Objective-C:*
+
+'''objectivec
+
+	//Inside message listener
+	[[Qwasi shared] postDLR: [message messageId] withType: @"DLRType" withContext: [message context]];
+'''
+
+*swift:*
+'''swift
+
+	//Inside message listener
+	qwasi.postDLR( messageId, withType: "DLRType", withContext: message.context )
+'''
+
+The acknowledge method is basically a custom DLR call which posts an acknowledgement of a given message ID to the server.
+
+- (void)acknowledge:(NSString*)msgId
+        withContext:(id)context{
+    [self postDLR: msgId withType: @"ack" withContext: context];
+}
+
+Example:
+*Objective-C:*
+
+'''objectivec
+
+	//Inside message listener
+	[[Qwasi shared] acknowledge: [message messageId] withContext: [message context]];
+'''
+
+*swift:*
+'''swift
+
+	//Inside message listener
+	qwasi.acknowledge( messageId, withContext: message.context )
+'''
+
 ## Location
 The `Qwasi` SDK can provide device location and track geofence and iBeacon events. The geofences and iBeacon must be preconfigured via the AIM or API interfaces.
 
