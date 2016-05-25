@@ -680,10 +680,12 @@ Example:
 
 The acknowledge method is basically a custom DLR call which posts an acknowledgement of a given message ID to the server.
 
+```objectivec
 - (void)acknowledge:(NSString*)msgId
         withContext:(id)context{
     [self postDLR: msgId withType: @"ack" withContext: context];
 }
+```
 
 Example:
 
