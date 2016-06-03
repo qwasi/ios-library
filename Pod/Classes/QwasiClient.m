@@ -78,7 +78,7 @@
                     break;
             }
         }];
-
+        
         [[AFNetworkReachabilityManager sharedManager] startMonitoring];
         
         if ([AFNetworkReachabilityManager sharedManager].isReachable) {
@@ -174,10 +174,10 @@
                                 });
                             }
                             else {
-                            // Forward the error
+                                // Forward the error
                                 failure(operation, error);
                             }
-            }];
+                        }];
         }
         else {
             [_queue addOperationWithBlock:^{

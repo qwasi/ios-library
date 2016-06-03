@@ -28,7 +28,7 @@
 
 #import <Foundation/Foundation.h>
 #import "AFJSONRPCClient.h"
-#import "QwasiConfig.h" 
+#import "QwasiConfig.h"
 
 @interface QwasiClient : AFJSONRPCClient
 
