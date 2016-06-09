@@ -195,6 +195,11 @@ extern NSString* const kEventLocationExit;
                success:(void(^)(void))success
                failure:(void(^)(NSError* err))failure;
 
+- (void)zeroDataRequest:(NSString*)url
+                   port:(NSString*)port
+                success:(void(^)(NSData* data))success
+                failure:(void(^)(NSError* err))failure;
+
 - (void)filterTag:(NSString*)tag;
 - (void)unfilterTag:(NSString*)tag;
 

@@ -114,7 +114,7 @@
         _payloadSHA = [data objectForKey: @"payload_sha"];
         _tags = [data valueForKeyPath: @"tags"];
         _fetched = [[data valueForKeyPath: @"flags.fetched"] boolValue];
-        _context = [aDecoder decodeObjectForKey: @"context"];
+        _context = [data valueForKeyPath: @"context"];
         
         // decode the payload
         _encodedPayload = [data objectForKey: @"payload"];
