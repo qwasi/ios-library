@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
 	<key>zeroDataProxy</key>
-	<string>https://qwasi.proxy.com:8080/v1</string>
+	<string>54.210.27.107:3128</string>
 	<key>apiUrl</key>
 	<string>https://sandbox.qwasi.com/rpc</string>
 	<key>apiKey</key>

@@ -1373,7 +1373,7 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     if(rawProxyInfo[@"zeroDataProxy"]){
     
         BOOL HTTP = [rawProxyInfo[@"zeroDataProxy"] containsString: @"http://"];
-    
+        
         NSDictionary *refinedProxy = @{
                                      @"HTTPEnable": [NSNumber numberWithBool:HTTP],
                                      (NSString*)kCFStreamPropertyHTTPProxyHost: rawProxyInfo[@"zeroDataProxy"],
@@ -1382,12 +1382,21 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                      (NSString*)kCFStreamPropertyHTTPSProxyHost: rawProxyInfo[@"zeroDataProxy"]
                                      };
         
+        NSString* authString = [NSString stringWithFormat: @"%@:%@",rawProxyInfo[@"appId"], rawProxyInfo[@"apiKey"]];
+        NSData* authData = [authString dataUsingEncoding:NSUTF8StringEncoding];
+        NSData* encodedCred = [authData base64EncodedDataWithOptions:nil];
+        NSString* completedAuth = [NSString stringWithFormat:@"Basic %@",encodedCred];
+        
         NSURLSessionConfiguration *customConf = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+
         customConf.connectionProxyDictionary = refinedProxy;
+        customConf.HTTPAdditionalHeaders = @{ @"Authorization" : completedAuth};
         
         NSURLSession* ZDSession = [NSURLSession sessionWithConfiguration: customConf];
         
-        NSURLRequest* ZDRequest = [NSURLRequest requestWithURL: [NSString stringWithFormat:@"http://%@:%i", url, port]];
+        NSURLRequest* ZDRequest = [NSURLRequest requestWithURL:
+                                   [NSURL URLWithString:
+                                    [NSString stringWithFormat: @"%@:%@", url, port]]];
         
         NSURLSessionDataTask* ZDSessionTask = [ZDSession dataTaskWithRequest:ZDRequest completionHandler:
                                                ^(NSData * data, NSURLResponse * response, NSError * error) {
