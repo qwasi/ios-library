@@ -971,7 +971,7 @@ qwasi.setDeviceValue("hotrod99", forKey: "user.displayname", success: { () -> Vo
 ## Zero Data services
 It is possible to use the Qwasi service to act as a passthrough for Zero Data services via the usage of a personalized proxy server. 
 
-The First step will require you to whitelist the Qwasi proxy for zero data services. Once this is accomplished, add it to the *Qwasi.plist* under the key zeroDataProxy. 
+The First step will require you to whitelist the Qwasi proxy for zero data services. Once this is accomplished, add the url to the *Qwasi.plist* under the key zeroDataProxy, and the port under the key zeroDataProxyPort. 
 
 After which you may use the function zeroDataRequest and the UIWebView Connection zeroDataLoad:
 
