@@ -1362,6 +1362,55 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     
 }
 
+- (void)zeroDataRequest:(NSString*)url
+                   port:(NSString*)port
+                success:(void(^)(NSData* data))success
+                failure:(void(^)(NSError* err))failure {
+    
+    NSString* path = [[NSBundle mainBundle] pathForResource:@"Qwasi" ofType:@"plist"];
+    NSDictionary *rawProxyInfo = [NSDictionary dictionaryWithContentsOfFile: path];
+    
+    if(rawProxyInfo[@"zeroDataProxy"]){
+    
+        BOOL HTTP = [rawProxyInfo[@"zeroDataProxy"] containsString: @"http://"];
+        
+        NSDictionary *refinedProxy = @{
+                                     @"HTTPEnable": [NSNumber numberWithBool:HTTP],
+                                     (NSString*)kCFStreamPropertyHTTPProxyHost: rawProxyInfo[@"zeroDataProxy"],
+                                   
+                                     @"HTTPSEnable": [NSNumber numberWithBool:HTTP],
+                                     (NSString*)kCFStreamPropertyHTTPSProxyHost: rawProxyInfo[@"zeroDataProxy"]
+                                     };
+        
+        NSString* authString = [NSString stringWithFormat: @"%@:%@",rawProxyInfo[@"appId"], rawProxyInfo[@"apiKey"]];
+        NSData* authData = [authString dataUsingEncoding:NSUTF8StringEncoding];
+        NSData* encodedCred = [authData base64EncodedDataWithOptions:nil];
+        NSString* completedAuth = [NSString stringWithFormat:@"Basic %@",encodedCred];
+        
+        NSURLSessionConfiguration *customConf = [NSURLSessionConfiguration ephemeralSessionConfiguration];
+
+        customConf.connectionProxyDictionary = refinedProxy;
+        customConf.HTTPAdditionalHeaders = @{ @"Authorization" : completedAuth};
+        
+        NSURLSession* ZDSession = [NSURLSession sessionWithConfiguration: customConf];
+        
+        NSURLRequest* ZDRequest = [NSURLRequest requestWithURL:
+                                   [NSURL URLWithString:
+                                    [NSString stringWithFormat: @"%@:%@", url, port]]];
+        
+        NSURLSessionDataTask* ZDSessionTask = [ZDSession dataTaskWithRequest:ZDRequest completionHandler:
+                                               ^(NSData * data, NSURLResponse * response, NSError * error) {
+                                                   
+                                                   NSLog(@"Completed session with response: %@ ", response);
+                                                   
+                                                   error ? failure(error) : NSLog(@"Completed with no errors");
+                                                   
+                                                   data ? success(data) : NSLog( @"Retrieved no data" );
+                                               }];
+        [ZDSessionTask resume];
+    }
+}
+
 - (void)sendMessage:(QwasiMessage*)message
         toUserToken:(NSString*)userToken
             success:(void(^)())success

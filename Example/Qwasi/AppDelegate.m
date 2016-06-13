@@ -120,7 +120,14 @@
         // [Qwasi shared].locationManager = [QwasiLocationManager backgroundManager];
         [Qwasi shared].locationEnabled = YES;
         
+        [[Qwasi shared] zeroDataRequest:@"http://www.youtube.com" port:@"80" success:^(NSData *data) {
+            NSLog(@"We win");
+            [[Qwasi shared] emit:@"ZDReceive" args:@[data]];
+        } failure:^(NSError *err) {
+            NSLog( @"There was an error %@",err);
+        }];
         /*QwasiMessage* welcome = [[QwasiMessage alloc] initWithAlert: @"You have a new message" withPayload: @"Test Message" withPayloadType: @"text/plain" withTags: nil];
+         
          
          // Send ourselves a test message
          [[Qwasi shared] sendMessage: welcome toUserToken: USER_TOKEN];

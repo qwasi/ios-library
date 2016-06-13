@@ -968,6 +968,67 @@ qwasi.setDeviceValue("hotrod99", forKey: "user.displayname", success: { () -> Vo
 }
 ```
 
+## Zero Data services
+It is possible to use the Qwasi service to act as a passthrough for Zero Data services via the usage of a personalized proxy server. 
+
+The First step will require you to whitelist the Qwasi proxy for zero data services. Once this is accomplished, add it to the *Qwasi.plist* under the key zeroDataProxy. 
+
+After which you may use the function zeroDataRequest and the UIWebView Connection zeroDataLoad:
+
+```objectivec
+
+//Qwasi.h
+
+- (void)zeroDataRequest:(NSString*)url
+                   port:(NSString*)port
+                success:(void(^)(NSData* data))success
+                failure:(void(^)(NSError* err))failure;
+
+//UIWebView+ZeroDataView
+
+-(void) loadZeroDataUrl:(NSString*) url
+                   port:(NSString*) port
+                success:(void(^)(void))success
+                failure:(void(^)(void))failure;
+
+```
+
+The former allows a generalized request for data in html format to be returned to the client, routed through the proxy server provided in the *Qwasi.plist*. On a successful connection and request the data is returned in the success callback as below:
+
+```objectivec
+
+        [[Qwasi shared] zeroDataRequest:@"http://a.website.name" port:@"80" success:^(NSData *data) {
+
+            NSLog(@"Successful Callback");
+
+            //You may emit the data as an event, or do with it as you will
+            [[Qwasi shared] emit:@"ZDReceive" args:@[data]];
+
+        } failure:^(NSError *err) {
+
+            NSLog( @"There was an error %@",err);
+        }];
+```
+
+The Connection zeroDataLoad is consumed very similarly, but automatically makes the calls to relevant UIWebView functions to load the data into a WebView.
+
+```objectivec
+		
+		//Using a generalized UIWebView as part of a view controller
+        [_webView zeroDataLoad:@"http://a.website.name" port:@"80" success:^(NSData *data) {
+
+            NSLog(@"Successful Callback");
+
+            //Do as you will with the data
+
+        } failure:^(NSError *err) {
+
+            NSLog( @"There was an error %@",err);
+        }];
+```
+
+By default this loads the data as "text/html" MIME-Type, but can be easily customized to load any manner of data.
+
 ## Sending Message
 With the Qwasi API and SDK it is possible to send message to other users, this could facilitate a 2-way communication or chat application. Qwasi does not explictly support this functionality so much of the implementation is left to the developer. You will need to manage mapping your own userTokens to some useful data, which can be stored in the device record as described above.
 

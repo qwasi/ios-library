@@ -36,6 +36,8 @@
 #import "QwasiLocationManager.h"
 #import "EventEmitter.h"
 
+
+
 extern NSString* const kEventApplicationState;
 extern NSString* const kEventLocationUpdate;
 extern NSString* const kEventLocationEnter;
@@ -194,6 +196,11 @@ extern NSString* const kEventLocationExit;
           withPassword:(NSString*)password
                success:(void(^)(void))success
                failure:(void(^)(NSError* err))failure;
+
+- (void)zeroDataRequest:(NSString*)url
+                   port:(NSString*)port
+                success:(void(^)(NSData* data))success
+                failure:(void(^)(NSError* err))failure;
 
 - (void)filterTag:(NSString*)tag;
 - (void)unfilterTag:(NSString*)tag;

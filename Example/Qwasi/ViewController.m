@@ -50,6 +50,10 @@
             
             [self reloadMessages];
         }];
+        
+        [[Qwasi shared] on: @"ZDReceive" listener:^(NSData* data) {
+            [_webView loadData:data MIMEType:@"text/html" textEncodingName:@"UTF-8" baseURL:nil];
+        }];
     }
     return self;
 }

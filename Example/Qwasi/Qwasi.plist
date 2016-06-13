@@ -2,6 +2,8 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<key>zeroDataProxy</key>
+	<string>54.210.27.107:3128</string>
 	<key>apiUrl</key>
 	<string>https://sandbox.qwasi.com/rpc</string>
 	<key>apiKey</key>
