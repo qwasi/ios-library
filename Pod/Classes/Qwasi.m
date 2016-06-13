@@ -1371,15 +1371,13 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
     NSDictionary *rawProxyInfo = [NSDictionary dictionaryWithContentsOfFile: path];
     
     if(rawProxyInfo[@"zeroDataProxy"]){
-    
-        BOOL HTTP = [rawProxyInfo[@"zeroDataProxy"] containsString: @"http://"];
+        
+        NSURLSessionConfiguration *customConf = [NSURLSessionConfiguration ephemeralSessionConfiguration];
         
         NSDictionary *refinedProxy = @{
-                                     @"HTTPEnable": [NSNumber numberWithBool:HTTP],
-                                     (NSString*)kCFStreamPropertyHTTPProxyHost: rawProxyInfo[@"zeroDataProxy"],
-                                   
-                                     @"HTTPSEnable": [NSNumber numberWithBool:HTTP],
-                                     (NSString*)kCFStreamPropertyHTTPSProxyHost: rawProxyInfo[@"zeroDataProxy"]
+                                     (NSString*) kCFNetworkProxiesHTTPEnable: (NSNumber*)@1,
+                                     (NSString*) kCFNetworkProxiesHTTPProxy: rawProxyInfo[@"zeroDataProxy"],
+                                     (NSString*) kCFNetworkProxiesHTTPPort: [NSNumber numberWithInteger: [rawProxyInfo[@"zeroDataProxyPort"] integerValue]],
                                      };
         
         NSString* authString = [NSString stringWithFormat: @"%@:%@",rawProxyInfo[@"appId"], rawProxyInfo[@"apiKey"]];
@@ -1387,16 +1385,14 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
         NSData* encodedCred = [authData base64EncodedDataWithOptions:nil];
         NSString* completedAuth = [NSString stringWithFormat:@"Basic %@",encodedCred];
         
-        NSURLSessionConfiguration *customConf = [NSURLSessionConfiguration ephemeralSessionConfiguration];
 
         customConf.connectionProxyDictionary = refinedProxy;
         customConf.HTTPAdditionalHeaders = @{ @"Authorization" : completedAuth};
         
         NSURLSession* ZDSession = [NSURLSession sessionWithConfiguration: customConf];
         
-        NSURLRequest* ZDRequest = [NSURLRequest requestWithURL:
-                                   [NSURL URLWithString:
-                                    [NSString stringWithFormat: @"%@:%@", url, port]]];
+        //Check if they have not given us a port to connect to specifically, if not remove the port from the string
+        NSURLRequest* ZDRequest = port ? [NSURLRequest requestWithURL: [NSURL URLWithString: [NSString stringWithFormat: @"%@:%@", url, port]]] : [NSURLRequest requestWithURL: [NSURL URLWithString: [NSString stringWithFormat: @"%@", url]]];
         
         NSURLSessionDataTask* ZDSessionTask = [ZDSession dataTaskWithRequest:ZDRequest completionHandler:
                                                ^(NSData * data, NSURLResponse * response, NSError * error) {

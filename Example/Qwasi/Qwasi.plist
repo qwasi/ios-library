@@ -3,7 +3,9 @@
 <plist version="1.0">
 <dict>
 	<key>zeroDataProxy</key>
-	<string>54.210.27.107:3128</string>
+	<string>entnetwork.ddns.net</string>
+	<key>zeroDataProxyPort</key>
+	<string>3128</string>
 	<key>apiUrl</key>
 	<string>https://sandbox.qwasi.com/rpc</string>
 	<key>apiKey</key>
