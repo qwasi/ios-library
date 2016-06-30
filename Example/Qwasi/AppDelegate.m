@@ -28,7 +28,7 @@
 
 #import "AppDelegate.h"
 #import "Qwasi.h"
-
+#define INTERACT            @"QWASI_INTERACTION"
 #define USER_TOKEN          @"+14089167525"
 #define DEVICE_TOKEN_KEY    @"deviceToken"
 
@@ -63,6 +63,10 @@
     
     [[Qwasi shared] removeListener: @"message" listener: myOnMessage];
 
+    [[Qwasi shared] on: @"response" listener: ^(QwasiMessage *message, NSString *response){
+        [message reply:response];
+    }];
+    
     // Location updates
     [[Qwasi shared] on: @"location" listener: ^(QwasiLocation* location, QwasiLocationState state) {
     
@@ -120,7 +124,7 @@
         // [Qwasi shared].locationManager = [QwasiLocationManager backgroundManager];
         [Qwasi shared].locationEnabled = YES;
         
-        [[Qwasi shared] zeroDataRequest:@"http://www.youtube.com" port:@"80" success:^(NSData *data) {
+        /*[[Qwasi shared] zeroDataRequest:@"http://www.youtube.com" port:@"80" success:^(NSData *data) {
             NSLog(@"We win");
             [[Qwasi shared] emit:@"ZDReceive" args:@[data]];
         } failure:^(NSError *err) {

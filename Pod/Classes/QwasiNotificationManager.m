@@ -32,7 +32,7 @@
 #import "NSObject+STSwizzle.h"
 
 typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
-
+typedef void (^responseCompletionHandler)(void);
 @implementation QwasiNotificationManager {
     BOOL _registering;
     NSDictionary* _launchNotification;
@@ -211,9 +211,9 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                                    implementation: ^(id _self, UIApplication* _unused, UILocalNotification* notification)
              {
                  if (notification.userInfo && notification.userInfo[@"qwasi"]) {
-                     QwasiMessage* mesage = [NSKeyedUnarchiver unarchiveObjectWithData: notification.userInfo[@"qwasi"]];
+                     QwasiMessage* message = [NSKeyedUnarchiver unarchiveObjectWithData: notification.userInfo[@"qwasi"]];
                      
-                     [self emit: @"message", mesage];
+                     [self emit: @"message", message];
                  }
                  
                  [_self callOnSuper:^{
@@ -222,13 +222,61 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                      }
                  }];
              }];
+            
+            [appDelegate replaceMethodForSelector:@selector(application:
+                                             handleActionWithIdentifier:
+                                                  forRemoteNotification:
+                                                       withResponseInfo:
+                                                      completionHandler:)
+                                   orAddWithTypes:"v@:@@"
+                                   implementation:^(id _self, UIApplication* _unused, NSString* identifier, NSDictionary* userInfo, NSDictionary* responseInfo, responseCompletionHandler completionHandler){
+                 if( [identifier isEqualToString:@"REPLY_IDENT"] ){
+                     
+                     NSLog( @"Received response - %@", responseInfo[@"UIUserNotificationActionResponseTypedTextKey"]);
+                     QwasiMessage* message = [QwasiMessage messageWithData:userInfo];
+                     
+                     [self emit:@"response", message, responseInfo[@"UIUserNotificationActionResponseTypedTextKey"]];
+                 }
+                                       
+                 [_self callOnSuper:^{
+                     if ([_self respondsToSelector:@selector(application:handleActionWithIdentifier:forRemoteNotification:withResponseInfo:completionHandler:)]) {
+                         [_self application:_unused handleActionWithIdentifier:identifier forRemoteNotification:userInfo withResponseInfo:responseInfo completionHandler:completionHandler];
+                     }
+                 }];
+                 completionHandler();
+
+            }];
         });
         
         if ([application respondsToSelector: @selector(registerUserNotificationSettings:)]) {
             // ios 8+
-            UIUserNotificationType types = (UIUserNotificationTypeAlert | UIUserNotificationTypeBadge | UIUserNotificationTypeSound);
+            UIMutableUserNotificationAction *qwasiMsgReply = [[UIMutableUserNotificationAction alloc] init];
+            qwasiMsgReply.identifier = @"REPLY_IDENT";
+            qwasiMsgReply.title = @"Reply";
+            qwasiMsgReply.activationMode = UIUserNotificationActivationModeBackground;
+            qwasiMsgReply.destructive = NO;
+            qwasiMsgReply.authenticationRequired = NO;
+            [qwasiMsgReply setBehavior:UIUserNotificationActionBehaviorTextInput];
             
-            [application registerUserNotificationSettings: [UIUserNotificationSettings settingsForTypes: types categories: nil]];
+            
+            UIMutableUserNotificationCategory *QwasiInteractionCat = [[UIMutableUserNotificationCategory alloc] init];
+            QwasiInteractionCat.identifier = @"QWASI_INTERACTION";
+            [QwasiInteractionCat setActions:@[qwasiMsgReply] forContext:UIUserNotificationActionContextMinimal];
+            [QwasiInteractionCat setActions:@[qwasiMsgReply] forContext:UIUserNotificationActionContextDefault];
+            
+            //NSSet *actions = [NSSet setWithObjects:[QwasiInteractionCat actionsForContext:UIUserNotificationActionContextMinimal], nil];
+            
+            NSSet *categories = [NSSet setWithObject:QwasiInteractionCat];
+            UIUserNotificationType types = (UIUserNotificationType) (UIUserNotificationTypeAlert|
+                                                                     UIUserNotificationTypeSound|
+                                                                     UIUserNotificationTypeBadge);
+            
+            UIUserNotificationSettings *settings;
+            settings = [UIUserNotificationSettings settingsForTypes:types
+                                                         categories:categories];
+            
+            [application registerUserNotificationSettings:settings];
+
         }
 #if __IPHONE_OS_VERSION_MAX_ALLOWED < 80000
         else {
@@ -238,4 +286,5 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
 #endif
     }
 }
+
 @end

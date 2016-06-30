@@ -2,14 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<key>zeroDataProxy</key>
-	<string>entnetwork.ddns.net</string>
-	<key>zeroDataProxyPort</key>
-	<string>3128</string>
 	<key>apiUrl</key>
-	<string>https://sandbox.qwasi.com/rpc</string>
+	<string>https://beta.qwasi.com/rpc</string>
 	<key>apiKey</key>
-	<string>7e459638914ae77e9ee2b0037e1f73f1</string>
+	<string>ec4a9d95ebe5e283822c99b36a9521b50fca7aeb392dcbc24b92cfeda9ceac60</string>
 	<key>appId</key>
 	<string>552f5e6e3e73ca104b46191d</string>
 </dict>

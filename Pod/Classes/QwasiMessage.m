@@ -27,6 +27,7 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import "QwasiMessage.h"
+#import "Qwasi.h"
 #import <CommonCrypto/CommonDigest.h>
 
 #ifdef __IPHONE_8_0
@@ -83,6 +84,8 @@
 }
 
 - (id)initWithData:(NSDictionary*)data {
+    
+
     
     if (self = [super init]) {
         _cached = NO;
@@ -290,6 +293,32 @@
     }
     
     return rval;
+}
+
+- (void)reply:(NSString*)response{
+    [self reply:response withContext:nil];
+}
+
+- (void)reply:(NSString*)response
+  withContext:(NSDictionary*)customContext{
+    
+    NSMutableDictionary* responseData = [[NSMutableDictionary alloc] init];
+  
+    [responseData addEntriesFromDictionary:@{@"text":response}];
+    
+    if( self.messageId ){
+        [responseData addEntriesFromDictionary:@{@"msgId" : self.messageId}];
+    }
+    
+    if( self.context ){
+        [responseData addEntriesFromDictionary:self.context];
+    }
+    
+    if( customContext ){
+        [responseData addEntriesFromDictionary:customContext];
+    }
+    
+    [[Qwasi shared] postEvent:@"com.qwasi.event.message.mo" withData:responseData];
 }
 
 - (BOOL)valid {

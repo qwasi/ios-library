@@ -110,4 +110,6 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
 - (void)didEnterBackgroundNotification:(NSNotification*)note {
     [self emit: @"didEnterBackground"];
 }
+
+
 @end
