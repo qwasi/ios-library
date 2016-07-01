@@ -593,6 +593,12 @@ typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
                 }
             }];
             
+            [[QwasiNotificationManager shared] on: @"response" listener: ^(QwasiMessage *message, NSString *response){
+                
+                [self emit: @"response", message, response];
+                
+            }];
+            
             [[QwasiAppManager shared] on: @"backgroundFetch" listener: ^() {
                 
                 [self fetchUnreadMessage:^(QwasiMessage *message) {

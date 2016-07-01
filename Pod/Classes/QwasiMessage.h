@@ -27,7 +27,6 @@
 // SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 #import <Foundation/Foundation.h>
-
 @interface QwasiMessage : NSObject<NSCoding>
 
 @property (nonatomic,readonly) NSString* alert;
@@ -37,7 +36,7 @@
 @property (nonatomic,readonly) NSString* payloadType;
 @property (nonatomic,readonly) NSString* payloadSHA;
 @property (nonatomic,readonly) id payload;
-@property (nonatomic,readonly) id context;
+@property (nonatomic,readonly) NSDictionary* context;
 @property (nonatomic,readonly) NSData* rawPayload;
 @property (nonatomic,readonly) NSArray* tags;
 @property (nonatomic,readonly) BOOL silent;
@@ -55,5 +54,10 @@
         withPayload:(id)payload
     withPayloadType:(NSString*)payloadType
            withTags:(NSArray*)tags;
+
+- (void)reply:(NSString*)response;
+
+- (void)reply:(NSString*)response
+  withContext:(NSDictionary*)customContext;
 @end
 
