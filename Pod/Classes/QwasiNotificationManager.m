@@ -29,6 +29,7 @@
 #import "QwasiNotificationManager.h"
 #import "QwasiError.h"
 #import "QwasiMessage.h"
+#import "Qwasi.h"
 #import "NSObject+STSwizzle.h"
 
 typedef void (^fetchCompletionHander)(UIBackgroundFetchResult result);
@@ -48,6 +49,7 @@ typedef void (^responseCompletionHandler)(void);
     [[NSNotificationCenter defaultCenter] addObserver: [QwasiNotificationManager shared]
                                             selector :@selector(checkNotificationStatus:)
                                                  name: UIApplicationWillEnterForegroundNotification object:nil];
+    
 }
 
 + (instancetype)shared {
@@ -71,6 +73,8 @@ typedef void (^responseCompletionHandler)(void);
         _pushToken = nil;
         
         _pushEnabled = NO;
+        
+        _customButtons = [NSMutableArray array];
     }
     return self;
 }
@@ -190,6 +194,44 @@ typedef void (^responseCompletionHandler)(void);
                  }];
              }];
             
+            [[Qwasi shared] filterTag: @"QWASI_INTERACTION_SETUP"];
+            
+            [[Qwasi shared] on: @"tag#QWASI_INTERACTION_SETUP" listener: ^(QwasiMessage* message) {
+                
+                
+                [_customButtons addObjectsFromArray:message.context[@"buttons"]];
+                NSMutableArray *customActions = [[NSMutableArray alloc] init];
+                
+                for ( NSString* button in _customButtons){
+                    UIMutableUserNotificationAction *qwasiCustom = [[UIMutableUserNotificationAction alloc] init];
+                    qwasiCustom.identifier = button;
+                    qwasiCustom.title = button;
+                    qwasiCustom.activationMode = UIUserNotificationActivationModeBackground;
+                    qwasiCustom.destructive = NO;
+                    qwasiCustom.authenticationRequired = NO;
+                    [qwasiCustom setBehavior:UIUserNotificationActionBehaviorDefault];
+                    
+                    [customActions addObject:qwasiCustom];
+                }
+
+                
+                UIMutableUserNotificationCategory *QwasiInteractionCustomCat = [[UIMutableUserNotificationCategory alloc] init];
+                QwasiInteractionCustomCat.identifier = [NSString stringWithString: message.context[@"category"]];
+                [QwasiInteractionCustomCat setActions:[customActions subarrayWithRange:NSMakeRange(0, 2)] forContext:UIUserNotificationActionContextMinimal];
+                [QwasiInteractionCustomCat setActions:customActions forContext:UIUserNotificationActionContextDefault];
+                    
+                NSSet *categories = [NSSet setWithObjects:QwasiInteractionCustomCat, application.currentUserNotificationSettings.categories, nil];
+                UIUserNotificationType types = (UIUserNotificationType) (UIUserNotificationTypeAlert|
+                                                                             UIUserNotificationTypeSound|
+                                                                             UIUserNotificationTypeBadge);
+                    
+                UIUserNotificationSettings *settings;
+                settings = [UIUserNotificationSettings settingsForTypes:types
+                                                                 categories:categories];
+                    
+                [application registerUserNotificationSettings:settings];
+             }];
+            
             [appDelegate replaceMethodForSelector: @selector(application:didReceiveRemoteNotification:fetchCompletionHandler:)
                                    orAddWithTypes:"v@:@@@"
                                    implementation: ^(id _self, UIApplication* _unused, NSDictionary* userInfo, fetchCompletionHander completionHandler)
@@ -233,19 +275,69 @@ typedef void (^responseCompletionHandler)(void);
                  if( [identifier isEqualToString:@"REPLY_IDENT"] ){
                      
                      NSLog( @"Received response - %@", responseInfo[@"UIUserNotificationActionResponseTypedTextKey"]);
-                     QwasiMessage* message = [QwasiMessage messageWithData:userInfo];
                      
-                     [self emit:@"response", message, responseInfo[@"UIUserNotificationActionResponseTypedTextKey"]];
+                     [[Qwasi shared] fetchMessageForNotification:userInfo success:^(QwasiMessage *message) {
+                     
+                         [self emit:@"response", message, responseInfo[@"UIUserNotificationActionResponseTypedTextKey"]];
+                     
+                     } failure:^(NSError *err) {
+                     
+                         NSLog(@"Failed to refetch message");
+                     
+                     }];
                  }
-                                       
                  [_self callOnSuper:^{
+                    
                      if ([_self respondsToSelector:@selector(application:handleActionWithIdentifier:forRemoteNotification:withResponseInfo:completionHandler:)]) {
+                      
                          [_self application:_unused handleActionWithIdentifier:identifier forRemoteNotification:userInfo withResponseInfo:responseInfo completionHandler:completionHandler];
+                    
                      }
                  }];
                  completionHandler();
 
             }];
+            
+            [appDelegate replaceMethodForSelector:@selector(application:
+                                                            handleActionWithIdentifier:
+                                                            forRemoteNotification:
+                                                            completionHandler:)
+                                   orAddWithTypes:"v@:@@"
+                                   implementation:^(id _self, UIApplication* _unused, NSString* identifier, NSDictionary* userInfo, responseCompletionHandler completionHandler){
+                                       
+                                       if( [identifier isEqualToString:[_customButtons objectAtIndex:0]] ){
+                                           
+                                           [[Qwasi shared] postEvent:@"com.qwasi.event.message.mo" withData:@{@"selected" : [_customButtons objectAtIndex:0],
+                                                                                                              @"message" : userInfo}];                                       }
+                                       
+                                       if ( [identifier isEqualToString:[_customButtons objectAtIndex:1]] && [_customButtons count] > 1){
+                                          
+                                           [[Qwasi shared] postEvent:@"com.qwasi.event.message.mo" withData:@{@"selected" : [_customButtons objectAtIndex:1],
+                                                                                                              @"message" : userInfo}];
+                                           
+                                       }
+                                       
+                                       if ( [identifier isEqualToString:[_customButtons objectAtIndex:2]]&& [_customButtons count] > 2){
+                                       
+                                           [[Qwasi shared] postEvent:@"com.qwasi.event.message.mo" withData:@{@"selected" : [_customButtons objectAtIndex:2],
+                                                                                                              @"message" : userInfo}];
+                                           
+                                       }
+                                       
+                                       if ( [identifier isEqualToString:[_customButtons objectAtIndex:3]]&& [_customButtons count] > 3){
+                                       
+                                           [[Qwasi shared] postEvent:@"com.qwasi.event.message.mo" withData:@{@"selected" : [_customButtons objectAtIndex:3],
+                                                                                                              @"message" : userInfo}];
+                                           
+                                       }
+                                       [_self callOnSuper:^{
+                                           if ([_self respondsToSelector:@selector(application:handleActionWithIdentifier:forRemoteNotification:withResponseInfo:completionHandler:)]) {
+                                               [_self application:_unused handleActionWithIdentifier:identifier forRemoteNotification:userInfo completionHandler:completionHandler];
+                                           }
+                                       }];
+                                       completionHandler();
+                                       
+                                   }];
         });
         
         if ([application respondsToSelector: @selector(registerUserNotificationSettings:)]) {
@@ -260,7 +352,7 @@ typedef void (^responseCompletionHandler)(void);
             
             
             UIMutableUserNotificationCategory *QwasiInteractionCat = [[UIMutableUserNotificationCategory alloc] init];
-            QwasiInteractionCat.identifier = @"QWASI_INTERACTION";
+            QwasiInteractionCat.identifier = @"QWASI_INTERACTION_TEXT";
             [QwasiInteractionCat setActions:@[qwasiMsgReply] forContext:UIUserNotificationActionContextMinimal];
             [QwasiInteractionCat setActions:@[qwasiMsgReply] forContext:UIUserNotificationActionContextDefault];
             

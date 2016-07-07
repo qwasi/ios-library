@@ -130,7 +130,7 @@
         } failure:^(NSError *err) {
             NSLog( @"There was an error %@",err);
         }];
-        /*QwasiMessage* welcome = [[QwasiMessage alloc] initWithAlert: @"You have a new message" withPayload: @"Test Message" withPayloadType: @"text/plain" withTags: nil];
+        QwasiMessage* welcome = [[QwasiMessage alloc] initWithAlert: @"You have a new message" withPayload: @"Test Message" withPayloadType: @"text/plain" withTags: nil];
          
          
          // Send ourselves a test message
