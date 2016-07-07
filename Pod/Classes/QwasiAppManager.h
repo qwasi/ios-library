@@ -28,7 +28,6 @@
 
 #import <Foundation/Foundation.h>
 #import "EventEmitter.h"
-#import "Qwasi.h"
 
 @interface QwasiAppManager : EventEmitter
 + (instancetype)shared;
