@@ -34,6 +34,8 @@
 @property (nonatomic,readonly)BOOL pushEnabled;
 @property (nonatomic,readwrite)BOOL sandbox;
 @property (nonatomic,readonly) NSDictionary* launchNotification;
+@property (nonatomic, readwrite) NSMutableArray* customButtons;
+
 
 + (instancetype)shared;
 
